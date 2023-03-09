@@ -1,24 +1,27 @@
-import bodyParser from "body-parser";
-import express from "express";
-import cors from "cors";
-import { routes } from "./routes/index.js";
-import { db } from "./db/database.js";
-
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const { db } = require("./db/DB.JS");
+const { readdirSync } = require("fs");
 const app = express();
-const port = 3001;
+const PORT = process.env.PORT;
 
-app.use(bodyParser.json());
-app.use(cors()); //for reacts
+//middlewares
+app.use(express.json());
+app.use(cors());
+//middlewares
 
-routes.forEach((route) => {
-  app[route.method](route.path, route.handler);
-});
+//routes
+readdirSync("./routes").map((route) =>
+  app.use("/api/v1", require("./routes/" + route))
+);
+//routes
 
-const start = async () => {
-  await db.connect();
-  app.listen(port, () => {
-    console.log("Server 3001 Portunda Çalışıyor");
+const server = () => {
+  db();
+  app.listen(PORT, () => {
+    console.log(`Server ${PORT} Portunda Çalışıyor`);
   });
 };
 
-start();
+server();

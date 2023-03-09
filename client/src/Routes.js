@@ -4,8 +4,7 @@ import YatirimPage from "./pages/YatirimPage";
 import BireyselEmeklilikPage from "./pages/BireyselEmeklilikPage";
 import IstatistikPage from "./pages/IstatistikPage";
 import AileButcesiPage from "./pages/AileButcesiPage";
-import Header from "./layouts/Header";
-import Footer from "./layouts/Footer";
+import NavBar from "./layouts/NavBar";
 
 const routes = [
   {
@@ -33,13 +32,12 @@ const routes = [
 export const Rotalar = () => {
   return (
     <Router>
-      <Header />
+      <NavBar />
       <Routes>
         {routes.map((route, index) => (
           <Route key={index} path={route.path} element={<route.component />} />
         ))}
       </Routes>
-      <Footer />
     </Router>
   );
 };

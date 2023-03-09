@@ -9,6 +9,8 @@ html {
 }
 
 body {
+  background-color: $color-primary;
+  color: $color-fourth;
   box-sizing: border-box; /* vereceğimiz padding ve margin değerlerini kutunun içinden düşer*/
   font-family: "Open Sans", sans-serif;
   font-weight: 400;

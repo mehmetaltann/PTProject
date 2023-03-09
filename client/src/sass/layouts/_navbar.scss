@@ -1,0 +1,104 @@
+.navbar {
+  background-color: $color-fourth;
+  height: 5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 1500px;
+  }
+
+  &__logo {
+    color: $color-primary;
+    align-items: center;
+    margin-left: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    flex-grow: 1;
+  }
+
+  &__menu {
+    display: flex;
+    list-style: none;
+    text-align: center;
+    margin-right: 2rem;
+
+    @media screen and (max-width: 960px) {
+      flex-direction: column;
+      width: 100%;
+      border-top: 1px solid $color-white;
+      position: absolute;
+      top: 5rem;
+      left: -110%;
+      opacity: 0;
+      transition: all 0.5s ease;
+
+      &--active {
+        background-color: $color-fourth;
+        left: 0px;
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 1;
+      }
+    }
+  }
+
+  &__links {
+    color: $color-primary;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    height: 100%;
+    border-bottom: 3px solid transparent;
+
+    @media screen and (max-width: 960px) {
+      width: 100%;
+      display: table;
+    }
+  }
+
+  &__items {
+    line-height: 2.5rem;
+    margin-right: 1rem;
+
+    &::after {
+      content: "";
+      display: block;
+      height: 3px;
+      width: 0;
+      background: transparent;
+      transition: width 0.7s ease, background-color 0.5s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+      background-color: $color-third;
+    }
+  }
+
+  &__icon {
+    display: none;
+
+    @media screen and (max-width: 960px) {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(-100%, 40%);
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: $color-primary;
+    }
+  }
+}
