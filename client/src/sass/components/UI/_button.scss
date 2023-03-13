@@ -1,0 +1,11 @@
+.button {
+  outline: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}

@@ -4,4 +4,15 @@
 @import "./base/base";
 @import "./base/typography";
 
+@import "./components/UI/button";
+
 @import "./layouts/navbar";
+
+@import "./layouts/aileButce/abSidebar";
+@import "./layouts/aileButce/abmain";
+@import "./components/aileBurcesiPage/dashboard";
+@import "./components/aileBurcesiPage/gelir";
+@import "./components/aileBurcesiPage/gider";
+@import "./components/aileBurcesiPage/gelirform";
+
+@import "./pages/aileButcesi";

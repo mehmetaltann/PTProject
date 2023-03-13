@@ -33,11 +33,17 @@ export const Rotalar = () => {
   return (
     <Router>
       <NavBar />
-      <Routes>
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={<route.component />} />
-        ))}
-      </Routes>
+      <div className="content">
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
+        </Routes>
+      </div>
     </Router>
   );
 };
