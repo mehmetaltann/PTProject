@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.5.0",
     "axios": "^1.2.1",
     "chart.js": "^4.2.1",
+    "components": "^0.1.0",
     "moment": "^2.29.4",
     "react": "^18.0.0",
     "react-chartjs-2": "^5.2.0",
@@ -15,7 +16,9 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.6.0",
     "react-script": "^2.0.5",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "styled-components": "^5.3.8",
+    "sweetpagination": "^1.0.15"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,8 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "node-sass": "^7.0.3"
   }
 }

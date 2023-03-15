@@ -1,22 +1,33 @@
 import { useState } from "react";
 import { useGlobalContext } from "../../../context/globalContext";
 import { plus } from "../../../utils/abicons";
-import { gelirCategories } from "../../../utils/formCategoryData";
-import "react-datepicker/dist/react-datepicker.css";
+import { giderCategories } from "../../../utils/formCategoryData";
 import Button from "../../UI/Button";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
+import "react-datepicker/dist/react-datepicker.css";
 
-const GelirForm = () => {
-  const { gelirEkle } = useGlobalContext();
+const GiderForm = () => {
+  const { giderEkle, giderGetir } = useGlobalContext();
   const [inputState, setInputState] = useState({
     title: "",
     amount: "",
     date: "",
-    category: "Maaş",
+    categoryA: "Fatura",
+    categoryB: "Telefon",
     description: "",
   });
-  const { title, amount, date, category, description } = inputState;
+  const [categoryBi, setCategoryBi] = useState([
+    "Telefon",
+    "İnternet/TV",
+    "Su",
+    "Doğalgaz",
+    "Elektrik",
+    "Site Aidat",
+    "Yakıt Parası",
+  ]);
+
+  const { title, amount, date, categoryA, categoryB, description } = inputState;
 
   const handleInput = (name) => (event) => {
     setInputState({ ...inputState, [name]: event.target.value });
@@ -29,43 +40,69 @@ const GelirForm = () => {
       [name]: event.target.value,
       ["title"]: catValue,
     });
+    const categoryBPopulate = () => {
+      giderCategories.map((cat) => {
+        if (cat.title === catValue) {
+          setCategoryBi(cat.alt);
+        }
+      });
+    };
+    categoryBPopulate();
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    gelirEkle(inputState);
+    giderEkle(inputState);
     setInputState({
       title: "",
       amount: "",
       date: "",
-      category: "",
+      categoryA: "",
+      categoryB: "",
       description: "",
     });
   };
 
   return (
     <FormStyle onSubmit={handleSubmit}>
-      <div className="selects input-control">
-        <select
-          required
-          value={category}
-          name="category"
-          id="category"
-          onChange={handleSelect("category")}
-        >
-          {gelirCategories.map((categoryName, index) => (
-            <option key={index} value={categoryName}>
-              {categoryName}
-            </option>
-          ))}
-        </select>
+      <div className="selects">
+        <div className="input-control">
+          <select
+            required
+            value={categoryA}
+            name="categoryA"
+            id="categoryA"
+            onChange={handleSelect("categoryA")}
+          >
+            {giderCategories.map((category, index) => (
+              <option key={index} value={category.title}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="input-control">
+          <select
+            required
+            value={categoryB}
+            name="categoryB"
+            id="categoryB"
+            onChange={handleSelect("categoryB")}
+          >
+            {categoryBi.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="input-control">
         <input
           type="text"
           value={title}
           name={"title"}
-          placeholder="Gelir Adı"
+          placeholder="Gider Adı"
           onChange={handleInput("title")}
         />
       </div>
@@ -74,7 +111,7 @@ const GelirForm = () => {
           type="number"
           value={amount}
           name={"amount"}
-          placeholder="Gelir Tutarı"
+          placeholder="Gider Tutarı"
           onChange={handleInput("amount")}
         />
       </div>
@@ -89,6 +126,7 @@ const GelirForm = () => {
           }}
         />
       </div>
+
       <div className="input-control">
         <textarea
           type="text"
@@ -104,7 +142,7 @@ const GelirForm = () => {
         <Button
           background={"var(--theme-fourth)"}
           color={"var(--theme-primary)"}
-          name={"Gelir Ekle"}
+          name={"Gider Ekle"}
           icon={plus}
           bpadding={".6rem 1.2rem"}
           bradious={"35px"}
@@ -122,7 +160,7 @@ const FormStyle = styled.form`
   input,
   textarea,
   select {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-family: inherit;
     outline: none;
     border: none;
@@ -147,8 +185,12 @@ const FormStyle = styled.form`
   }
 
   .selects {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     select {
-      width: 100%;
+      padding: 0.3rem 1.4rem;
       color: var(--theme-fourth);
       opacity: 0.6;
 
@@ -160,4 +202,4 @@ const FormStyle = styled.form`
   }
 `;
 
-export default GelirForm;
+export default GiderForm;

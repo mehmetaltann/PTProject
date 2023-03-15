@@ -27,3 +27,6 @@ export const food = <i className="fa-solid fa-bowl-food"></i>;
 export const medical = <i className="fa-solid fa-briefcase-medical"></i>;
 export const tv = <i className="fa-solid fa-tv"></i>;
 export const circle = <i className="fa-solid fa-circle-dot"></i>;
+export const credit = <i className="fa-regular fa-credit-card"></i>;
+export const credit_card =  <i className="fa-brands fa-cc-visa"></i>
+export const tl = <i className="fa-solid fa-turkish-lira-sign"></i>
