@@ -38,8 +38,8 @@ const AbSideBar = ({ active, setActive }) => {
 
 const AbSidebarStyle = styled.div`
   padding: 2rem 1.5rem;
-  width: 24rem;
-  height: 90%;
+  width: 18rem;
+  height: 61%;
   background-color: var(--theme-secondary);
   border: 3px solid var(--theme-white);
   backdrop-filter: blur(4.5px);

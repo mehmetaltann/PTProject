@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import YatirimPage from "./pages/YatirimPage";
 import BireyselEmeklilikPage from "./pages/BireyselEmeklilikPage";
-import IstatistikPage from "./pages/IstatistikPage";
+import GenelDurum from "./pages/GenelDurum";
 import AileButcesiPage from "./pages/AileButcesiPage";
 import NavBar from "./layouts/NavBar";
 
@@ -16,12 +16,12 @@ const routes = [
     component: YatirimPage,
   },
   {
-    path: "/bireysel_emeklilik",
+    path: "/yatirim",
     component: BireyselEmeklilikPage,
   },
   {
-    path: "/istatistik",
-    component: IstatistikPage,
+    path: "/genel-durum",
+    component: GenelDurum,
   },
   {
     path: "/butce",

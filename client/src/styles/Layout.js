@@ -1,13 +1,9 @@
 import styled from "styled-components";
 
 export const PageLayout = styled.div`
-  padding: 2rem;
+  padding: .5rem 2rem 2rem 2rem;
   height: 100%;
   display: flex;
-  gap: 1.5rem;
-`;
+  overflow: auto;
 
-export const InnerLayout = styled.div`
-  padding: 1rem 1.5rem;
-  width: 100%;
 `;

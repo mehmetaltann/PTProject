@@ -1,49 +1,128 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageLayout } from "../styles/Layout";
-import AbSideBar from "../layouts/aileButce/AbSideBar";
-import Dashboard from "../components/aileButcesi/dashboard/Dashboard";
-import Gelir from "../components/aileButcesi/gelir/Gelir";
-import Gider from "../components/aileButcesi/gider/Gider";
+import { useGlobalContext } from "../context/globalContext";
+import GelGit from "../components/aileButcesi/GelGit";
 import styled from "styled-components";
+import GiderForm from "../components/aileButcesi/GiderForm";
+import GelirForm from "../components/aileButcesi/GelirForm";
+import GelirItem from "../components/aileButcesi/GelirItem";
+import GiderItem from "../components/aileButcesi/GiderItem";
 
 const AileButcesiPage = () => {
   const [active, setActive] = useState(1);
+  const {
+    giderler,
+    gelirGetir,
+    giderGetir,
+    giderSil,
+    toplamGider,
+    gelirler,
+    gelirSil,
+    toplamGelir,
+  } = useGlobalContext();
+
+  useEffect(() => {
+    gelirGetir();
+    giderGetir();
+  }, []);
+
+  const giderMap = giderler.map(
+    ({ _id, title, amount, date, categoryA, categoryB, description }) => {
+      return (
+        <GiderItem
+          key={_id}
+          id={_id}
+          title={title}
+          amount={amount}
+          date={date}
+          categoryA={categoryA}
+          categoryB={categoryB}
+          description={description}
+          indicatorColor={"var(--theme-red)"}
+          deleteItem={giderSil}
+        />
+      );
+    }
+  );
+
+  const gelirMap = gelirler.map(
+    ({ _id, title, amount, date, category, description }) => {
+      return (
+        <GelirItem
+          key={_id}
+          id={_id}
+          title={title}
+          amount={amount}
+          date={date}
+          category={category}
+          description={description}
+          indicatorColor={"var(--theme-green)"}
+          deleteItem={gelirSil}
+        />
+      );
+    }
+  );
 
   const displayData = () => {
     switch (active) {
       case 1:
-        return <Dashboard />;
+        return (
+          <GelGit
+            Form={GelirForm}
+            baslik={"Gelirler"}
+            form_baslik={"Yeni Gelir"}
+            data_baslik={"Toplam Gelir:"}
+            data={gelirMap}
+            toplamGider={toplamGelir}
+            indicatorColor={"var(--theme-green)"}
+            active={active}
+            setActive={setActive}
+          />
+        );
       case 2:
-        return <Dashboard />;
-      case 3:
-        return <Gelir />;
-      case 4:
-        return <Gider />;
+        return (
+          <GelGit
+            Form={GiderForm}
+            baslik={"Giderler"}
+            form_baslik={"Yeni Gider"}
+            data_baslik={"Toplam Gider:"}
+            data={giderMap}
+            toplamGider={toplamGider}
+            indicatorColor={"var(--theme-red)"}
+            active={active}
+            setActive={setActive}
+          />
+        );
       default:
-        return <Dashboard />;
+        return (
+          <GelGit
+            Form={GelirForm}
+            baslik={"Gelirler"}
+            form_baslik={"Yeni Gelir"}
+            data_baslik={"Toplam Gelir:"}
+            data={gelirMap}
+            toplamGider={toplamGelir}
+            indicatorColor={"var(--theme-green)"}
+            active={active}
+            setActive={setActive}
+          />
+        );
     }
   };
 
   return (
     <PageLayout>
-      <AbSideBar active={active} setActive={setActive} />
       <MainStyle>{displayData()}</MainStyle>
     </PageLayout>
   );
 };
 
 const MainStyle = styled.main`
-  padding: 2rem 1.5rem;
   height: 90%;
   width: 100%;
-  flex: 1;
-  background-color: var(--theme-secondary);
-  border: 3px solid var(--theme-white);
-  backdrop-filter: blur(4.5px);
-  border-radius: 32px;
-  overflow-x: hidden;
-  &::-webkit-scrollbar {
-    width: 0;
+
+  @media only screen and (max-width: 500px) {
+    overflow: auto;
   }
 `;
 

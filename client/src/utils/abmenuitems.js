@@ -1,28 +1,17 @@
-import { dashboard, expenses, transactions, trend } from "./abicons";
+export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>;
+export const incomes = <i className="fa-solid fa-money-bill-transfer"></i>;
 
 export const menuItems = [
   {
     id: 1,
-    title: "Genel Durumu",
-    icon: dashboard,
-    link: "/dashboard",
+    title: "Gelir",
+    icon: incomes,
+    link: "/gelir",
   },
   {
     id: 2,
-    title: "İşlemler",
-    icon: transactions,
-    link: "/dashboard",
-  },
-  {
-    id: 3,
-    title: "Gelir",
-    icon: trend,
-    link: "/dashboard",
-  },
-  {
-    id: 4,
     title: "Gider",
     icon: expenses,
-    link: "/dashboard",
+    link: "/gider",
   },
 ];

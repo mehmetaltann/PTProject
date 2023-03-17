@@ -9,6 +9,8 @@ export const GlobalProvider = ({ children }) => {
   const [gelirler, setGelirler] = useState([]);
   const [giderler, setGiderler] = useState([]);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
 
   const gelirGetir = async () => {
     const response = await axios.get(`${BASE_URL}gelir-getir`);
@@ -23,6 +25,7 @@ export const GlobalProvider = ({ children }) => {
   const gelirEkle = async (income) => {
     const response = await axios
       .post(`${BASE_URL}gelir-ekle`, income)
+      .then((response) => setMessage(response.data.message))
       .catch((err) => {
         setError(err.response.data.message);
       });
@@ -32,6 +35,7 @@ export const GlobalProvider = ({ children }) => {
   const giderEkle = async (expense) => {
     const response = await axios
       .post(`${BASE_URL}gider-ekle`, expense)
+      .then((response) => setMessage(response.data.message))
       .catch((err) => {
         setError(err.response.data.message);
       });
@@ -39,12 +43,22 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const gelirSil = async (id) => {
-    const response = await axios.delete(`${BASE_URL}/gelir-sil/${id}`);
+    const response = await axios
+      .delete(`${BASE_URL}gelir-sil/${id}`)
+      .then((response) => setMessage(response.data.message))
+      .catch((err) => {
+        setError(err.response.data.message);
+      });
     gelirGetir();
   };
 
   const giderSil = async (id) => {
-    const response = await axios.delete(`${BASE_URL}/gider-sil/${id}`);
+    const response = await axios
+      .delete(`${BASE_URL}/gider-sil/${id}`)
+      .then((response) => setMessage(response.data.message))
+      .catch((err) => {
+        setError(err.response.data.message);
+      });
     giderGetir();
   };
 
@@ -53,7 +67,7 @@ export const GlobalProvider = ({ children }) => {
     gelirler.forEach((gelir) => {
       totalIncome += gelir.amount;
     });
-    return totalIncome;
+    return totalIncome.toFixed(2);
   };
 
   const toplamGider = () => {
@@ -61,7 +75,20 @@ export const GlobalProvider = ({ children }) => {
     giderler.forEach((gider) => {
       totalExpense += gider.amount;
     });
-    return totalExpense;
+    return totalExpense.toFixed(2);
+  };
+
+  const totalBalance = () => {
+    return toplamGelir() - toplamGider();
+  };
+
+  const islemGecmisi = () => {
+    const history = [...gelirler, ...giderler];
+    history.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    return history.slice(0, 5);
   };
 
   return (
@@ -78,6 +105,14 @@ export const GlobalProvider = ({ children }) => {
         giderSil,
         toplamGider,
         setGiderler,
+        totalBalance,
+        islemGecmisi,
+        error,
+        setError,
+        message,
+        setMessage,
+        startDate,
+        setStartDate,
       }}
     >
       {children}

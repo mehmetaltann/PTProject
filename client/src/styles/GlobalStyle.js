@@ -10,11 +10,15 @@ export const GlobalStyle = createGlobalStyle`
 
     html{
       font-size: 100%;
+
+      @media only screen and (max-width: 1250px) {
+        font-size: 80%;
+        }
     }
 
     :root{
       --theme-primary: #F9F7F7;
-      --theme-secondary: #DBE2EF;
+      --theme-secondary: #e6e8ea;
       --theme-third: #3F72AF;
       --theme-fourth: #112D4E;
       --theme-green: #8DB255;
@@ -35,6 +39,53 @@ export const GlobalStyle = createGlobalStyle`
       font-weight: 400;
       line-height: 1.2;
       overflow: hidden;
+    }
+
+    .error{
+      color:var(--theme-red);
+      animation: shake 0.5s ease-in-out;
+      font-size: 1rem;
+
+      @keyframes shake {
+        0%{
+          transform: translate(0);
+        }
+        25%{
+          transform: translate(15px);
+        }
+        50%{
+          transform: translate(15px);
+        }
+        75%{
+          transform: translate(15px);
+        }
+        100%{
+          transform: translate(0);
+        }
+      }
+    }
+
+    .message{
+      color:var(--theme-green);
+      animation: shake 0.5s ease-in-out;
+
+      @keyframes shake {
+        0%{
+          transform: translate(0);
+        }
+        25%{
+          transform: translate(15px);
+        }
+        50%{
+          transform: translate(15px);
+        }
+        75%{
+          transform: translate(15px);
+        }
+        100%{
+          transform: translate(0);
+        }
+      }
     }
 
 
