@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Line } from "react-chartjs-2";
 import { useGlobalContext } from "../../context/globalContext";
-import { dateFormat } from "../../utils/dateFormat";
+import { dateFormat } from "../../utils/help-functions";
 import {
   Chart as ChartJs,
   CategoryScale,

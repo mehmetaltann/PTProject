@@ -22,7 +22,7 @@ exports.gelirEkle = async (req, res) => {
     }
     //validation
     await gelir.save();
-    res.status(200).json({ message: "Gelir Eklendi" });
+    res.status(200).json({ message: "Yeni Gelir Eklendi" });
   } catch (error) {
     res.status(500).json({ message: "Server Bağlantı Hatası" });
   }

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../UI/Button";
-import { gelirCategoriesIcons } from "../../utils/formCategoryData";
-import { tl, calender, trash, comment } from "../../utils/abicons";
-import { dateFormat } from "../../utils/dateFormat";
+import { butceCategoryData } from "../../utils/localData";
+import { tl, calender, trash, comment } from "../../utils/icons";
+import { dateFormat } from "../../utils/help-functions";
 
 const GelirItem = ({
   id,
@@ -14,9 +14,10 @@ const GelirItem = ({
   deleteItem,
   indicatorColor,
 }) => {
+
   return (
     <GelirItemStyle indicatorColor={indicatorColor}>
-      <div className="icon">{gelirCategoriesIcons[category]}</div>
+      <div className="icon">{butceCategoryData.find((cat) => cat.categoryA === category).icon}</div>
       <h5 className="title">{title}</h5>
       <div className="text">
         <p>

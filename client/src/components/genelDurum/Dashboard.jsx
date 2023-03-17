@@ -1,41 +1,32 @@
 import { useEffect } from "react";
-import { tl } from "../../utils/abicons";
 import { useGlobalContext } from "../../context/globalContext";
-import { tarihSecimCat } from "../../utils/formCategoryData";
-import {
-  giderCategories,
-  gelirCategories,
-  totalCat,
-} from "../../utils/formCategoryData";
+import { tarihSecim } from "../../utils/localData";
+import { totalCat, butceCategoryData } from "../../utils/localData";
 import styled from "styled-components";
 import Chart from "./Chart";
 
-const Dashboard = () => {
-  const {
-    toplamGelir,
-    toplamGider,
-    gelirler,
-    giderler,
-    totalBalance,
-    gelirGetir,
-    giderGetir,
-  } = useGlobalContext();
+const Dashboard = ({ activeTarih, setActiveTarih }) => {
+  const { gelirGetir, giderGetir } = useGlobalContext();
 
   useEffect(() => {
     gelirGetir();
     giderGetir();
   }, []);
 
-  const giderCategoriesList = giderCategories.flatMap((cat) => cat.alt);
-
   return (
     <DashboardStyled>
       <div className="container">
         <div className="left-container">
           <div className="tarihSecim-container">
-            {tarihSecimCat.map((cat, index) => (
-              <button className="tarihsecim" key={index}>
-                {cat}
+            {tarihSecim.map(({ id, title }) => (
+              <button
+                onClick={() => setActiveTarih(id)}
+                className={
+                  activeTarih === id ? "tarihsecim active" : "tarihsecim"
+                }
+                key={id}
+              >
+                {title}
               </button>
             ))}
           </div>
@@ -53,19 +44,23 @@ const Dashboard = () => {
         <div className="right-container">
           <div className="gelir-container">
             <h3>Gelirler</h3>
-            {gelirCategories.map((cat, index) => (
-              <div className="gelir" key={index}>
-                {cat}
-              </div>
-            ))}
+            {butceCategoryData
+              .filter((cat) => cat.type === "Gelir")
+              .map(({ id, categoryA }) => (
+                <div className="gelir" key={id}>
+                  {categoryA}
+                </div>
+              ))}
           </div>
 
           <div className="gider-container">
-            <h3>Gelirler</h3>
+            <h3>Giderler</h3>
             <div className="gider-con">
-              {giderCategoriesList.flatMap((cat, index) => (
-                <div className="gider" key={index}>
-                  {cat}
+              {butceCategoryData
+              .filter((cat) => cat.type === "Gider")
+              .map(({ id, categoryB }) => (
+                <div className="gider" key={id}>
+                  {categoryB}
                 </div>
               ))}
             </div>
@@ -91,7 +86,6 @@ const DashboardStyled = styled.div`
 
     @media only screen and (max-width: 1250px) {
       flex-wrap: wrap;
-      overflow: auto;
     }
 
     .left-container {
@@ -118,18 +112,22 @@ const DashboardStyled = styled.div`
         display: flex;
         justify-content: space-around;
         gap: 1rem;
+        flex-wrap: wrap;
 
-        @media only screen and (max-width: 1250px) {
-          height: 24%;
-          flex-wrap: wrap;
-          overflow: auto;
+        @media only screen and (max-width: 1460px) {
+          height: 15%;
+        }
+
+        @media only screen and (max-width: 800px) {
+          height: 18%;
         }
 
         .tarihsecim {
+          width: 13%;
           background: var(--theme-secondary);
           border: var(--theme-border);
           box-shadow: var(--theme-box-shadow);
-          padding: 1rem;
+          padding: 0.7rem;
           border-radius: 20px;
           color: var(--theme-fourth);
           font-size: 1rem;
@@ -144,6 +142,23 @@ const DashboardStyled = styled.div`
             background-color: var(--theme-fourth);
             color: var(--theme-primary);
           }
+
+          @media only screen and (max-width: 1460px) {
+            width: 31%;
+            padding: 0.3rem;
+          }
+
+          @media only screen and (max-width: 800px) {
+            width: 48%;
+          }
+          @media only screen and (max-width: 375px) {
+            width: 99%;
+          }
+        }
+
+        .active {
+          background-color: var(--theme-fourth);
+          color: var(--theme-primary);
         }
       }
 
@@ -170,8 +185,10 @@ const DashboardStyled = styled.div`
         overflow: hidden;
         display: flex;
         gap: 1rem;
+        flex-wrap: wrap;
 
         .total {
+          width: 15%;
           background: var(--theme-secondary);
           border: var(--theme-border);
           box-shadow: var(--theme-box-shadow);
@@ -181,8 +198,21 @@ const DashboardStyled = styled.div`
           flex-direction: column;
           justify-content: center;
 
+          @media only screen and (max-width: 1460px) {
+            width: 31%;
+          }
+
+          @media only screen and (max-width: 800px) {
+            width: 48%;
+          }
+          @media only screen and (max-width: 375px) {
+            width: 99%;
+          }
+
           h4 {
             text-align: center;
+            font-size: 1rem;
+            opacity: 0.6;
           }
         }
       }
@@ -251,6 +281,14 @@ const DashboardStyled = styled.div`
             box-shadow: var(--theme-box-shadow);
             padding: 1rem;
             border-radius: 20px;
+
+            @media only screen and (max-width: 1460px) {
+              width: 48%;
+            }
+
+            @media only screen and (max-width: 800px) {
+              width: 90%;
+            }
           }
         }
       }

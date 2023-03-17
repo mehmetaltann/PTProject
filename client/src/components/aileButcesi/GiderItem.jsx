@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../UI/Button";
-import { giderCategoriesIcons } from "../../utils/formCategoryData";
-import { tl, calender, trash, comment } from "../../utils/abicons";
-import { dateFormat } from "../../utils/dateFormat";
+import { butceCategoryData } from "../../utils/localData";
+import { tl, calender, trash, comment } from "../../utils/icons";
+import { dateFormat } from "../../utils/help-functions";
 
 const GiderItem = ({
   id,
@@ -16,7 +16,9 @@ const GiderItem = ({
 }) => {
   return (
     <GiderItemStyle indicatorColor={indicatorColor}>
-      <div className="icon">{giderCategoriesIcons[categoryB]}</div>
+      <div className="icon">
+        {butceCategoryData.find((cat) => cat.categoryB === categoryB).icon}
+      </div>
       <h5 className="title">{title}</h5>
       <div className="text">
         <p>
@@ -99,17 +101,13 @@ const GiderItemStyle = styled.div`
   .text {
     font-size: 1.2rem;
     flex-basis: 65%;
-    display: flex;  
+    display: flex;
     gap: 3rem;
     justify-content: flex-start;
     opacity: 0.8;
-    
-    
 
     span {
       padding-left: 0.4rem;
-
-     
     }
   }
 `;

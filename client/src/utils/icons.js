@@ -1,3 +1,8 @@
+export const trash = <i className="fa-solid fa-trash"></i>;
+export const calender = <i className="fa-solid fa-calendar"></i>;
+export const comment = <i className="fa-solid fa-comment"></i>;
+export const tl = <i className="fa-solid fa-turkish-lira-sign"></i>;
+export const plus = <i className="fa-solid fa-plus"></i>;
 export const money = <i className="fa-solid fa-money-bill"></i>;
 export const kitap = <i className="fa-solid fa-book-open"></i>;
 export const kredi_karti = <i className="fa-brands fa-cc-visa"></i>;
@@ -30,116 +35,6 @@ export const cake = <i className="fa-solid fa-cake-candles"></i>;
 export const oyun = <i className="fa-solid fa-gamepad"></i>;
 export const tatil = <i className="fa-solid fa-champagne-glasses"></i>;
 export const tadilat = <i className="fa-solid fa-screwdriver-wrench"></i>;
-
-export const gelirCategories = [
-  "Maaş",
-  "Sena",
-  "Fon Satış",
-  "Kredi",
-  "Kıst Maaş",
-  "Promosyon",
-  "Harcırah",
-  "Aile",
-  "Diğer",
-];
-
-export const giderCategories = [
-  {
-    title: "Fatura",
-    alt: [
-      "Telefon",
-      "İnternet/TV",
-      "Su",
-      "Doğalgaz",
-      "Elektrik",
-      "Site Aidat",
-      "Yakıt Parası",
-    ],
-  },
-  { title: "Birikim", alt: ["Bireysel Emeklilik", "Fon Alım"] },
-  {
-    title: "Aylık Giderler",
-    alt: [
-      "Market",
-      "Araç",
-      "Hazır Yemek",
-      "Kredi",
-      "Kira",
-      "Abonelikler",
-      "Okul Aidatı",
-      "Servis Ücreti",
-      "ATM Nakit",
-    ],
-  },
-  {
-    title: "Ekstra Giderler",
-    alt: [
-      "Giyim",
-      "Sağlık",
-      "Ev Eşyası",
-      "Pasta Hammadde",
-      "Eğitim/Kitap",
-      "Eğlence/Oyun",
-      "Tatil",
-      "Ev Tadilat",
-    ],
-  },
-];
-
-export const giderCategoriesIcons = {
-  Telefon: telefon,
-  "İnternet/TV": internet,
-  Su: su,
-  Doğalgaz: dogalgaz,
-  Elektrik: elektrik,
-  "Site Aidat": aidat,
-  "Yakıt Parası": yakit,
-  "Bireysel Emeklilik": emeklilik,
-  "Fon Alım": fon,
-  Araç: oto,
-  "Hazır Yemek": yemek,
-  Kredi: kredi_karti,
-  Kira: kira,
-  Abonelikler: abone,
-  "Okul Aidatı": okul_aidat,
-  "Servis Ücreti": servis,
-  "ATM Nakit": atm,
-  Giyim: giyim,
-  Sağlık: healty,
-  "Ev Eşyası": ev_esya,
-  "Pasta Hammadde": cake,
-  "Eğitim/Kitap": kitap,
-  "Eğlence/Oyun": oyun,
-  Tatil: tatil,
-  "Ev Tadilat": tadilat,
-};
-
-export const gelirCategoriesIcons = {
-  Maaş: money,
-  Sena: love,
-  "Fon Satış": fon,
-  Kredi: credit,
-  "Kıst Maaş": money,
-  Promosyon: bank,
-  Harcırah: hotel,
-  Aile: aile,
-  Diğer: diger,
-};
-
-export const tarihSecimCat = [
-  "Son 1 Ay",
-  "Son 3 Ay",
-  "Son 6 Ay",
-  "Son 1 Yıl",
-  "Son 3 Yıl",
-  "Tüm Zamanlar",
-];
-
-export const totalCat = [
-  "Toplam Gelir",
-  "Toplam Gider",
-  "Ortalama Aylık Gelir",
-  "Ortalama Aylık Gider",
-  "Gelir - Gider Farkı",
-  "Tüm Zamanlar",
-];
+export const market = <i className="fa-solid fa-cart-shopping"></i>;
+export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>;
+export const incomes = <i className="fa-solid fa-money-bill-transfer"></i>;

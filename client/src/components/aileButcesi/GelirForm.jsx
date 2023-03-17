@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "../../context/globalContext";
-import { plus } from "../../utils/abicons";
-import { gelirCategories } from "../../utils/formCategoryData";
-import "react-datepicker/dist/react-datepicker.css";
+import { plus } from "../../utils/icons";
+import { butceCategoryData } from "../../utils/localData";
 import Button from "../UI/Button";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
+import "react-datepicker/dist/react-datepicker.css";
 
 const GelirForm = () => {
   const {
@@ -67,11 +67,13 @@ const GelirForm = () => {
           id="category"
           onChange={handleSelect}
         >
-          {gelirCategories.map((categoryName, index) => (
-            <option key={index} value={categoryName}>
-              {categoryName}
-            </option>
-          ))}
+          {butceCategoryData
+            .filter((cat) => cat.type === "Gelir")
+            .map(({ id, categoryA }) => (
+              <option key={id} value={categoryA}>
+                {categoryA}
+              </option>
+            ))}
         </select>
       </div>
       <div className="input-control">

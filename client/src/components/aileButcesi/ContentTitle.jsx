@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { menuItems } from "../utils/abmenuitems";
+import { menuItems } from "../../utils/localData";
 
 const ContentTitle = ({ active, setActive, title }) => {
   return (

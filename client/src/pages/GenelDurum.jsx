@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
 import { PageLayout } from "../styles/Layout";
 import { useGlobalContext } from "../context/globalContext";
 import Dashboard from "../components/genelDurum/Dashboard";
 import styled from "styled-components";
 
 const GenelDurum = () => {
+  const { activeTarih, setActiveTarih } = useGlobalContext();
+
   return (
     <PageLayout>
       <GenelDurumMain>
-        <Dashboard />
+        <Dashboard activeTarih={activeTarih} setActiveTarih={setActiveTarih} />
       </GenelDurumMain>
     </PageLayout>
   );

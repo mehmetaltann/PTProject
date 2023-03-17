@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "../../context/globalContext";
-import { plus } from "../../utils/abicons";
-import { giderCategories } from "../../utils/formCategoryData";
+import { plus } from "../../utils/icons";
+import { butceCategoryData } from "../../utils/localData";
+import { uniqListFunc } from "../../utils/help-functions";
 import Button from "../UI/Button";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
@@ -23,7 +24,9 @@ const GiderForm = () => {
   const [enteredCategoryB, setEnteredCategoryB] = useState("Telefon");
   const [enteredDescription, setEnteredDescription] = useState("");
   const [catBFormData, setCatBFormData] = useState(
-    giderCategories.flatMap((cat) => cat.alt)
+    butceCategoryData
+      .filter((cat) => cat.type === "Gider")
+      .filter((gidCat) => gidCat.categoryA === "Fatura")
   );
 
   useEffect(() => {
@@ -38,11 +41,11 @@ const GiderForm = () => {
   const handleSelectA = (e) => {
     const catAValue = e.target.value;
     setEnteredCategoryA(catAValue);
-    giderCategories.map((cat) => {
-      if (cat.title === catAValue) {
-        setCatBFormData(cat.alt);
-      }
-    });
+    setCatBFormData(
+      butceCategoryData
+        .filter((cat) => cat.type === "Gider")
+        .filter((gidCat) => gidCat.categoryA === catAValue)
+    );
   };
 
   const handleSelectB = (e) => {
@@ -83,9 +86,12 @@ const GiderForm = () => {
           id="categoryA"
           onChange={handleSelectA}
         >
-          {giderCategories.map((category, index) => (
-            <option key={index} value={category.title}>
-              {category.title}
+          {uniqListFunc(
+            butceCategoryData.filter((cat) => cat.type === "Gider"),
+            "categoryA"
+          ).map(({ id, categoryA }) => (
+            <option key={id} value={categoryA}>
+              {categoryA}
             </option>
           ))}
         </select>
@@ -98,9 +104,9 @@ const GiderForm = () => {
           id="categoryB"
           onChange={handleSelectB}
         >
-          {catBFormData.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
+          {catBFormData.map(({ id, categoryB }) => (
+            <option key={id} value={categoryB}>
+              {categoryB}
             </option>
           ))}
         </select>
@@ -190,7 +196,7 @@ const FormStyled = styled.form`
       width: 100%;
     }
   }
-  
+
   select {
     width: 100%;
     opacity: 0.6;

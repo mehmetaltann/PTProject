@@ -11,6 +11,8 @@ export const GlobalProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
+  const [activeTarih, setActiveTarih] = useState(1);
+  const [activeCategory, setActiveCategory] = useState(1);
 
   const gelirGetir = async () => {
     const response = await axios.get(`${BASE_URL}gelir-getir`);
@@ -82,15 +84,6 @@ export const GlobalProvider = ({ children }) => {
     return toplamGelir() - toplamGider();
   };
 
-  const islemGecmisi = () => {
-    const history = [...gelirler, ...giderler];
-    history.sort((a, b) => {
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
-
-    return history.slice(0, 5);
-  };
-
   return (
     <GlobalContext.Provider
       value={{
@@ -106,13 +99,14 @@ export const GlobalProvider = ({ children }) => {
         toplamGider,
         setGiderler,
         totalBalance,
-        islemGecmisi,
         error,
         setError,
         message,
         setMessage,
         startDate,
         setStartDate,
+        activeTarih,
+        setActiveTarih,
       }}
     >
       {children}

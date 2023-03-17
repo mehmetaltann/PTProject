@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { InnerLayout } from "../../styles/Layout";
-import ContentTitle from "../ContentTitle";
+import ContentTitle from "./ContentTitle";
 import styled from "styled-components";
 
 const GelGit = ({
