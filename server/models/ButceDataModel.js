@@ -1,40 +1,43 @@
 const mongoose = require("mongoose");
 
-const YatirimSchema = new mongoose.Schema(
+const ButceSchema = new mongoose.Schema(
   {
-    kod: {
+    title: {
       type: String,
       required: true,
       trim: true,
-      maxLength: 5,
+      maxLength: 50,
     },
-    tip: {
-      type: String,
-      required: true,
-      trim: true,
-      maxLength: 15,
-    },
-    adet: {
+    amount: {
       type: Number,
       required: true,
       trim: true,
       maxLength: 20,
     },
-    alimfiyati: {
-      type: Number,
-      required: true,
+    type: {
+      type: String,
+      default: "",
       trim: true,
+      maxLength: 10,
     },
-    alimtarihi: {
+    date: {
       type: Date,
       required: true,
       trim: true,
     },
-    satimtarihi: {
-      type: Date,
+    categoryA: {
+      type: String,
+      required: true,
       trim: true,
+      maxLength: 25,
     },
-    aciklama: {
+    categoryB: {
+      type: String,
+      default: "",
+      trim: true,
+      maxLength: 25,
+    },
+    description: {
       type: String,
       default: "",
       trim: true,
@@ -44,4 +47,4 @@ const YatirimSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Yatirim Portfoy", YatirimSchema);
+module.exports = mongoose.model("Butce", ButceSchema);

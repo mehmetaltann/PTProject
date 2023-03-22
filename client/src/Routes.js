@@ -5,6 +5,8 @@ import BireyselEmeklilikPage from "./pages/BireyselEmeklilikPage";
 import GenelDurum from "./pages/GenelDurum";
 import AileButcesiPage from "./pages/AileButcesiPage";
 import NavBar from "./layouts/NavBar";
+import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
+import ButceKayitPage from "./pages/ButceKayitPage";
 
 const routes = [
   {
@@ -13,11 +15,11 @@ const routes = [
   },
   {
     path: "/yatirim",
-    component: YatirimPage,
+    component: ButceGenelDurumPage,
   },
   {
-    path: "/yatirim",
-    component: BireyselEmeklilikPage,
+    path: "/yatirim2",
+    component: ButceKayitPage,
   },
   {
     path: "/genel-durum",

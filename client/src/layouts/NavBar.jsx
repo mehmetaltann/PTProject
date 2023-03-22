@@ -5,7 +5,7 @@ import styled from "styled-components";
 const data = [
   { title: "Anasayfa", link: "" },
   { title: "Yatırım", link: "yatirim" },
-  { title: "Bireysel Emeklilik", link: "bireysel_emeklilik" },
+  { title: "Bireysel Emeklilik", link: "yatirim2" },
   { title: "Aile Bütçesi", link: "butce" },
   { title: "Genel Durum", link: "genel-durum" },
 ];

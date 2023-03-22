@@ -5,5 +5,4 @@ export const PageLayout = styled.div`
   height: 100%;
   display: flex;
   overflow: auto;
-
 `;

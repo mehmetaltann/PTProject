@@ -18,10 +18,6 @@ const GenelDurum = () => {
 const GenelDurumMain = styled.main`
   height: 90%;
   width: 100%;
-
-  @media only screen and (max-width: 500px) {
-    overflow: auto;
-  }
 `;
 
 export default GenelDurum;

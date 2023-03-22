@@ -14,10 +14,11 @@ const GelirItem = ({
   deleteItem,
   indicatorColor,
 }) => {
-
   return (
     <GelirItemStyle indicatorColor={indicatorColor}>
-      <div className="icon">{butceCategoryData.find((cat) => cat.categoryA === category).icon}</div>
+      <div className="icon">
+        {butceCategoryData.find((cat) => cat.categoryA === category).icon}
+      </div>
       <h5 className="title">{title}</h5>
       <div className="text">
         <p>
@@ -54,10 +55,9 @@ const GelirItemStyle = styled.div`
   border-radius: 20px;
   padding: 0.8rem;
   margin-bottom: 0.8rem;
-  
 
   display: flex;
-  align-items:center;
+  align-items: center;
   gap: 1.2rem;
   width: 98%;
   color: var(--theme-fourth);

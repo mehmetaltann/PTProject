@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
     html{
       font-size: 100%;
 
-      @media only screen and (max-width: 1250px) {
+      @media only screen and (max-width: 1460px) {
         font-size: 80%;
         }
     }
@@ -26,7 +26,7 @@ export const GlobalStyle = createGlobalStyle`
       --theme-black: #000000;
       --theme-white: #FFFFFF;
       --theme-box-shadow: 0px 1px 15px rgba(0,0,0,0.06);
-      --theme-border: 2px solid #FFFFFF;
+      --theme-border: 2px solid rgba(17, 45, 78, .1);
 
     }
 

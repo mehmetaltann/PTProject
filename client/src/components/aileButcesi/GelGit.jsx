@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { InnerLayout } from "../../styles/Layout";
+import { tarihSecim } from "../../utils/localData";
 import ContentTitle from "./ContentTitle";
 import styled from "styled-components";
 
@@ -13,6 +14,8 @@ const GelGit = ({
   indicatorColor,
   setActive,
   active,
+  activeTarih,
+  setActiveTarih,
 }) => {
   return (
     <GelGitStyled indicatorColor={indicatorColor}>
@@ -21,10 +24,25 @@ const GelGit = ({
       </ContentTitle>
       <div className="container">
         <div className="form-container">
-          <h3>
-            <span>{form_baslik}</span>
-          </h3>
-          <Form />
+          <div className="form">
+            <h3>
+              <span>{form_baslik}</span>
+            </h3>
+            <Form />
+          </div>
+          <div className="tarihSecim-container">
+            {tarihSecim.map(({ id, title }) => (
+              <button
+                onClick={() => setActiveTarih(id)}
+                className={
+                  activeTarih === id ? "tarihsecim active" : "tarihsecim"
+                }
+                key={id}
+              >
+                {title}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="data-container">
           <h3>
@@ -67,17 +85,61 @@ const GelGitStyled = styled.div`
         margin-bottom: 1rem;
       }
 
-      @media only screen and (max-width: 1250px) {
-        width: 30%;
+      .form {
+        @media only screen and (max-width: 1250px) {
+          width: 30%;
+        }
+
+        @media only screen and (max-width: 750px) {
+          width: 40%;
+        }
+
+        @media only screen and (max-width: 500px) {
+          flex-wrap: wrap;
+          width: 100%;
+        }
       }
 
-      @media only screen and (max-width: 750px) {
-        width: 40%;
-      }
-
-      @media only screen and (max-width: 500px) {
+      .tarihSecim-container {
+        height: 35%;
+        background: var(--theme-secondary);
+        border: var(--theme-border);
+        box-shadow: var(--theme-box-shadow);
+        padding: 1rem;
+        margin-top: 2rem;
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
         flex-wrap: wrap;
-        width: 100%;
+
+        .tarihsecim {
+          width: 35%;
+          background: var(--theme-secondary);
+          border: var(--theme-border);
+          box-shadow: var(--theme-box-shadow);
+          padding: 0.7rem;
+          border-radius: 20px;
+          color: var(--theme-fourth);
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          opacity: 0.7;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &:hover {
+            background-color: var(--theme-fourth);
+            color: var(--theme-primary);
+          }
+        }
+        .active {
+          background-color: var(--theme-fourth);
+          color: var(--theme-primary);
+        }
       }
     }
 

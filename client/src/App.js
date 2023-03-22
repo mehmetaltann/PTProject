@@ -12,10 +12,6 @@ function App() {
 const AppStyled = styled.div`
   height: 100vh;
   position: relative;
-
-  @media only screen and (max-width: 500px) {
-    overflow: auto;
-  }
 `;
 
 export default App;

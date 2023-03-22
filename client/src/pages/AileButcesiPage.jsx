@@ -19,14 +19,16 @@ const AileButcesiPage = () => {
     gelirler,
     gelirSil,
     toplamGelir,
+    activeTarih,
+    setActiveTarih,
   } = useGlobalContext();
 
   useEffect(() => {
     gelirGetir();
     giderGetir();
-  }, []);
+  }, [activeTarih]);
 
-  const giderMap = giderler.map(
+  const giderData = giderler.map(
     ({ _id, title, amount, date, categoryA, categoryB, description }) => {
       return (
         <GiderItem
@@ -45,7 +47,7 @@ const AileButcesiPage = () => {
     }
   );
 
-  const gelirMap = gelirler.map(
+  const gelirData = gelirler.map(
     ({ _id, title, amount, date, category, description }) => {
       return (
         <GelirItem
@@ -72,11 +74,13 @@ const AileButcesiPage = () => {
             baslik={"Gelirler"}
             form_baslik={"Yeni Gelir"}
             data_baslik={"Toplam Gelir:"}
-            data={gelirMap}
+            data={gelirData}
             toplamGider={toplamGelir}
             indicatorColor={"var(--theme-green)"}
             active={active}
             setActive={setActive}
+            activeTarih={activeTarih}
+            setActiveTarih={setActiveTarih}
           />
         );
       case 2:
@@ -86,11 +90,13 @@ const AileButcesiPage = () => {
             baslik={"Giderler"}
             form_baslik={"Yeni Gider"}
             data_baslik={"Toplam Gider:"}
-            data={giderMap}
+            data={giderData}
             toplamGider={toplamGider}
             indicatorColor={"var(--theme-red)"}
             active={active}
             setActive={setActive}
+            activeTarih={activeTarih}
+            setActiveTarih={setActiveTarih}
           />
         );
       default:
@@ -100,11 +106,13 @@ const AileButcesiPage = () => {
             baslik={"Gelirler"}
             form_baslik={"Yeni Gelir"}
             data_baslik={"Toplam Gelir:"}
-            data={gelirMap}
+            data={gelirData}
             toplamGider={toplamGelir}
             indicatorColor={"var(--theme-green)"}
             active={active}
             setActive={setActive}
+            activeTarih={activeTarih}
+            setActiveTarih={setActiveTarih}
           />
         );
     }

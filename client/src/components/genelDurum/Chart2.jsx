@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Line } from "react-chartjs-2";
-import { useGlobalContext } from "../../context/globalContext";
 import { dateFormat } from "../../utils/help-functions";
 import {
   Chart as ChartJs,
@@ -26,20 +25,22 @@ ChartJs.register(
   ArcElement
 );
 
-const Chart = () => {
-  const { gelirler, giderler } = useGlobalContext();
-
+const Chart2 = ({ butceData }) => {
   const data = {
-    labels: gelirler.map((gelir) => {
-      return dateFormat(gelir.date);
-    }),
+    labels: butceData
+      .filter((data) => data.type === "gelir")
+      .map((gelir) => {
+        return gelir.date;
+      }),
     datasets: [
       {
         label: "Gelir",
         data: [
-          ...gelirler.map((gelir) => {
-            return gelir.amount;
-          }),
+          ...butceData
+            .filter((data) => data.type === "gelir")
+            .map((gelir) => {
+              return gelir.amount;
+            }),
         ],
         backgroundColor: "green",
         tension: 0.2,
@@ -47,9 +48,11 @@ const Chart = () => {
       {
         label: "Gider",
         data: [
-          ...giderler.map((gider) => {
-            return gider.amount;
-          }),
+          ...butceData
+            .filter((data) => data.type === "gider")
+            .map((gider) => {
+              return gider.amount;
+            }),
         ],
         backgroundColor: "red",
         tension: 0.2,
@@ -76,4 +79,4 @@ const ChartStyled = styled.div`
   justify-content: center;
 `;
 
-export default Chart;
+export default Chart2;
