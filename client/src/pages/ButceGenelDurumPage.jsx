@@ -1,12 +1,12 @@
 import { PageLayout } from "../styles/Layout";
-import Dashboard2 from "../components/genelDurum/Dashboard2";
+import Dashboard from "../components/genelDurum/Dashboard";
 import styled from "styled-components";
 
 const ButceGenelDurumPage = () => {
   return (
     <PageLayout>
       <ButceGenelDurumStyled>
-        <Dashboard2 />
+        <Dashboard />
       </ButceGenelDurumStyled>
     </PageLayout>
   );

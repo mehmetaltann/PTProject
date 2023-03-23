@@ -38,3 +38,4 @@ export const tadilat = <i className="fa-solid fa-screwdriver-wrench"></i>;
 export const market = <i className="fa-solid fa-cart-shopping"></i>;
 export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>;
 export const incomes = <i className="fa-solid fa-money-bill-transfer"></i>;
+export const search = <i className="fa-solid fa-magnifying-glass"></i>

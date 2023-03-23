@@ -1,23 +1,25 @@
 import styled from "styled-components";
 import { menuItems } from "../../utils/localData";
+import { useGlobalContext } from "../../context/globalContext";
 
-const ContentTitle = ({ active, setActive, title }) => {
+const ContentTitle = () => {
+  const { activeType, setActiveType, capitalizedTitle } = useGlobalContext();
   return (
     <ContentTitleStyled>
       <div className="left-side">
         {menuItems.map(({ id, icon, title }) => (
           <button
             key={id}
-            onClick={() => setActive(id)}
-            className={active === id ? "btn active" : "btn"}
+            onClick={() => setActiveType(title)}
+            className={activeType === title ? "btn active" : "btn"}
           >
             {icon}
-            <span>{title}</span>
+            <span>{title.charAt(0).toUpperCase() + title.slice(1)}</span>
           </button>
         ))}
       </div>
       <div className="right-side">
-        <h2>{title}</h2>
+        <h2>{capitalizedTitle}</h2>
       </div>
     </ContentTitleStyled>
   );

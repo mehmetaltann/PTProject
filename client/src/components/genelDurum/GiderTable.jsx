@@ -1,19 +1,18 @@
 import { butceCategoryData } from "../../utils/localData";
 import styled from "styled-components";
 
-const GiderTable = ({ toplamButceData }) => {
+const GiderTable = ({ toplamCategorikButceData }) => {
   return (
     <GiderTableStyled>
       <h3>Giderler</h3>
       <div className="gider-con">
         {butceCategoryData
           .filter((cat) => cat.type === "Gider")
+          .filter((cata) => cata.categoryB !== "Tümü")
           .map(({ id, categoryB }) => (
             <div className="gider" key={id}>
               <p>{categoryB}&nbsp;:</p>{" "}
-              <span>
-                {toplamButceData(categoryB,"gider")} TL
-              </span>
+              <span>{toplamCategorikButceData(categoryB, "gider")} TL</span>
             </div>
           ))}
       </div>

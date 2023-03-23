@@ -1,23 +1,30 @@
-import React from "react";
 import styled from "styled-components";
 import Button from "../UI/Button";
+import { dateFormat } from "../../utils/help-functions";
 import { butceCategoryData } from "../../utils/localData";
 import { tl, calender, trash, comment } from "../../utils/icons";
-import { dateFormat } from "../../utils/help-functions";
+import { useGlobalContext } from "../../context/globalContext";
 
-const GelirItem = ({
+const DataTableItem = ({
   id,
   title,
   amount,
   date,
-  category,
-  deleteItem,
-  indicatorColor,
+  categoryA,
+  categoryB,
+  description,
+  activeType,
 }) => {
+  const { butceKalemiSil } = useGlobalContext();
+
   return (
-    <GelirItemStyle indicatorColor={indicatorColor}>
+    <DataTableItemStyled
+      indicatorColor={activeType === "gelir" ? "green" : "red"}
+    >
       <div className="icon">
-        {butceCategoryData.find((cat) => cat.categoryA === category).icon}
+        {activeType === "gelir"
+          ? butceCategoryData.find((cat) => cat.categoryA === categoryA).icon
+          : butceCategoryData.find((cat) => cat.categoryB === categoryB).icon}
       </div>
       <h5 className="title">{title}</h5>
       <div className="text">
@@ -31,7 +38,7 @@ const GelirItem = ({
         </p>
         <p>
           {comment}
-          <span>{category}</span>
+          <span>{activeType === "gelir" ? categoryA : categoryB}</span>
         </p>
       </div>
       <div className="bottom">
@@ -41,14 +48,14 @@ const GelirItem = ({
           icon={trash}
           bpadding={"1rem"}
           bradious={"50%"}
-          onClick={() => deleteItem(id)}
+          onClick={() => butceKalemiSil(id)}
         />
       </div>
-    </GelirItemStyle>
+    </DataTableItemStyled>
   );
 };
 
-const GelirItemStyle = styled.div`
+const DataTableItemStyled = styled.div`
   background-color: var(--theme-primary);
   border: var(--theme-border);
   box-shadow: var(--theme-box-shadow);
@@ -115,4 +122,4 @@ const GelirItemStyle = styled.div`
   }
 `;
 
-export default GelirItem;
+export default DataTableItem;

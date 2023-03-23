@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import ContentTitle2 from "./ContentTitle2";
+import ContentTitle from "./ContentTitle";
 import KayitForm from "./KayitForm";
 import TarihSecim from "./TarihSecim";
 import TableTitle from "./TableTitle";
 import DataTable from "./DataTable";
 import { useGlobalContext } from "../../context/globalContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const ButceKayit = () => {
-  const [activeType, setActiveType] = useState("gelir");
-  const { butceKalemiGetir, activeTarih } = useGlobalContext();
+  const { butceKalemiGetir, activeTarih, activeCategory } = useGlobalContext();
 
   useEffect(() => {
     butceKalemiGetir();
@@ -18,11 +17,11 @@ const ButceKayit = () => {
 
   return (
     <ButceKayitStyled>
-      <ContentTitle2 activeType={activeType} setActiveType={setActiveType} />
+      <ContentTitle />
       <div className="container">
         <div className="left-container">
           <div className="form-container">
-            <KayitForm activeType={activeType} />
+            <KayitForm />
           </div>
           <div className="tarihSecim-container">
             <TarihSecim />
@@ -72,6 +71,24 @@ const ButceKayitStyled = styled.div`
       }
 
       .tarihSecim-container {
+        height: 35%;
+        background: var(--theme-secondary);
+        border: var(--theme-border);
+        box-shadow: var(--theme-box-shadow);
+        padding: 1rem;
+        margin-top: 2rem;
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .active {
+          background-color: var(--theme-fourth);
+          color: var(--theme-primary);
+        }
       }
     }
 
@@ -86,25 +103,23 @@ const ButceKayitStyled = styled.div`
       box-shadow: var(--theme-box-shadow);
       border-radius: 20px;
       padding: 1rem;
-      overflow: auto;
+      overflow: hidden;
 
       &::-webkit-scrollbar {
         display: none;
       }
 
-      h3 {
-        margin-bottom: 1rem;
-
-        span {
-          color: ${(props) => props.indicatorColor};
-          opacity: 0.8;
-        }
-      }
-
       .title-container {
+        padding: 1rem;
+        width: 100%;
+        overflow: hidden;
       }
 
       .dataTable-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
       }
     }
   }

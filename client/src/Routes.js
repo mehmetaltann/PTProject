@@ -2,8 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import YatirimPage from "./pages/YatirimPage";
 import BireyselEmeklilikPage from "./pages/BireyselEmeklilikPage";
-import GenelDurum from "./pages/GenelDurum";
-import AileButcesiPage from "./pages/AileButcesiPage";
 import NavBar from "./layouts/NavBar";
 import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
 import ButceKayitPage from "./pages/ButceKayitPage";
@@ -15,19 +13,19 @@ const routes = [
   },
   {
     path: "/yatirim",
-    component: ButceGenelDurumPage,
+    component: YatirimPage,
   },
   {
     path: "/yatirim2",
-    component: ButceKayitPage,
+    component: BireyselEmeklilikPage,
   },
   {
     path: "/genel-durum",
-    component: GenelDurum,
+    component: ButceGenelDurumPage,
   },
   {
     path: "/butce",
-    component: AileButcesiPage,
+    component: ButceKayitPage,
   },
 ];
 

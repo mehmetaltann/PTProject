@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Line } from "react-chartjs-2";
 import { useGlobalContext } from "../../context/globalContext";
@@ -14,6 +13,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
+import { useState } from "react";
 
 ChartJs.register(
   CategoryScale,
@@ -27,32 +27,38 @@ ChartJs.register(
 );
 
 const Chart = () => {
-  const { gelirler, giderler } = useGlobalContext();
+  const { butceData, activeTarih } = useGlobalContext();
+  const [initailLabel, setInitailLabel] = useState([]);
+  const gelirData = butceData
+    .filter((data) => data.type === "gelir")
+    .map((gelir) => {
+      return gelir.amount;
+    });
+
+  const giderData = butceData
+    .filter((data) => data.type === "gider")
+    .map((gider) => {
+      return gider.amount;
+    });
 
   const data = {
-    labels: gelirler.map((gelir) => {
-      return dateFormat(gelir.date);
-    }),
+    labels: butceData
+      .filter((data) => data.type === "gelir")
+      .map((gelir) => {
+        return dateFormat(gelir.date);
+      }),
     datasets: [
       {
         label: "Gelir",
-        data: [
-          ...gelirler.map((gelir) => {
-            return gelir.amount;
-          }),
-        ],
+        data: [...gelirData],
         backgroundColor: "green",
-        tension: 0.2,
+        tension: 0.4,
       },
       {
         label: "Gider",
-        data: [
-          ...giderler.map((gider) => {
-            return gider.amount;
-          }),
-        ],
+        data: [...giderData],
         backgroundColor: "red",
-        tension: 0.2,
+        tension: 0.4,
       },
     ],
   };

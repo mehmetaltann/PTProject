@@ -7,21 +7,24 @@ export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [butceData, setButceData] = useState([]);
-  const [gelirler, setGelirler] = useState([]);
-  const [giderler, setGiderler] = useState([]);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [activeTarih, setActiveTarih] = useState(1);
   const [activeCategory, setActiveCategory] = useState("Tümü");
+  const [activeType, setActiveType] = useState("gelir");
+  const capitalizedTitle =
+    activeType.charAt(0).toUpperCase() + activeType.slice(1);
 
   const butceKalemiGetir = async () => {
-    const response = await axios.get(`${BASE_URL}butce-getir/0/Tümü`);
+    const response = await axios.get(
+      `${BASE_URL}butce-getir/${activeTarih}/Tümü`
+    );
     setButceData(response.data);
   };
 
   const butceKalemiEkle = async (data, type) => {
-    const response = await axios
+    await axios
       .post(`${BASE_URL}butce-veri-ekle/${type}`, data)
       .then((response) => setMessage(response.data.message))
       .catch((err) => {
@@ -31,7 +34,7 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const butceKalemiSil = async (id) => {
-    const response = await axios
+    await axios
       .delete(`${BASE_URL}butce-veri-sil/${id}`)
       .then((response) => setMessage(response.data.message))
       .catch((err) => {
@@ -40,7 +43,14 @@ export const GlobalProvider = ({ children }) => {
     butceKalemiGetir();
   };
 
-  const toplamButceData = (categoryData = "Tümü", type) => {
+  const toplamButceData = (type) => {
+    let total = 0;
+    const data = butceData.filter((data) => data.type === type);
+    data.forEach((dataType) => (total += dataType.amount));
+    return total.toFixed(2);
+  };
+
+  const toplamCategorikButceData = (categoryData = "Tümü", type) => {
     let total = 0;
     const data = butceData.filter((data) => data.type === type);
     if (categoryData === "Tümü") {
@@ -63,186 +73,31 @@ export const GlobalProvider = ({ children }) => {
   const ortalamaButceData = (type) => {
     switch (activeTarih) {
       case 1:
-        return toplamButceData(undefined, type);
-        break;
+        return toplamButceData(type);
       case 2:
-        return (toplamButceData(undefined, type) / 3).toFixed(2);
-        break;
+        return (toplamButceData(type) / 3).toFixed(2);
       case 3:
-        return (toplamButceData(undefined, type) / 6).toFixed(2);
-        break;
+        return (toplamButceData(type) / 6).toFixed(2);
       case 4:
-        return (toplamButceData(undefined, type) / 12).toFixed(2);
-        break;
+        return (toplamButceData(type) / 12).toFixed(2);
       case 5:
-        return (toplamButceData(undefined, type) / 36).toFixed(2);
-        break;
+        return (toplamButceData(type) / 36).toFixed(2);
       default:
-        return toplamButceData(undefined, type);
-        break;
+        return toplamButceData(type);
     }
-  };
-
-  const toplamGelir = (categoryData = "Tümü") => {
-    let totalIncome = 0;
-    if (categoryData === "Tümü") {
-      gelirler.forEach((gelir) => {
-        totalIncome += gelir.amount;
-      });
-    } else {
-      gelirler
-        .filter((cat) => cat.category === categoryData)
-        .forEach((gelir) => {
-          totalIncome += gelir.amount;
-        });
-    }
-
-    return totalIncome.toFixed(2);
-  };
-
-  const gelirGetir = async () => {
-    const response = await axios.get(
-      `${BASE_URL}gelir-getir/${activeTarih}/${activeCategory}`
-    );
-    setGelirler(response.data);
-  };
-
-  const giderGetir = async () => {
-    const response = await axios.get(
-      `${BASE_URL}gider-getir/${activeTarih}/${activeCategory}`
-    );
-    setGiderler(response.data);
-  };
-
-  const gelirEkle = async (income) => {
-    const response = await axios
-      .post(`${BASE_URL}gelir-ekle`, income)
-      .then((response) => setMessage(response.data.message))
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    gelirGetir();
-  };
-
-  const giderEkle = async (expense) => {
-    const response = await axios
-      .post(`${BASE_URL}gider-ekle`, expense)
-      .then((response) => setMessage(response.data.message))
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    giderGetir();
-  };
-
-  const gelirSil = async (id) => {
-    const response = await axios
-      .delete(`${BASE_URL}gelir-sil/${id}`)
-      .then((response) => setMessage(response.data.message))
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    gelirGetir();
-  };
-
-  const giderSil = async (id) => {
-    const response = await axios
-      .delete(`${BASE_URL}/gider-sil/${id}`)
-      .then((response) => setMessage(response.data.message))
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    giderGetir();
-  };
-
-  const toplamGider = (categoryData = "Tümü") => {
-    let totalExpense = 0;
-    if (categoryData === "Tümü") {
-      giderler.forEach((gider) => {
-        totalExpense += gider.amount;
-      });
-    } else {
-      giderler
-        .filter((cat) => cat.categoryB === categoryData)
-        .forEach((gider) => {
-          totalExpense += gider.amount;
-        });
-    }
-    return totalExpense.toFixed(2);
-  };
-
-  const ortalamaGelir = () => {
-    switch (activeTarih) {
-      case 1:
-        return toplamGelir();
-        break;
-      case 2:
-        return (toplamGelir() / 3).toFixed(2);
-        break;
-      case 3:
-        return (toplamGelir() / 6).toFixed(2);
-        break;
-      case 4:
-        return (toplamGelir() / 12).toFixed(2);
-        break;
-      case 5:
-        return (toplamGelir() / 36).toFixed(2);
-        break;
-      default:
-        return toplamGelir();
-        break;
-    }
-  };
-
-  const ortalamaGider = () => {
-    switch (activeTarih) {
-      case 1:
-        return toplamGider();
-        break;
-      case 2:
-        return (toplamGider() / 3).toFixed(2);
-        break;
-      case 3:
-        return (toplamGider() / 6).toFixed(2);
-        break;
-      case 4:
-        return (toplamGider() / 12).toFixed(2);
-        break;
-      case 5:
-        return (toplamGider() / 36).toFixed(2);
-        break;
-      default:
-        return toplamGider();
-        break;
-    }
-  };
-
-  const totalBalance = () => {
-    return (toplamGelir() - toplamGider()).toFixed(2);
   };
 
   return (
     <GlobalContext.Provider
       value={{
+        capitalizedTitle,
         butceData,
         butceKalemiGetir,
         butceKalemiEkle,
         butceKalemiSil,
         toplamButceData,
+        toplamCategorikButceData,
         ortalamaButceData,
-        gelirEkle,
-        gelirGetir,
-        gelirSil,
-        gelirler,
-        giderEkle,
-        giderGetir,
-        giderler,
-        giderSil,
-        toplamGelir,
-        toplamGider,
-        setGiderler,
-        totalBalance,
-        ortalamaGelir,
-        ortalamaGider,
         error,
         setError,
         message,
@@ -251,6 +106,10 @@ export const GlobalProvider = ({ children }) => {
         setStartDate,
         activeTarih,
         setActiveTarih,
+        activeCategory,
+        setActiveCategory,
+        activeType,
+        setActiveType,
       }}
     >
       {children}

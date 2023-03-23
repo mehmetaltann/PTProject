@@ -3,19 +3,19 @@ import styled from "styled-components";
 const TotalInf = ({ ortalamaButceData, toplamButceData }) => {
 
   const balance =
-    toplamButceData(undefined, "gelir") - toplamButceData(undefined, "gider");
+    toplamButceData("gelir") - toplamButceData("gider");
 
   const totalCat = [
     {
       id: 1,
       title: "Toplam Gelir",
-      value: toplamButceData(undefined, "gelir"),
+      value: toplamButceData("gelir"),
       stil: "gelir",
     },
     {
       id: 2,
       title: "Toplam Gider",
-      value: toplamButceData(undefined, "gider"),
+      value: toplamButceData("gider"),
       stil: "gider",
     },
     {

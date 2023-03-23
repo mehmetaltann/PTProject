@@ -2,7 +2,6 @@ const ButceSchema = require("../models/ButceDataModel");
 const {
   thisMonthLastDay,
   thisMonthFirstDay,
-  prevMonthLastDay,
   prevThreeMonthFirstDay,
   prevSixMonthFirstDay,
   prevYearFirstDay,
@@ -61,13 +60,13 @@ exports.butceSorgula = async (req, res) => {
     } else if (activeTarih == 2) {
       if (activeCategory === "Tümü") {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevThreeMonthFirstDay, prevMonthLastDay)
+          dateQuery(prevThreeMonthFirstDay, thisMonthLastDay)
         )
           .sort({ createdAt: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevThreeMonthFirstDay, prevMonthLastDay)
+          dateQuery(prevThreeMonthFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
           .sort({ createdAt: -1 })
@@ -76,13 +75,13 @@ exports.butceSorgula = async (req, res) => {
     } else if (activeTarih == 3) {
       if (activeCategory === "Tümü") {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevSixMonthFirstDay, prevMonthLastDay)
+          dateQuery(prevSixMonthFirstDay, thisMonthLastDay)
         )
           .sort({ createdAt: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevSixMonthFirstDay, prevMonthLastDay)
+          dateQuery(prevSixMonthFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
           .sort({ createdAt: -1 })
@@ -91,13 +90,13 @@ exports.butceSorgula = async (req, res) => {
     } else if (activeTarih == 4) {
       if (activeCategory === "Tümü") {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevYearFirstDay, prevMonthLastDay)
+          dateQuery(prevYearFirstDay, thisMonthLastDay)
         )
           .sort({ createdAt: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevYearFirstDay, prevMonthLastDay)
+          dateQuery(prevYearFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
           .sort({ createdAt: -1 })
@@ -106,13 +105,13 @@ exports.butceSorgula = async (req, res) => {
     } else if (activeTarih == 5) {
       if (activeCategory === "Tümü") {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevThreeYearFirstDay, prevMonthLastDay)
+          dateQuery(prevThreeYearFirstDay, thisMonthLastDay)
         )
           .sort({ createdAt: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
-          dateQuery(prevThreeYearFirstDay, prevMonthLastDay)
+          dateQuery(prevThreeYearFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
           .sort({ createdAt: -1 })

@@ -8,7 +8,7 @@ import Button from "../UI/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const KayitForm = ({ activeType }) => {
+const KayitForm = () => {
   const {
     butceKalemiEkle,
     error,
@@ -17,6 +17,8 @@ const KayitForm = ({ activeType }) => {
     setMessage,
     startDate,
     setStartDate,
+    activeType,
+    capitalizedTitle,
   } = useGlobalContext();
 
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -29,8 +31,6 @@ const KayitForm = ({ activeType }) => {
       .filter((cat) => cat.type === "Gider")
       .filter((gidCat) => gidCat.categoryA === "Fatura")
   );
-  const capitalizedTitle =
-    activeType.charAt(0).toUpperCase() + activeType.slice(1);
 
   useEffect(() => {
     if (error) {
@@ -74,6 +74,9 @@ const KayitForm = ({ activeType }) => {
     <KayitFormStyled onSubmit={handleSubmit}>
       {error && <p className="error">{error}</p>}
       {message && <p className="message">{message}</p>}
+      <h4>
+        <span>{`Yeni ${capitalizedTitle}`}</span>
+      </h4>
       {activeType === "gelir" ? (
         <div className="selects input-control">
           <select
@@ -177,7 +180,7 @@ const KayitForm = ({ activeType }) => {
       <Button
         background={"var(--theme-fourth)"}
         color={"var(--theme-primary)"}
-        name={capitalizedTitle}
+        name={`Yeni ${capitalizedTitle} Ekle`}
         icon={plus}
         bpadding={".6rem 1.2rem"}
         bradious={"35px"}
@@ -211,6 +214,10 @@ const KayitFormStyled = styled.form`
       color: var(--theme-fourth);
       opacity: 0.6;
     }
+  }
+
+  h4 {
+    opacity: 0.8;
   }
 
   .input-control {
