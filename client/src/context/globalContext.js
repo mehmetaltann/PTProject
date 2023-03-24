@@ -18,7 +18,7 @@ export const GlobalProvider = ({ children }) => {
 
   const butceKalemiGetir = async () => {
     const response = await axios.get(
-      `${BASE_URL}butce-getir/${activeTarih}/Tümü`
+      `${BASE_URL}butce-getir/${activeTarih}/${activeCategory}`
     );
     setButceData(response.data);
   };

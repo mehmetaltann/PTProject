@@ -5,20 +5,18 @@ import { butceCategoryData } from "../../utils/localData";
 import { search } from "../../utils/icons";
 
 const TableTitle = () => {
-  const {
-    toplamButceData,
-    activeType,
-    capitalizedTitle,
-    setActiveCategory,
-  } = useGlobalContext();
+  const { toplamButceData, activeType, capitalizedTitle, setActiveCategory } =
+    useGlobalContext();
 
   return (
     <TableTitleStyled indicatorColor={activeType === "gelir" ? "green" : "red"}>
-      <h3>
-        {`Toplam ${capitalizedTitle}:`}{" "}
-        <span> {toplamButceData(activeType)} TL</span>
-      </h3>
-      <div className="input-grup">
+      <div className="toplam-tutar">
+        <h3>
+          {`Toplam ${capitalizedTitle}:`}{" "}
+          <span> {toplamButceData(activeType)} TL</span>
+        </h3>
+      </div>
+      <div className="category-pick">
         <label htmlFor="category">Kategory Seçiniz:</label>
 
         {activeType === "gelir" ? (
@@ -73,30 +71,67 @@ const TableTitle = () => {
 };
 
 const TableTitleStyled = styled.div`
-width: 100%;
-display: flex;
-justify-content: space-between;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 
-h3 {
-    margin-bottom: 1rem;
+  @media only screen and (max-width: 1000px) {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 4rem;
+    gap: 1rem;
+  }
+
+  @media only screen and (max-width: 700px) {
+    margin-bottom: 0.5rem;
+  }
+
+  .toplam-tutar {
+    width: 40%;
     opacity: 0.7;
 
     span {
       color: ${(props) => props.indicatorColor};
     }
+
+    @media only screen and (max-width: 1200px) {
+      font-size: 1rem;
+    }
+
+    @media only screen and (max-width: 1200px) {
+      width: 100%;
+    }
   }
 
-  .input-grup {
-    width: 45%;
+  .category-pick {
+    flex: 1;
+    gap: 0.4rem;
+    font-size: 1.2rem;
+    font-family: inherit;
     display: flex;
     align-items: center;
-    gap: .4rem;
-    font-size:ont-size: 1.2rem;
-    font-family: inherit;
+
+    @media only screen and (max-width: 1100px) {
+      font-size: 1rem;
+    }
 
     label {
-      width: 30%;
+      width: 25%;
       opacity: 0.8rem;
+
+      @media only screen and (max-width: 1400px) {
+        width: 30%;
+      }
+
+      @media only screen and (max-width: 1400px) {
+        font-size: 1rem;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        font-size: 1.2rem;
+      }
     }
 
     select {
@@ -112,6 +147,21 @@ h3 {
       box-shadow: var(--theme-box-shadow);
       color: var(--theme-fourth);
       opacity: 0.8;
+    }
+
+    button {
+      width: 20%;
+
+      i {
+        @media only screen and (max-width: 1200px) {
+          width: 0.5rem;
+
+        }
+      }
+
+      @media only screen and (max-width: 1200px) {
+        font-size: 1rem;
+      }
     }
   }
 `;

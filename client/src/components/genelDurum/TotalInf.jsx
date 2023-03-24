@@ -1,9 +1,9 @@
 import styled from "styled-components";
+import { useGlobalContext } from "../../context/globalContext";
 
-const TotalInf = ({ ortalamaButceData, toplamButceData }) => {
-
-  const balance =
-    toplamButceData("gelir") - toplamButceData("gider");
+const TotalInf = () => {
+  const { ortalamaButceData, toplamButceData } = useGlobalContext();
+  const balance = toplamButceData("gelir") - toplamButceData("gider");
 
   const totalCat = [
     {
@@ -49,6 +49,7 @@ const TotalInf = ({ ortalamaButceData, toplamButceData }) => {
 
 const TotalInfStyled = styled.div`
   height: 20%;
+  width: 100%;
   background: var(--theme-secondary);
   border: var(--theme-border);
   box-shadow: var(--theme-box-shadow);
@@ -59,12 +60,24 @@ const TotalInfStyled = styled.div`
   gap: 1rem;
   flex-wrap: wrap;
 
+  @media only screen and (max-width: 1460px) {
+    height: 24%;
+  }
+
   @media only screen and (max-width: 1200px) {
     height: 25%;
   }
 
-  @media only screen and (max-width: 850px) {
+  @media only screen and (max-width: 1000px) {
+    height: 28%;
+  }
+
+  @media only screen and (max-width: 800px) {
     height: 35%;
+  }
+
+  @media only screen and (max-width: 600px) {
+    height: 23%;
   }
 
   .total {
@@ -79,11 +92,13 @@ const TotalInfStyled = styled.div`
     justify-content: space-around;
 
     @media only screen and (max-width: 1460px) {
-      width: 31%;
+      width: 30%;
+      gap: 0.3rem;
     }
 
     @media only screen and (max-width: 800px) {
       width: 46%;
+      height: 30%;
     }
 
     h4 {

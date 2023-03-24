@@ -190,10 +190,16 @@ const KayitForm = () => {
 };
 
 const KayitFormStyled = styled.form`
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   overflow: hidden;
+
+  @media only screen and (max-width: 1000px) {
+    gap: 1.8rem;
+  }
 
   input,
   textarea,
@@ -230,7 +236,11 @@ const KayitFormStyled = styled.form`
   .selects {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
+
+    @media only screen and (max-width: 1000px) {
+      gap: 1.8rem;
+    }
     select {
       width: 100%;
       opacity: 0.6;

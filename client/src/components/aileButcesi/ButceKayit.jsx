@@ -13,7 +13,7 @@ const ButceKayit = () => {
 
   useEffect(() => {
     butceKalemiGetir();
-  }, [activeTarih]);
+  }, [activeTarih, activeCategory]);
 
   return (
     <ButceKayitStyled>
@@ -41,19 +41,23 @@ const ButceKayit = () => {
 };
 
 const ButceKayitStyled = styled.div`
-  height: 100%;
+  height: 900px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  padding-top: 0.8rem;
 
   .container {
-    height: 100%;
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
     gap: 1.5rem;
     padding-top: 0.8rem;
+
+    @media only screen and (max-width: 700px) {
+      height: 1800px;
+      flex-direction: column;
+    }
 
     .left-container {
       width: 22%;
@@ -67,16 +71,36 @@ const ButceKayitStyled = styled.div`
       flex-direction: column;
       text-align: center;
 
+      @media only screen and (max-width: 1400px) {
+        width: 30%;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        width: 40%;
+      }
+
+      @media only screen and (max-width: 700px) {
+        width: 100%;
+        height:600px;
+      }
+
       .form-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+
+        @media only screen and (max-width: 700px) {
+        width: 100%;
+      }
       }
 
       .tarihSecim-container {
-        height: 35%;
+        height: 40%;
         background: var(--theme-secondary);
         border: var(--theme-border);
         box-shadow: var(--theme-box-shadow);
         padding: 1rem;
-        margin-top: 2rem;
+        margin-top: 1rem;
         border-radius: 20px;
         overflow: hidden;
         display: flex;
@@ -85,9 +109,19 @@ const ButceKayitStyled = styled.div`
         gap: 1rem;
         flex-wrap: wrap;
 
+        @media only screen and (max-width: 1000px) {
+          height: 38%;
+        }
+
+        @media only screen and (max-width: 700px) {
+          flex-wrap: wrap;
+          flex-basis: 25%;
+        }
+
         .active {
           background-color: var(--theme-fourth);
           color: var(--theme-primary);
+          font-size: 1.1rem;
         }
       }
     }
@@ -120,6 +154,7 @@ const ButceKayitStyled = styled.div`
         display: flex;
         flex-direction: column;
         overflow: auto;
+        gap: 0.5rem;
       }
     }
   }

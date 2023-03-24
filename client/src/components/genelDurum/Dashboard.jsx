@@ -8,36 +8,23 @@ import GelirTable from "./GelirTable";
 import GiderTable from "./GiderTable";
 
 const Dashboard = () => {
-  const {
-    butceKalemiGetir,
-    toplamButceData,
-    ortalamaButceData,
-    activeTarih,
-    setActiveTarih,
-    toplamCategorikButceData,
-  } = useGlobalContext();
+  const { butceKalemiGetir, activeTarih, activeCategory } = useGlobalContext();
 
   useEffect(() => {
     butceKalemiGetir();
-  }, [activeTarih]);
+  }, [activeTarih, activeCategory]);
 
   return (
     <GenelDurumStyled>
       <div className="container">
         <div className="left-container">
-          <TarihSecim
-            activeTarih={activeTarih}
-            setActiveTarih={setActiveTarih}
-          />
+          <TarihSecim />
           <Chart />
-          <TotalInf
-            ortalamaButceData={ortalamaButceData}
-            toplamButceData={toplamButceData}
-          />
+          <TotalInf />
         </div>
         <div className="right-container">
-          <GelirTable toplamCategorikButceData={toplamCategorikButceData} />
-          <GiderTable toplamCategorikButceData={toplamCategorikButceData} />
+          <GelirTable />
+          <GiderTable />
         </div>
       </div>
     </GenelDurumStyled>
@@ -50,13 +37,13 @@ const GenelDurumStyled = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding-top: 0.8rem;
 
   .container {
-    height: 100%;
+    height: 900px;
     width: 100%;
     display: flex;
     gap: 0.8rem;
-    padding-top: 0.8rem;
     overflow: auto;
 
     @media only screen and (max-width: 600px) {
@@ -71,6 +58,8 @@ const GenelDurumStyled = styled.div`
       gap: 0.5rem;
 
       @media only screen and (max-width: 600px) {
+        flex-wrap: wrap;
+        height: 150%;
         width: 100%;
       }
     }
@@ -84,6 +73,10 @@ const GenelDurumStyled = styled.div`
       overflow: hidden;
 
       @media only screen and (max-width: 600px) {
+        width: 100%;
+      }
+
+      @media only screen and (max-width: 500px) {
         flex-wrap: wrap;
         overflow: auto;
       }

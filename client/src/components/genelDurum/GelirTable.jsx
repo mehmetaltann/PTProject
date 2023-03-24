@@ -1,18 +1,25 @@
 import { butceCategoryData } from "../../utils/localData";
 import styled from "styled-components";
+import { useGlobalContext } from "../../context/globalContext";
 
-const GelirTable = ({ toplamCategorikButceData }) => {
+const GelirTable = () => {
+  const { toplamCategorikButceData, activeCategory, setActiveCategory } =
+    useGlobalContext();
   return (
     <GelirTableStyled>
       <h3>Gelirler</h3>
       {butceCategoryData
         .filter((cat) => cat.type === "Gelir")
-        .filter((cata) => cata.categoryA !== "Tümü")
+        /*.filter((cata) => cata.categoryA !== "Tümü")*/
         .map(({ id, categoryA }) => (
-          <div className="gelir" key={id}>
+          <button
+            key={id}
+            onClick={() => setActiveCategory(categoryA)}
+            className={activeCategory === categoryA ? "gelir active" : "gelir"}
+          >
             <p>{categoryA}&nbsp;:</p>{" "}
-            <span>{toplamCategorikButceData(categoryA, "gelir")} TL</span>
-          </div>
+            <span>{toplamCategorikButceData(categoryA, "gelir")}</span>
+          </button>
         ))}
     </GelirTableStyled>
   );
@@ -29,12 +36,12 @@ const GelirTableStyled = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  @media only screen and (max-width: 600px) {
-    width: 100%;
+  @media only screen and (max-width: 800px) {
+    width: 45%;
+  }
 
-    h3 {
-      text-align: center;
-    }
+  @media only screen and (max-width: 600px) {
+    flex-basis: 100%;
   }
 
   .gelir {
@@ -44,13 +51,8 @@ const GelirTableStyled = styled.div`
     padding: 1rem;
     border-radius: 20px;
     display: flex;
+    flex-wrap: wrap;
     gap: 0.3rem;
-
-    @media only screen and (max-width: 850px) {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-    }
 
     :hover {
       background: var(--theme-fourth);
@@ -66,6 +68,13 @@ const GelirTableStyled = styled.div`
       color: var(--theme-green);
       text-align: center;
     }
+  }
+  .active {
+    background: var(--theme-fourth);
+    color: var(--theme-secondary);
+    font-weight: 600;
+    opacity: 1;
+    font-size: 1rem;
   }
 `;
 

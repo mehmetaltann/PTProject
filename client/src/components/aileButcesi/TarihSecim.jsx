@@ -21,7 +21,7 @@ const TarihSecim = () => {
 };
 
 const TarihSecimStyled = styled.button`
-  width: 35%;
+  width: 45%;
   background: var(--theme-secondary);
   border: var(--theme-border);
   box-shadow: var(--theme-box-shadow);
@@ -35,6 +35,11 @@ const TarihSecimStyled = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media only screen and (max-width: 700px) {
+    width: 28%;
+
+}
 
   &:hover {
     background-color: var(--theme-fourth);

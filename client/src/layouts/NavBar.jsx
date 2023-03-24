@@ -139,7 +139,7 @@ export const NavbarStyled = styled.nav`
       position: absolute;
       top: 0;
       right: 0;
-      transform: translate(-100%, 40%);
+      transform: translate(-100%, 60%);
       font-size: 1.8rem;
       cursor: pointer;
       color: var(--theme-primary);
@@ -148,40 +148,3 @@ export const NavbarStyled = styled.nav`
 `;
 
 export default NavBar;
-
-/*
-
-
-  .items {
-    line-height: 2.5rem;
-    margin-right: 1rem;
-  }
-
-  .items::after {
-    content: "";
-    display: block;
-    height: 3px;
-    width: 0;
-    background: transparent;
-    transition: width 0.7s ease, background-color 0.5s ease;
-  }
-
-  .items:hover::after {
-    width: 100%;
-    background-color: $color-third;
-  }
-
-  .icon {
-    display: none;
-
-    @media screen and (max-width: 960px) {
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(-100%, 40%);
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--theme-primary);
-    }
-*/

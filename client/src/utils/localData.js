@@ -237,6 +237,13 @@ export const butceCategoryData = [
   { id: 35, type: "Gelir", categoryA: "Harcırah", categoryB: "", icon: hotel },
   { id: 36, type: "Gelir", categoryA: "Aile", categoryB: "", icon: aile },
   { id: 37, type: "Gelir", categoryA: "Diğer", categoryB: "", icon: diger },
+  {
+    id: 38,
+    type: "Gider",
+    categoryA: "Ekstra Giderler",
+    categoryB: "Borç",
+    icon: tadilat,
+  },
 ];
 
 export const menuItems = [

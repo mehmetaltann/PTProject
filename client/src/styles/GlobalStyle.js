@@ -12,7 +12,15 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 100%;
 
       @media only screen and (max-width: 1460px) {
-        font-size: 80%;
+        font-size: 95%;
+        }
+
+      @media only screen and (max-width: 1350px) {
+        font-size: 92%;
+        }
+
+        @media only screen and (max-width: 1000px) {
+        font-size: 88%;
         }
     }
 

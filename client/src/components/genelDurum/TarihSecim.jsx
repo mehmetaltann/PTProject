@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { tarihSecim } from "../../utils/localData";
+import { useGlobalContext } from "../../context/globalContext";
 
-const TarihSecim = ({ activeTarih, setActiveTarih }) => {
+const TarihSecim = () => {
+  const { activeTarih, setActiveTarih } = useGlobalContext();
   return (
     <TarihSecimStyled className="tarihSecim-container">
       {tarihSecim.map(({ id, title }) => (
@@ -33,8 +35,19 @@ const TarihSecimStyled = styled.div`
   flex-wrap: wrap;
 
   @media only screen and (max-width: 1000px) {
-    height: 18%;
+    height: 13%;
   }
+
+  @media only screen and (max-width: 680px) {
+    height: 16%;
+  }
+  @media only screen and (max-width: 600px) {
+    height: 8%;
+  }
+
+  @media only screen and (max-width: 375px) {
+    height: 10%;
+    }
 
   .tarihsecim {
     width: 13%;
@@ -58,18 +71,27 @@ const TarihSecimStyled = styled.div`
     }
 
     @media only screen and (max-width: 1000px) {
-      width: 31%;
+      width: 30%;
       padding: 0.3rem;
     }
 
+    @media only screen and (max-width: 680px) {
+      width: 22%;
+    }
+
     @media only screen and (max-width: 600px) {
-      width: 45%;
+      width: 30%;
+    }
+
+    @media only screen and (max-width: 375px) {
+      width: 25%;
     }
   }
 
   .active {
     background-color: var(--theme-fourth);
     color: var(--theme-primary);
+    font-size: 1.1rem;
   }
 `;
 
