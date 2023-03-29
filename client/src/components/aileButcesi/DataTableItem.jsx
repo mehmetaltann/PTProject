@@ -170,14 +170,11 @@ const DataTableItemStyled = styled.div`
 
     @media only screen and (max-width: 1100px) {
       font-size: 1.1rem;
-    }
-
-    @media only screen and (max-width: 1000px) {
       flex-direction: column;
       gap: 0;
     }
 
-    @media only screen and (max-width: 500px) {
+   @media only screen and (max-width: 500px) {
       font-size: 0.9rem;
     }
 

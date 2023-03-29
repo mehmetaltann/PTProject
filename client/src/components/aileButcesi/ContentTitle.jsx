@@ -37,7 +37,7 @@ const ContentTitleStyled = styled.div`
   }
 
   .left-side {
-    width: 22%;
+    width: 30%;
     height: 100%;
     background-color: var(--theme-secondary);
     border: var(--theme-border);
@@ -52,7 +52,7 @@ const ContentTitleStyled = styled.div`
       width: 30%;
     }
 
-    @media only screen and (max-width: 1400px) {
+    @media only screen and (max-width: 1100px) {
       width: 40%;
     }
 

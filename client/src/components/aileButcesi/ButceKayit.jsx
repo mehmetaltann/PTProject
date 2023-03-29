@@ -60,7 +60,7 @@ const ButceKayitStyled = styled.div`
     }
 
     .left-container {
-      width: 22%;
+      width: 30%;
       height: 700px;
       background-color: var(--theme-secondary);
       border: var(--theme-border);
@@ -75,13 +75,13 @@ const ButceKayitStyled = styled.div`
         width: 30%;
       }
 
-      @media only screen and (max-width: 1000px) {
+      @media only screen and (max-width: 1100px) {
         width: 40%;
       }
 
       @media only screen and (max-width: 700px) {
         width: 100%;
-        height:600px;
+        height: 600px;
       }
 
       .form-container {
@@ -90,8 +90,8 @@ const ButceKayitStyled = styled.div`
         justify-content: center;
 
         @media only screen and (max-width: 700px) {
-        width: 100%;
-      }
+          width: 100%;
+        }
       }
 
       .tarihSecim-container {
@@ -130,26 +130,38 @@ const ButceKayitStyled = styled.div`
       flex: 1;
       height: 700px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       background-color: var(--theme-secondary);
       border: var(--theme-border);
       box-shadow: var(--theme-box-shadow);
       border-radius: 20px;
       padding: 1rem;
-      overflow: hidden;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
 
       &::-webkit-scrollbar {
         display: none;
       }
 
       .title-container {
+        height: 5%;
         padding: 1rem;
         width: 100%;
         overflow: hidden;
+
+        @media only screen and (max-width: 950px) {
+          width: 100%;
+          height: 13%;
+        }
+
+        @media only screen and (max-width: 700px) {
+          height: 8%;
+          padding: 0.5rem;
+        }
       }
 
       .dataTable-container {
+        flex: 1;
         width: 100%;
         display: flex;
         flex-direction: column;

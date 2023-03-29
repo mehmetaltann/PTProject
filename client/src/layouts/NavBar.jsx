@@ -6,8 +6,8 @@ const data = [
   { title: "Anasayfa", link: "" },
   { title: "Yatırım", link: "yatirim" },
   { title: "Bireysel Emeklilik", link: "yatirim2" },
-  { title: "Aile Bütçesi", link: "butce" },
-  { title: "Genel Durum", link: "genel-durum" },
+  { title: "Bütçe Kayıt", link: "butce" },
+  { title: "Bütçe Durum", link: "genel-durum" },
 ];
 
 const NavBar = () => {

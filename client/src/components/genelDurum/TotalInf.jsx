@@ -3,7 +3,9 @@ import { useGlobalContext } from "../../context/globalContext";
 
 const TotalInf = () => {
   const { ortalamaButceData, toplamButceData } = useGlobalContext();
-  const balance = toplamButceData("gelir") - toplamButceData("gider");
+  const balance = (toplamButceData("gelir") - toplamButceData("gider")).toFixed(
+    2
+  );
 
   const totalCat = [
     {

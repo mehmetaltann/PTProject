@@ -161,7 +161,7 @@ const KayitForm = () => {
         <DatePicker
           placeholderText="Tarih Giriniz"
           id="date"
-          dateFormat="dd/MM/yyyy"
+          dateFormat="dd.MM.yyyy"
           selected={startDate}
           onChange={(date) => setStartDate(date)}
         />

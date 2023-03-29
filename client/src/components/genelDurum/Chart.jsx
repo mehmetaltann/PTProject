@@ -36,6 +36,9 @@ const Chart = () => {
     const dateAmountList = Object.values(
       butceData
         .filter((data) => data.type === type)
+        .sort(
+          (d1, d2) => new Date(d1.date).getTime() - new Date(d2.date).getTime()
+        )
         .reduce((r, o) => {
           let tarih = timeFunc(o.date);
           r[tarih] = r[tarih] || { date: tarih, amount: 0 };

@@ -72,20 +72,16 @@ const TableTitle = () => {
 
 const TableTitleStyled = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
 
-  @media only screen and (max-width: 1000px) {
+  @media only screen and (max-width: 950px) {
     flex-direction: column;
-    align-items: stretch;
-    margin-bottom: 4rem;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 1rem;
-  }
-
-  @media only screen and (max-width: 700px) {
-    margin-bottom: 0.5rem;
   }
 
   .toplam-tutar {
@@ -97,11 +93,8 @@ const TableTitleStyled = styled.div`
     }
 
     @media only screen and (max-width: 1200px) {
-      font-size: 1rem;
-    }
-
-    @media only screen and (max-width: 1200px) {
       width: 100%;
+      font-size: 1rem;
     }
   }
 
@@ -155,7 +148,6 @@ const TableTitleStyled = styled.div`
       i {
         @media only screen and (max-width: 1200px) {
           width: 0.5rem;
-
         }
       }
 

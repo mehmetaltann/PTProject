@@ -10,7 +10,7 @@ export const GlobalProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
-  const [activeTarih, setActiveTarih] = useState(1);
+  const [activeTarih, setActiveTarih] = useState(2);
   const [activeCategory, setActiveCategory] = useState("Tümü");
   const [activeType, setActiveType] = useState("gelir");
   const capitalizedTitle =

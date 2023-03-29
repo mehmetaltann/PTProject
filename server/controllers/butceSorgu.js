@@ -32,12 +32,12 @@ exports.butceSorgula = async (req, res) => {
     if (activeTarih == 0) {
       if (activeCategory === "Tümü") {
         const butceKalemi = await ButceSchema.find()
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find()
           .or(categoryQuery)
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else if (activeTarih == 1) {
@@ -45,14 +45,14 @@ exports.butceSorgula = async (req, res) => {
         const butceKalemi = await ButceSchema.find(
           dateQuery(thisMonthFirstDay, thisMonthLastDay)
         )
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
           dateQuery(thisMonthFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
-          .sort({ date: "desc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else if (activeTarih == 2) {
@@ -60,14 +60,14 @@ exports.butceSorgula = async (req, res) => {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevThreeMonthFirstDay, thisMonthLastDay)
         )
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevThreeMonthFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else if (activeTarih == 3) {
@@ -75,14 +75,14 @@ exports.butceSorgula = async (req, res) => {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevSixMonthFirstDay, thisMonthLastDay)
         )
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevSixMonthFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else if (activeTarih == 4) {
@@ -90,14 +90,14 @@ exports.butceSorgula = async (req, res) => {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevYearFirstDay, thisMonthLastDay)
         )
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevYearFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else if (activeTarih == 5) {
@@ -105,14 +105,14 @@ exports.butceSorgula = async (req, res) => {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevThreeYearFirstDay, thisMonthLastDay)
         )
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       } else {
         const butceKalemi = await ButceSchema.find(
           dateQuery(prevThreeYearFirstDay, thisMonthLastDay)
         )
           .or(categoryQuery)
-          .sort({ date: "asc" })
+          .sort({ date: -1 })
           .then((butceKalemi) => res.status(200).json(butceKalemi));
       }
     } else {
