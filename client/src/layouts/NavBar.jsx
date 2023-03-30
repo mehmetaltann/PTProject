@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const data = [
   { title: "Anasayfa", link: "" },
-  { title: "Yatırım", link: "yatirim" },
-  { title: "Bireysel Emeklilik", link: "yatirim2" },
+  { title: "Yatırım İşlemleri", link: "yatirim-islemleri" },
+  { title: "Yatırım Geçmişi", link: "yatirim-gecmisi" },
   { title: "Bütçe Kayıt", link: "butce" },
   { title: "Bütçe Durum", link: "genel-durum" },
 ];

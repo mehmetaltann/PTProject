@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import YatirimPage from "./pages/YatirimPage";
-import BireyselEmeklilikPage from "./pages/BireyselEmeklilikPage";
+import YatirimIslemleri from "./pages/YatirimIslemleri.jsx"
+import YatirimGecmisi from "./pages/YatirimGecmisi"
 import NavBar from "./layouts/NavBar";
 import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
 import ButceKayitPage from "./pages/ButceKayitPage";
@@ -12,12 +12,12 @@ const routes = [
     component: HomePage,
   },
   {
-    path: "/yatirim",
-    component: YatirimPage,
+    path: "/yatirim-islemleri",
+    component: YatirimIslemleri,
   },
   {
-    path: "/yatirim2",
-    component: BireyselEmeklilikPage,
+    path: "/yatirim-gecmisi",
+    component: YatirimGecmisi,
   },
   {
     path: "/genel-durum",

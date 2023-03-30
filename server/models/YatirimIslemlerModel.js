@@ -37,6 +37,12 @@ const Islem = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    portfoy_ismi: {
+      type: String,
+      trim: true,
+      required: true,
+      maxLength: 20,
+    },
     durum: {
       type: String,
       trim: true,

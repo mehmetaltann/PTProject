@@ -1,5 +1,5 @@
 const Islem = require("../models/YatirimIslemlerModel");
-const { tarihiKayitEkle } = require("../controllers/yatirimHistory");
+const { tarihiKayitEkle } = require("./yatirimHistory");
 
 exports.islemYap = async (req, res) => {
   const tradeTransection = async (
