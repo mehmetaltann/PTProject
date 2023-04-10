@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import Transections from "../components/yatirimIslemleri/Transections";
+import Transactions from "../components/yatirimIslemleri/Transactions";
 import { PageLayout } from "../styles/Layout";
 
 const YatirimIslemleri = () => {
   return (
     <PageLayout>
       <YatirimIslemleriStyled>
-        <Transections />
+        <Transactions />
       </YatirimIslemleriStyled>
-      ;
     </PageLayout>
   );
 };

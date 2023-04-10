@@ -39,3 +39,4 @@ export const market = <i className="fa-solid fa-cart-shopping"></i>;
 export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>;
 export const incomes = <i className="fa-solid fa-money-bill-transfer"></i>;
 export const search = <i className="fa-solid fa-magnifying-glass"></i>
+export const carpi = <i className="fa-solid fa-xmark"></i>

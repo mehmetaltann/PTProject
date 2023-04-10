@@ -8,14 +8,20 @@ const Button = ({
   bradious,
   color,
   bpadding,
+  disabled,
+  className,
+  type,
 }) => {
   return (
     <ButtonStyle
+      type={type}
       background={background}
       padding={bpadding}
       borderRadius={bradious}
       color={color}
       onClick={onClick}
+      disabled={disabled}
+      className={className}
     >
       {icon}
       {name}
@@ -24,6 +30,7 @@ const Button = ({
 };
 
 const ButtonStyle = styled.button`
+  width: 100%;
   outline: none;
   border: none;
   font-family: inherit;

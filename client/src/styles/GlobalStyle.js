@@ -6,6 +6,7 @@ export const GlobalStyle = createGlobalStyle`
       padding: 0;
       box-sizing: inherit; /* box-sizing özelliği kalıtsal olmuş oldu. Hepsi body'den alacak. */
       list-style: none;
+      min-width: 0;
     }
 
     html{
@@ -35,6 +36,7 @@ export const GlobalStyle = createGlobalStyle`
       --theme-white: #FFFFFF;
       --theme-box-shadow: 0px 1px 15px rgba(0,0,0,0.06);
       --theme-border: 2px solid rgba(17, 45, 78, .1);
+      --theme-inputBorder: 2px solid rgba(17, 45, 78, .5);
 
     }
 

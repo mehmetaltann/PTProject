@@ -9,25 +9,39 @@ export const YatirimProvider = ({ children }) => {
   const [tarihiKayitlar, setTarihiKayitlar] = useState([]);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [responseStatus, setResponseStatus] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
 
   const yatirimTarihiKayitGetir = async () => {
     const response = await axios.get(`${BASE_URL}tarihi-yatirim-sorgula`);
     setTarihiKayitlar(response.data);
   };
 
-  const yatirimKalemiEkle = async (data, type) => {
+  const yatirimKalemiEkle = async (i) => {
     await axios
-      .post(`${BASE_URL}yatirim-islem`, data)
-      .then((response) => setMessage(response.data.message))
+      .post(`${BASE_URL}yatirim-islem`, i)
+      .then((response) => {
+        setMessage(response.data.message);
+        setResponseStatus(response.status);
+        console.log(response.status);
+      })
       .catch((err) => {
         setError(err.response.data.message);
       });
-    //butceKalemiGetir();
   };
 
   return (
     <YatirimContext.Provider
-      value={{ tarihiKayitlar, message, setMessage, error, setError }}
+      value={{
+        tarihiKayitlar,
+        message,
+        setMessage,
+        error,
+        setError,
+        responseStatus,
+        yatirimKalemiEkle,
+        startDate,
+      }}
     >
       {children}
     </YatirimContext.Provider>

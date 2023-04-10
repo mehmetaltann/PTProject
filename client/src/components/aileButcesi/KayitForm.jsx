@@ -211,7 +211,7 @@ const KayitFormStyled = styled.form`
     padding: 0.3rem 0.8rem;
     border-radius: 10px;
     resize: none;
-    border: var(--theme-border);
+    border: var(--theme-inputBorder);
     box-shadow: var(--theme-box-shadow);
     color: var(--theme-fourth);
     opacity: 0.8;
