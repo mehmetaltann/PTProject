@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Button from "../UI/Button";
 import FormInput from "../UI/FormInput";
 import FormDatePicker from "../UI/FormDatePicker";
+
 import { useEffect } from "react";
 import { useYatirimContext } from "../../context/yatirimContext";
 import { Form, Formik, Field, FieldArray } from "formik";
@@ -191,12 +192,12 @@ const IslemForm = () => {
 };
 
 const IslemFormStyled = styled.div`
-  flex: 1;
+  width: 50%;
   display: flex;
   flex-direction: column;
 
   .form-title {
-    width: 50%;
+    width: 100%;
     background: var(--theme-secondary);
     border: var(--theme-border);
     box-shadow: var(--theme-box-shadow);
@@ -211,7 +212,7 @@ const IslemFormStyled = styled.div`
   }
 
   .form {
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

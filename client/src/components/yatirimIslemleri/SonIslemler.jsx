@@ -1,7 +1,21 @@
+import styled from "styled-components";
+import Table from "./sonIslemler/Table";
+import TitleSelect from "./sonIslemler/TitleSelect";
+
 const SonIslemler = () => {
   return (
-    <div>SonIslemler</div>
-  )
-}
+    <SonIslemlerStyled>
+      <TitleSelect />
+      <Table />
+    </SonIslemlerStyled>
+  );
+};
 
-export default SonIslemler
+const SonIslemlerStyled = styled.div`
+  width: 50%;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+`;
+
+export default SonIslemler;

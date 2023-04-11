@@ -12,7 +12,6 @@ const DataTableItem = ({
   date,
   categoryA,
   categoryB,
-  description,
   activeType,
 }) => {
   const { butceKalemiSil } = useGlobalContext();
