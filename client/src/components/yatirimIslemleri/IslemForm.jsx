@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Button from "../UI/Button";
 import FormInput from "../UI/FormInput";
 import FormDatePicker from "../UI/FormDatePicker";
-
-import { useEffect } from "react";
+import ErrorMessage from "../UI/ErrorMessage ";
+import * as Yup from "yup";
+import React, { useEffect, useMemo } from "react";
 import { useYatirimContext } from "../../context/yatirimContext";
 import { Form, Formik, Field, FieldArray } from "formik";
 import { useState } from "react";
@@ -11,13 +12,14 @@ import { carpi, plus } from "../../utils/icons";
 
 const IslemForm = () => {
   const {
-    yatirimKalemiEkle,
+    yatirimIslemiEkle,
     error,
     setError,
     message,
     setMessage,
-    responseStatus,
     startDate,
+    portfoyler,
+    setSelectedPortfoy,
   } = useYatirimContext();
   const [islemTuru, setIslemTuru] = useState("Alış");
 
@@ -29,6 +31,25 @@ const IslemForm = () => {
       setTimeout(() => setMessage(null), 1500);
     }
   }, [error, message]);
+
+  const schema = Yup.object().shape({
+    portfoy: Yup.string().required("Gerekli"),
+    fons: Yup.array().of(
+      Yup.object().shape({
+        kod: Yup.string()
+          .min(3, "En az 3 Karakter")
+          .max(5, "En fazla 5 Karakter")
+          .required("Boş Olamaz"),
+        adet: Yup.number()
+          .required("Gerekli")
+          .moreThan(0, "Sıfırdan Büyük Olmalıdır"),
+        fiyat: Yup.number()
+          .required("Gerekli")
+          .moreThan(0, "Sıfırdan Büyük Olmalıdır"),
+        komisyon: Yup.number(),
+      })
+    ),
+  });
 
   const initialFonInfo = {
     date: startDate,
@@ -43,7 +64,7 @@ const IslemForm = () => {
     const yeniKayitListesi = values.fons.map((fon) => {
       return {
         action: islemTuru,
-        kod: fon.kod,
+        kod: fon.kod.toUpperCase().trim(),
         date: fon.date,
         adet: fon.adet,
         fiyat: fon.fiyat,
@@ -51,10 +72,9 @@ const IslemForm = () => {
         portfoy_ismi: portfoy_ismi,
       };
     });
-    yatirimKalemiEkle(yeniKayitListesi);
-    if (responseStatus === 200) {
-      resetForm();
-    }
+    yatirimIslemiEkle(yeniKayitListesi);
+    //yeniKayitListesi.map((kayit) => yatirimKalemiEkle(kayit));
+    resetForm();
   };
 
   return (
@@ -68,66 +88,77 @@ const IslemForm = () => {
           fons: [initialFonInfo],
         }}
         onSubmit={submitHandler}
+        validationSchema={schema}
       >
-        {({ values, isSubmitting }) => (
-          <>
-            <Form className="form">
-              <div className="uyari-container">
-                {error && <p className="error">{error}</p>}
-                {message && <p className="message">{message}</p>}
-              </div>
-              <div className="top-container">
-                <Field as="select" name="portfoy" className="portfoy">
-                  <option value="" disabled defaultValue="Portföy Seçim">
-                    Portföy Seçim
+        {({ values, isSubmitting, setFieldValue }) => (
+          <Form className="form">
+            <div className="uyari-container">
+              {error && <p className="error">{error}</p>}
+              {message && <p className="message">{message}</p>}
+            </div>
+            <div className="top-container">
+              <Field
+                as="select"
+                name="portfoy"
+                className="portfoy"
+                onChange={(e) => {
+                  setSelectedPortfoy(e.target.value);
+                  setFieldValue("portfoy", e.target.value);
+                }}
+              >
+                <option value="" disabled defaultValue="Portföy Seçim">
+                  Portföy Seçim
+                </option>
+                {portfoyler.map((portfoy) => (
+                  <option value={portfoy.isim} key={portfoy.id}>
+                    {portfoy.isim}
                   </option>
-                  <option value="Bireysel Emeklilik">Bireysel Emeklilik</option>
-                  <option value="Yatırım">Yatırım</option>
-                </Field>
-                <div className="button-group">
-                  <Button
-                    type={"submit"}
-                    onClick={() => setIslemTuru("Alış")}
-                    disabled={isSubmitting}
-                    background={"var(--theme-green)"}
-                    color={"var(--theme-primary)"}
-                    name={isSubmitting ? `Alınıyor` : "Alış"}
-                    bpadding={".6rem 3rem"}
-                    bradious={"35px"}
-                  />
-                  <Button
-                    type={"submit"}
-                    onClick={() => setIslemTuru("Satış")}
-                    disabled={isSubmitting}
-                    background={"var(--theme-red)"}
-                    color={"var(--theme-primary)"}
-                    name={isSubmitting ? `Satılıyor` : "Satış"}
-                    bpadding={".6rem 3rem"}
-                    bradious={"35px"}
-                  />
-                </div>
+                ))}
+              </Field>
+              <div className="button-group">
+                <Button
+                  type={"submit"}
+                  onClick={() => setIslemTuru("Alış")}
+                  disabled={isSubmitting}
+                  background={"var(--theme-green)"}
+                  color={"var(--theme-primary)"}
+                  name={isSubmitting ? `Alınıyor` : "Alış"}
+                  bpadding={".6rem 3rem"}
+                  bradious={"35px"}
+                />
+                <Button
+                  type={"submit"}
+                  onClick={() => setIslemTuru("Satış")}
+                  disabled={isSubmitting}
+                  background={"var(--theme-red)"}
+                  color={"var(--theme-primary)"}
+                  name={isSubmitting ? `Satılıyor` : "Satış"}
+                  bpadding={".6rem 3rem"}
+                  bradious={"35px"}
+                />
               </div>
-              <FieldArray name="fons">
-                {({ push, remove }) => (
-                  <div className="bottom-container">
-                    <div className="labels-container">
-                      <label>Tarih</label>
-                      <label>Kod</label>
-                      <label>Adet</label>
-                      <label>Fiyat</label>
-                      <label>Komisyon</label>
-                    </div>
-                    {values.fons.map((_, index) => (
-                      <div className="inputs" key={index}>
-                        <FormDatePicker
-                          name={`fons.${index}.date`}
-                          placeholderText="Tarih Giriniz"
-                          id="date"
-                          dateFormat="dd.MM.yyyy"
-                          selected={startDate}
-                          label="Tarih"
-                        />
-
+            </div>
+            <FieldArray name="fons">
+              {({ push, remove }) => (
+                <div className="bottom-container">
+                  <div className="labels-container">
+                    <label>Tarih</label>
+                    <label>Kod</label>
+                    <label>Adet</label>
+                    <label>Fiyat</label>
+                    <label>Komisyon</label>
+                  </div>
+                  {values.fons.map((_, index) => (
+                    <div className="inputs" key={index}>
+                      <FormDatePicker
+                        name={`fons.${index}.date`}
+                        placeholderText="Tarih Giriniz"
+                        id="date"
+                        dateFormat="dd.MM.yyyy"
+                        selected={startDate}
+                        label="Tarih"
+                      />
+                      <div className="input-group">
                         <FormInput
                           name={`fons.${index}.kod`}
                           className="kod"
@@ -135,6 +166,9 @@ const IslemForm = () => {
                           type="text"
                           label="Kod"
                         />
+                        <ErrorMessage name={`fons.${index}.kod`} />
+                      </div>
+                      <div className="input-group">
                         <FormInput
                           name={`fons.${index}.adet`}
                           className="adet"
@@ -142,6 +176,9 @@ const IslemForm = () => {
                           type="number"
                           label="Adet"
                         />
+                        <ErrorMessage name={`fons.${index}.adet`} />
+                      </div>
+                      <div className="input-group">
                         <FormInput
                           name={`fons.${index}.fiyat`}
                           className="fiyat"
@@ -149,42 +186,42 @@ const IslemForm = () => {
                           type="number"
                           label="Fiyat"
                         />
-                        <FormInput
-                          name={`fons.${index}.komisyon`}
-                          className="komisyon"
-                          placeholder="Komisyon"
-                          type="number"
-                          label="Komisyon"
-                        />
-
-                        <Button
-                          type={"button"}
-                          className={"delete-btn"}
-                          background={"var(--theme-fourth)"}
-                          color={"var(--theme-primary)"}
-                          icon={carpi}
-                          bpadding={".05rem .7rem"}
-                          bradious={"10px"}
-                          onClick={() => remove(index)}
-                        />
+                        <ErrorMessage name={`fons.${index}.fiyat`} />
                       </div>
-                    ))}
+                      <FormInput
+                        name={`fons.${index}.komisyon`}
+                        className="komisyon"
+                        placeholder="Komisyon"
+                        type="number"
+                        label="Komisyon"
+                      />
+                      <Button
+                        type={"button"}
+                        className={"delete-btn"}
+                        background={"var(--theme-fourth)"}
+                        color={"var(--theme-primary)"}
+                        icon={carpi}
+                        bpadding={".05rem .7rem"}
+                        bradious={"10px"}
+                        onClick={() => remove(index)}
+                      />
+                    </div>
+                  ))}
 
-                    <Button
-                      type={"button"}
-                      className={"plus-btn"}
-                      background={"var(--theme-fourth)"}
-                      color={"var(--theme-primary)"}
-                      icon={plus}
-                      bpadding={".5rem .3rem"}
-                      bradious={"10px"}
-                      onClick={() => push(initialFonInfo)}
-                    />
-                  </div>
-                )}
-              </FieldArray>
-            </Form>
-          </>
+                  <Button
+                    type={"button"}
+                    className={"plus-btn"}
+                    background={"var(--theme-fourth)"}
+                    color={"var(--theme-primary)"}
+                    icon={plus}
+                    bpadding={".5rem .3rem"}
+                    bradious={"10px"}
+                    onClick={() => push(initialFonInfo)}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </Form>
         )}
       </Formik>
     </IslemFormStyled>
@@ -220,6 +257,7 @@ const IslemFormStyled = styled.div`
 
     .uyari-container {
       font-weight: 600;
+      padding-top: 1rem;
     }
 
     .top-container {
@@ -289,6 +327,12 @@ const IslemFormStyled = styled.div`
         display: flex;
         justify-content: center;
         gap: 0.4rem;
+
+        .input-group {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+        }
 
         button {
           width: 10%;

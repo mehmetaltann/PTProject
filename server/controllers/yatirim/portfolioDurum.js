@@ -1,4 +1,4 @@
-const Islem = require("../models/YatirimIslemlerModel");
+const Islem = require("../../models/YatirimIslemlerModel");
 
 const query = [
   {
@@ -31,7 +31,7 @@ const query = [
   },
 ];
 
-exports.portfolioGetir = async (req, res) => {
+exports.portfolioDurum = async (req, res) => {
   try {
     const acikKayitlar = await Islem.aggregate(query).then((butceKalemi) =>
       res.status(200).json(butceKalemi)

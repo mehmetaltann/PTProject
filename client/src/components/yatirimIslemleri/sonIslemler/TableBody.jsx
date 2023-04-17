@@ -1,123 +1,55 @@
-import React from "react";
 import styled from "styled-components";
 import TableItem from "./TableItem";
+import ReactPaginate from "react-paginate";
+import { useState, useEffect } from "react";
+import { useYatirimContext } from "../../../context/yatirimContext";
+
+const itemsPerPage = 10;
 
 const TableBody = () => {
-  const DATA = [
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "1525",
-      fiyat: "256,32",
-      komisyon: "12",
-      total: "154224",
-    },
-    {
-      action: "Satış",
-      kod: "AFA",
-      tarih: "22.07.2022",
-      adet: "100",
-      fiyat: "1254,34",
-      komisyon: "0",
-      total: "78965",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "1",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "12",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-    {
-      action: "Alış",
-      kod: "AFT",
-      tarih: "15.05.2023",
-      adet: "112",
-      fiyat: "854",
-      komisyon: "123",
-      total: "243",
-    },
-  ];
+  const { selectedPortfoy, islemler } = useYatirimContext();
+  const data = islemler.filter((data) => data.portfoy_ismi === selectedPortfoy);
+  const [itemOffset, setItemOffset] = useState(0);
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = data.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(data.length / itemsPerPage);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % data.length;
+    setItemOffset(newOffset);
+  };
 
   return (
     <TableBodyStyled>
-      {DATA.map(({ _id, action, kod, tarih, adet, fiyat, komisyon }) => (
-        <TableItem
-          key={_id}
-          action={action}
-          kod={kod}
-          tarih={tarih}
-          adet={adet}
-          fiyat={fiyat}
-          komisyon={komisyon}
-        />
-      ))}
+      {currentItems.map(
+        ({ _id, action, kod, date, adet, fiyat, komisyon, durum }) => (
+          <TableItem
+            key={_id}
+            id={_id}
+            action={action}
+            kod={kod}
+            tarih={date}
+            adet={adet}
+            fiyat={fiyat}
+            komisyon={komisyon}
+            durum={durum}
+          />
+        )
+      )}
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="Sonra >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        previousLabel="< Önce"
+        renderOnZeroPageCount={null}
+        containerClassName="pagination"
+        pageLinkClassName="page-num"
+        previousLinkClassName="page-num"
+        nextLinkClassName="page-num"
+        activeLinkClassName="active"
+      />
     </TableBodyStyled>
   );
 };
@@ -131,6 +63,31 @@ const TableBodyStyled = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+
+  .pagination {
+    list-style-type: style none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+    font-size: 1rem;
+    gap: 5px;
+
+    .page-num {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: 400;
+
+      &:hover {
+        background: var(--theme-primary);
+      }
+    }
+    .active{
+      background: var(--theme-primary);
+      transform: scale(150%)
+    }
+  }
 `;
 
 export default TableBody;

@@ -1,4 +1,4 @@
-const ButceSchema = require("../models/ButceDataModel");
+const ButceSchema = require("../../models/ButceDataModel");
 
 const title = "title";
 const categoryA = "categoryA";

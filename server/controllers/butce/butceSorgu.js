@@ -1,4 +1,4 @@
-const ButceSchema = require("../models/ButceDataModel");
+const ButceSchema = require("../../models/ButceDataModel");
 const {
   thisMonthLastDay,
   thisMonthFirstDay,
@@ -6,7 +6,7 @@ const {
   prevSixMonthFirstDay,
   prevYearFirstDay,
   prevThreeYearFirstDay,
-} = require("../utils/helpFunctions");
+} = require("../../utils/helpFunctions");
 
 exports.butceSorgula = async (req, res) => {
   const activeTarih = req.params.tarih;

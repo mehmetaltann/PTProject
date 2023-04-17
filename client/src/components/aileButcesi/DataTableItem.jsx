@@ -41,14 +41,16 @@ const DataTableItem = ({
         </p>
       </div>
       <div className="bottom">
-        <Button
-          background={"var(--theme-fourth)"}
-          color={"var(--theme-primary)"}
-          icon={trash}
-          bpadding={"1rem"}
-          bradious={"50%"}
-          onClick={() => butceKalemiSil(id)}
-        />
+        <p>
+          <Button
+            background={"var(--theme-fourth)"}
+            color={"var(--theme-primary)"}
+            icon={trash}
+            bpadding={"1rem"}
+            bradious={"50%"}
+            onClick={() => butceKalemiSil(id)}
+          />
+        </p>
       </div>
     </DataTableItemStyled>
   );
@@ -173,7 +175,7 @@ const DataTableItemStyled = styled.div`
       gap: 0;
     }
 
-   @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 500px) {
       font-size: 0.9rem;
     }
 

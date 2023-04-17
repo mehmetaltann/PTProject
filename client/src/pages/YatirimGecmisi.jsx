@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Dashboard from "../components/yatirimGecmis/Dashboard";
+import Dashboard from "../components/yatirimGecmisi/Dashboard";
 import { PageLayout } from "../styles/Layout";
 
 const YatirimGecmisi = () => {

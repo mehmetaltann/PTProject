@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TableHeader = () => {
+const TableHeader = React.memo(() => {
   const headerList = [
     "İşlem",
     "Kod",
@@ -10,17 +10,20 @@ const TableHeader = () => {
     "Fiyat",
     "Komisyon",
     "Toplam",
+    "İşlem",
   ];
   return (
     <TableHeaderStyled>
       <div className="row">
-        {headerList.map((data) => (
-          <div className="item">{data}</div>
+        {headerList.map((data, index) => (
+          <div className="item" key={index}>
+            {data}
+          </div>
         ))}
       </div>
     </TableHeaderStyled>
   );
-};
+});
 
 const TableHeaderStyled = styled.div`
   width: 100%;

@@ -1,4 +1,4 @@
-const ButceSchema = require("../models/ButceDataModel");
+const ButceSchema = require("../../models/ButceDataModel");
 
 exports.butceDataEkle = async (req, res) => {
   const { title, amount, categoryA, categoryB, description, date } = req.body;

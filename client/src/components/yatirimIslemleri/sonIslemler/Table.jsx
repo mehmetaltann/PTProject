@@ -14,7 +14,7 @@ const Table = () => {
 
 const TableStyled = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80%;
   background: var(--theme-secondary);
   border: var(--theme-border);
   box-shadow: var(--theme-box-shadow);
@@ -24,6 +24,7 @@ const TableStyled = styled.div`
   margin-top: 0px;
   position: relative;
   padding-top: 1.5rem;
+  overflow: auto;
 `;
 
 export default Table;

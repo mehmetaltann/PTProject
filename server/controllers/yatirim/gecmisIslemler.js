@@ -1,34 +1,31 @@
-const YtHistory = require("../models/YatirimHistoryModel");
+const YtHistory = require("../../models/YatirimHistoryModel");
 
-exports.tarihiKayitEkle = async (
+exports.gecmisIslemEkle = async (
   kod,
   adet,
+  alim_islemId,
   alim_tarihi,
   alim_fiyati,
   satim_tarihi,
   satim_fiyati,
   komisyon
 ) => {
-  const tarihiKayit = YtHistory({
+  const gecmisIslem = YtHistory({
     kod,
     adet,
+    alim_islemId,
     alim_tarihi,
     alim_fiyati,
     satim_tarihi,
     satim_fiyati,
     komisyon,
   });
-
-  try {
-    await tarihiKayit.save();
-  } catch (error) {
-    res.status(500).json({ message: "Bağlantı Hatası, Kaydedilemedi" });
-  }
+  await gecmisIslem.save();
 };
 
-exports.tarihiKayitSorgula = async (req, res) => {
+exports.gecmisIslemSorgula = async (req, res) => {
   try {
-    const tarihiKayitlar = await YtHistory.find()
+    const gecmisIslemler = await YtHistory.find()
       .sort({ satim_tarihi: 1 })
       .then((kayit) => res.status(200).json(kayit));
   } catch (error) {

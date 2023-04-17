@@ -1,5 +1,3 @@
-
-
 exports.butceCategoryData = [
   {
     id: 1,

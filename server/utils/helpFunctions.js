@@ -8,6 +8,14 @@ const prevMonthLastDay = moment().subtract(1, "months").endOf("month");
 const thisMonthFirstDay = moment().startOf("month");
 const thisMonthLastDay = moment().endOf("month");
 
+const calculateSum = (array, property) => {
+  let sum = 0;
+  array.forEach((element) => {
+    sum += element[property];
+  });
+  return sum;
+};
+
 module.exports = {
   thisMonthLastDay,
   thisMonthFirstDay,
@@ -16,4 +24,5 @@ module.exports = {
   prevSixMonthFirstDay,
   prevYearFirstDay,
   prevThreeYearFirstDay,
+  calculateSum,
 };
