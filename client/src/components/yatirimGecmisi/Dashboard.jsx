@@ -1,19 +1,23 @@
 import styled from "styled-components";
+import Filtreleme from "./Filtreleme";
+import GecmisIslemler from "./GecmisIslemler";
 import { useYatirimContext } from "../../context/yatirimContext";
+import { YatirimLayout } from "../../styles/Layout";
 import { useEffect } from "react";
 
 const Dashboard = () => {
-  const { tarihiKayitlar } = useYatirimContext();
+  const { yatirimGecmisIslemSorgula, gecmisIslemler } = useYatirimContext();
 
-  return <DashboardStyleed>Dashboard</DashboardStyleed>;
+  useEffect(() => {
+    yatirimGecmisIslemSorgula();
+  }, [gecmisIslemler]);
+
+  return (
+    <YatirimLayout>
+      <Filtreleme />
+      <GecmisIslemler />
+    </YatirimLayout>
+  );
 };
-
-const DashboardStyleed = styled.div`
-  height: 900px;
-  width: 100%;
-  padding-top: 1rem;
-  display: flex;
-  gap: 1rem;
-`;
 
 export default Dashboard;

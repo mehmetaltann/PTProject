@@ -1,16 +1,18 @@
-import TableBody from "./TableBody";
-import TableHeader from "../../UI/Table/TableHeader";
 import { TableLayout } from "../../../styles/TableLayout";
+import TableHeader from "../../UI/Table/TableHeader";
+import TableBody from "./TableBody";
 
 const headerList = [
-  "İşlem",
+  "Portföy",
   "Kod",
-  "Tarih",
   "Adet",
-  "Fiyat",
-  "Komisyon",
-  "Toplam",
-  "İşlem",
+  "Alım Tarihi",
+  "Alım Fiyatı",
+  "Satış Tarihi",
+  "Satış Fiyatı",
+  "Kar/Zarar Tutarı",
+  "Kar/Zarar Oranı",
+  "Gün Sayısı"
 ];
 
 const Table = () => {

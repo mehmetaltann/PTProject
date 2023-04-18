@@ -1,23 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const TableHeader = React.memo(() => {
-  const headerList = [
-    "İşlem",
-    "Kod",
-    "Tarih",
-    "Adet",
-    "Fiyat",
-    "Komisyon",
-    "Toplam",
-    "İşlem",
-  ];
+const TableHeader = React.memo(({ header_list }) => {
   return (
     <TableHeaderStyled>
       <div className="row">
-        {headerList.map((data, index) => (
+        {header_list.map((data, index) => (
           <div className="item" key={index}>
-            {data}
+            <p>{data}</p>
           </div>
         ))}
       </div>
@@ -44,6 +34,11 @@ const TableHeaderStyled = styled.div`
       justify-content: center;
       font-weight: 600;
       opacity: 0.8;
+
+      p {
+        font-size: 1rem;
+        white-space: pre-line;
+      }
     }
   }
 `;

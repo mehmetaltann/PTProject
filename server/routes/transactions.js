@@ -15,6 +15,10 @@ router.post("/yatirim-islem", islemEkle);
 router.delete("/yatirim-islem-sil/:id", islemSil);
 router.get("/yatirim-islem-sorgula", islemSorgula);
 
+//Geçmiş Yatırım İşlemleri Rotaları
+const { gecmisIslemSorgula } = require("../controllers/yatirim/gecmisIslemler");
+router.get("/gecmis-islem-sorgula", gecmisIslemSorgula);
+
 //Portfoy İşlemleri Rotaları
 const {
   portfoyEkle,

@@ -1,4 +1,3 @@
-const { acikPoziyonSorgu } = require("./queries");
 const { acikPoziyonUpdate } = require("./updates");
 const { gecmisIslemEkle } = require("./gecmisIslemler");
 
@@ -21,8 +20,6 @@ exports.tradeTransection = async (
         kod,
         satılanAdet,
         secilenAlim.id,
-        secilenAlim.date,
-        secilenAlim.fiyat,
         tarih,
         fiyat,
         komisyon
@@ -40,8 +37,6 @@ exports.tradeTransection = async (
         kod,
         satılanAdet,
         secilenAlim.id,
-        secilenAlim.date,
-        secilenAlim.fiyat,
         tarih,
         fiyat,
         komisyon
@@ -53,8 +48,6 @@ exports.tradeTransection = async (
         kod,
         satılanAdet,
         secilenAlim.id,
-        secilenAlim.date,
-        secilenAlim.fiyat,
         tarih,
         fiyat,
         komisyon

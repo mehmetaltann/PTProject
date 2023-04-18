@@ -2,9 +2,9 @@ const Portfoy = require("../../models/PortfoyModel");
 
 exports.portfoySorgula = async (req, res) => {
   try {
-    const portfoyler = await Portfoy.find()
-      .sort({ _id: desc })
-      .then((kayit) => res.status(200).json(kayit));
+    const portfoyler = await Portfoy.find().then((kayit) =>
+      res.status(200).json(kayit)
+    );
   } catch (error) {
     res.status(500).json({ message: "Bağlantı Hatası, Portfoyler Alınamadı" });
   }

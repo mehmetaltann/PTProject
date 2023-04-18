@@ -20,6 +20,7 @@ const IslemForm = () => {
     startDate,
     portfoyler,
     setSelectedPortfoy,
+    selectedPortfoy,
   } = useYatirimContext();
   const [islemTuru, setIslemTuru] = useState("Alış");
 
@@ -74,7 +75,9 @@ const IslemForm = () => {
     });
     yatirimIslemiEkle(yeniKayitListesi);
     //yeniKayitListesi.map((kayit) => yatirimKalemiEkle(kayit));
-    resetForm();
+    resetForm({
+      values: { portfoy: selectedPortfoy, fons: [initialFonInfo] },
+    });
   };
 
   return (
@@ -110,7 +113,7 @@ const IslemForm = () => {
                   Portföy Seçim
                 </option>
                 {portfoyler.map((portfoy) => (
-                  <option value={portfoy.isim} key={portfoy.id}>
+                  <option value={portfoy.isim} key={portfoy._id}>
                     {portfoy.isim}
                   </option>
                 ))}
@@ -257,7 +260,6 @@ const IslemFormStyled = styled.div`
 
     .uyari-container {
       font-weight: 600;
-      padding-top: 1rem;
     }
 
     .top-container {

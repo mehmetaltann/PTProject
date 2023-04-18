@@ -41,7 +41,7 @@ const Islem = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      maxLength: 20,
+      maxLength: 40,
     },
     durum: {
       type: String,

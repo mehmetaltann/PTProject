@@ -6,3 +6,11 @@ export const PageLayout = styled.div`
   display: flex;
   overflow: auto;
 `;
+
+export const YatirimLayout = styled.div`
+  height: 900px;
+  width: 100%;
+  padding-top: 1rem;
+  display: flex;
+  gap: 1rem;
+`;

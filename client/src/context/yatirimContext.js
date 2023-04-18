@@ -6,14 +6,17 @@ const BASE_URL = "http://localhost:1623/api/v1/";
 export const YatirimContext = createContext();
 
 export const YatirimProvider = ({ children }) => {
-  const [tarihiKayitlar, setTarihiKayitlar] = useState([]);
-  const [islemler, setIslemler] = useState([]);
   const [portfoyler, setPortfoyler] = useState([]);
+  const [islemler, setIslemler] = useState([]);
+  const [gecmisIslemler, setGecmisIslemler] = useState([]);
+
   const [message, setMessage] = useState(null);
   const [messageList, setMessageList] = useState([]);
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
-  const [selectedPortfoy, setSelectedPortfoy] = useState("Bireysel Emeklilik");
+  const [selectedPortfoy, setSelectedPortfoy] = useState(
+    "Bireysel Emeklilik Fonları"
+  );
 
   const yatirimIslemleriSorgula = async () => {
     const { data } = await axios.get(`${BASE_URL}yatirim-islem-sorgula`);
@@ -60,22 +63,9 @@ export const YatirimProvider = ({ children }) => {
     setPortfoyler(data);
   };
 
-  /*
-  const yatirimKalemiEkle = async (islem) => {
-    try {
-      const { data } = await axios.post(`${BASE_URL}yatirim-islem`, islem);
-      setMessage(data.message)
-      //setMessageList((old) => [...old, data.message]);
-    } catch (err) {
-      setError(err.data.message)
-    }
-    yatirimIslemleriSorgula();
-  };
-  */
-
-  const yatirimTarihiKayitGetir = async () => {
-    const response = await axios.get(`${BASE_URL}gecmis-islem-sorgula`);
-    setTarihiKayitlar(response.data);
+  const yatirimGecmisIslemSorgula = async () => {
+    const { data } = await axios.get(`${BASE_URL}gecmis-islem-sorgula`);
+    setGecmisIslemler(data);
   };
 
   return (
@@ -85,10 +75,12 @@ export const YatirimProvider = ({ children }) => {
         islemler,
         yatirimIslemiEkle,
         yatirimIslemiSil,
-        tarihiKayitlar,
+        yatirimGecmisIslemSorgula,
+        gecmisIslemler,
         portfoySorgula,
         portfoyler,
         setPortfoyler,
+
         message,
         setMessage,
         error,
@@ -106,3 +98,16 @@ export const YatirimProvider = ({ children }) => {
 export const useYatirimContext = () => {
   return useContext(YatirimContext);
 };
+
+/*
+  const yatirimKalemiEkle = async (islem) => {
+    try {
+      const { data } = await axios.post(`${BASE_URL}yatirim-islem`, islem);
+      setMessage(data.message)
+      //setMessageList((old) => [...old, data.message]);
+    } catch (err) {
+      setError(err.data.message)
+    }
+    yatirimIslemleriSorgula();
+  };
+  */

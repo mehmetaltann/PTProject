@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Table from "./sonIslemler/Table";
-import TitleSelect from "./sonIslemler/TitleSelect";
+import TableTitle from "../UI/Table/TableTitle";
 
 const SonIslemler = () => {
   return (
     <SonIslemlerStyled>
-      <TitleSelect />
+      <TableTitle title="Son İşlemler" />
       <Table />
     </SonIslemlerStyled>
   );

@@ -4,8 +4,6 @@ exports.gecmisIslemEkle = async (
   kod,
   adet,
   alim_islemId,
-  alim_tarihi,
-  alim_fiyati,
   satim_tarihi,
   satim_fiyati,
   komisyon
@@ -14,8 +12,6 @@ exports.gecmisIslemEkle = async (
     kod,
     adet,
     alim_islemId,
-    alim_tarihi,
-    alim_fiyati,
     satim_tarihi,
     satim_fiyati,
     komisyon,
@@ -25,9 +21,16 @@ exports.gecmisIslemEkle = async (
 
 exports.gecmisIslemSorgula = async (req, res) => {
   try {
-    const gecmisIslemler = await YtHistory.find()
-      .sort({ satim_tarihi: 1 })
-      .then((kayit) => res.status(200).json(kayit));
+    const gecmisIslemler = await YtHistory.aggregate([
+      {
+        $lookup: {
+          let: { userObjId: { $toObjectId: "$alim_islemId" } },
+          from: "islems",
+          pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$userObjId"] } } }],
+          as: "alim_bilgi",
+        },
+      },
+    ]).then((kayit) => res.status(200).json(kayit));
   } catch (error) {
     res
       .status(500)

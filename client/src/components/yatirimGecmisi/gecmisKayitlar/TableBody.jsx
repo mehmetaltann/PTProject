@@ -7,8 +7,31 @@ import { useYatirimContext } from "../../../context/yatirimContext";
 const itemsPerPage = 10;
 
 const TableBody = () => {
-  const { selectedPortfoy, islemler } = useYatirimContext();
-  const data = islemler.filter((data) => data.portfoy_ismi === selectedPortfoy);
+  const { gecmisIslemler } = useYatirimContext();
+  const initialData = gecmisIslemler.map(
+    ({
+      _id,
+      kod,
+      adet,
+      alim_islemId,
+      satim_tarihi,
+      satim_fiyati,
+      komisyon,
+    }) => {
+      return {
+        kod: kod,
+        adet: adet,
+        alim_tarihi: "",
+        alim_fiyati: 0,
+        satis_tarihi: satim_tarihi,
+        satis_fiyatı: satim_fiyati,
+        kar_zarar_tutarı: 0,
+        kar_zarar_oranı: 0,
+        gun_sayisi: 0,
+      };
+    }
+  );
+  const data = gecmisIslemler;
   const [itemOffset, setItemOffset] = useState(0);
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data.slice(itemOffset, endOffset);
@@ -22,17 +45,29 @@ const TableBody = () => {
   return (
     <TableBodyStyled>
       {currentItems.map(
-        ({ _id, action, kod, date, adet, fiyat, komisyon, durum }) => (
+        ({
+          portfoy,
+          kod,
+          adet,
+          alim_tarihi,
+          alim_fiyati,
+          satis_tarihi,
+          satis_fiyatı,
+          kar_zarar_tutarı,
+          kar_zarar_oranı,
+          gun_sayisi,
+        }) => (
           <TableItem
-            key={_id}
-            id={_id}
-            action={action}
+            portfoy={portfoy}
             kod={kod}
-            tarih={date}
             adet={adet}
-            fiyat={fiyat}
-            komisyon={komisyon}
-            durum={durum}
+            alim_tarihi={alim_tarihi}
+            alim_fiyati={alim_fiyati}
+            satis_tarihi={satis_tarihi}
+            satis_fiyati={satis_fiyatı}
+            kar_zarar_tutari={kar_zarar_tutarı}
+            kar_zarar_orani={kar_zarar_oranı}
+            gun_sayisi={gun_sayisi}
           />
         )
       )}
