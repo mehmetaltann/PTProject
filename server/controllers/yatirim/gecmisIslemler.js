@@ -1,36 +1,20 @@
 const YtHistory = require("../../models/YatirimHistoryModel");
+const { gecmisIslemQuery } = require("../../utils/queries");
 
-exports.gecmisIslemEkle = async (
-  kod,
-  adet,
-  alim_islemId,
-  satim_tarihi,
-  satim_fiyati,
-  komisyon
-) => {
+exports.gecmisIslemEkle = async (adet, satim_islemId, alim_islemId) => {
   const gecmisIslem = YtHistory({
-    kod,
     adet,
     alim_islemId,
-    satim_tarihi,
-    satim_fiyati,
-    komisyon,
+    satim_islemId,
   });
   await gecmisIslem.save();
 };
 
 exports.gecmisIslemSorgula = async (req, res) => {
   try {
-    const gecmisIslemler = await YtHistory.aggregate([
-      {
-        $lookup: {
-          let: { userObjId: { $toObjectId: "$alim_islemId" } },
-          from: "islems",
-          pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$userObjId"] } } }],
-          as: "alim_bilgi",
-        },
-      },
-    ]).then((kayit) => res.status(200).json(kayit));
+    const gecmisIslemler = await YtHistory.aggregate(gecmisIslemQuery).then(
+      (kayit) => res.status(200).json(kayit)
+    );
   } catch (error) {
     res
       .status(500)

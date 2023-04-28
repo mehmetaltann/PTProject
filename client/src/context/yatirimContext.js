@@ -9,7 +9,6 @@ export const YatirimProvider = ({ children }) => {
   const [portfoyler, setPortfoyler] = useState([]);
   const [islemler, setIslemler] = useState([]);
   const [gecmisIslemler, setGecmisIslemler] = useState([]);
-
   const [message, setMessage] = useState(null);
   const [messageList, setMessageList] = useState([]);
   const [error, setError] = useState(null);
@@ -38,12 +37,13 @@ export const YatirimProvider = ({ children }) => {
       .all(axiosArray)
       .then(
         axios.spread((...responses) => {
-          responses.forEach((res) =>
-            setMessageList([...messageList, res.data.message])
-          );
+          responses.forEach((res) => {
+            let newMessage = res.data.message;
+            setMessageList([...messageList, newMessage]);
+          });
         })
       )
-      .catch((error) => {});
+      .catch((err) => {});
 
     yatirimIslemleriSorgula();
   };
@@ -80,9 +80,10 @@ export const YatirimProvider = ({ children }) => {
         portfoySorgula,
         portfoyler,
         setPortfoyler,
-
+        messageList,
         message,
         setMessage,
+        setMessageList,
         error,
         setError,
         startDate,

@@ -49,10 +49,6 @@ const Islem = new mongoose.Schema(
       default: "Açık",
       maxLength: 7,
     },
-    son_guncelleme_date: {
-      type: Date,
-      trim: true,
-    },
   },
   { timestamps: true }
 );

@@ -16,8 +16,8 @@ exports.islemEkle = async (req, res) => {
     portfoy_ismi,
   });
 
-  const alimlist = await acikPoziyonSorgu(kod); //duurumu açık veya güncellendi olan alışlar
-  const totalAdet = calculateSum(alimlist, "adet"); //duurumu açık olan alışların toplam adedi
+  const alim_list = await acikPoziyonSorgu(kod); //duurumu açık veya güncellendi olan alışlar
+  const toplam_adet = calculateSum(alim_list, "adet"); //duurumu açık olan alışların toplam adedi
   const satilanAdet = Number(Number(adet).toFixed(8));
 
   try {
@@ -25,17 +25,18 @@ exports.islemEkle = async (req, res) => {
       await islem.save();
       res.status(200).json({ message: `"${kod}" Alış İşlemi Gerçekleşti` });
     } else {
-      if (alimlist.length === 0) {
+      if (alim_list.length === 0) {
         res
           .status(200)
           .json({ message: `Portföyde "${kod}" Bulunmamaktadır.` });
-      } else if (totalAdet < satilanAdet) {
+      } else if (toplam_adet < satilanAdet) {
         res
           .status(200)
           .json({ message: `Belirlenen Sayıda "${kod}" Bulunmamaktadır.` });
       } else {
-        tradeTransection(kod, satilanAdet, fiyat, date, komisyon, alimlist);
-        await islem.save();
+        await islem.save().then((savedDoc) => {
+          tradeTransection(savedDoc._id, adet, alim_list);
+        });
         res.status(200).json({ message: `"${kod}" Satım İşlemi Gerçekleşti` });
       }
     }

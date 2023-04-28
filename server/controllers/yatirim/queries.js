@@ -1,8 +1,9 @@
 const Islem = require("../../models/YatirimIslemlerModel");
+const { tumIslemlerQuery } = require("../../utils/queries");
 
 exports.islemSorgula = async (req, res) => {
   try {
-    const acikKayitlar = await Islem.find()
+    await Islem.aggregate(tumIslemlerQuery)
       .sort({ date: "desc" })
       .then((butceKalemi) => res.status(200).json(butceKalemi));
   } catch (error) {
@@ -17,7 +18,7 @@ exports.acikPoziyonSorgu = async (kod) => {
     $or: [{ durum: "Açık" }, { durum: "Güncellendi" }],
   };
   let dataList = [];
-  const codes = await Islem.find(queryObject)
+  await Islem.find(queryObject)
     .sort({ date: "asc" })
     .then((code) => (dataList = code));
   return dataList;

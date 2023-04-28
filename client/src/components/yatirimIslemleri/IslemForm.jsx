@@ -16,6 +16,8 @@ const IslemForm = () => {
     error,
     setError,
     message,
+    messageList,
+    setMessageList,
     setMessage,
     startDate,
     portfoyler,
@@ -28,10 +30,10 @@ const IslemForm = () => {
     if (error) {
       setTimeout(() => setError(null), 1500);
     }
-    if (message) {
-      setTimeout(() => setMessage(null), 1500);
+    if (messageList) {
+      setTimeout(() => setMessageList([]), 1500);
     }
-  }, [error, message]);
+  }, [error, messageList]);
 
   const schema = Yup.object().shape({
     portfoy: Yup.string().required("Gerekli"),
@@ -97,7 +99,12 @@ const IslemForm = () => {
           <Form className="form">
             <div className="uyari-container">
               {error && <p className="error">{error}</p>}
-              {message && <p className="message">{message}</p>}
+              {messageList?.length !== 0 &&
+                messageList.map((message, index) => (
+                  <p className="message" key={index}>
+                    {message}
+                  </p>
+                ))}
             </div>
             <div className="top-container">
               <Field

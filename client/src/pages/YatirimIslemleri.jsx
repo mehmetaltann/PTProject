@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import Transactions from "../components/yatirimIslemleri/Transactions";
 import { PageLayout } from "../styles/Layout";
+import YImain from "../components/yatirimIslemleri/YImain";
 
 const YatirimIslemleri = () => {
   return (
     <PageLayout>
       <YatirimIslemleriStyled>
-        <Transactions />
+        <YImain />
       </YatirimIslemleriStyled>
     </PageLayout>
   );

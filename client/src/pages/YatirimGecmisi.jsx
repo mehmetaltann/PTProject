@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import Dashboard from "../components/yatirimGecmisi/Dashboard";
+import YGmain from "../components/yatirimGecmisi/YGmain";
 import { PageLayout } from "../styles/Layout";
 
 const YatirimGecmisi = () => {
   return (
     <PageLayout>
       <YatirimGecmisiStyled>
-        <Dashboard />
+        <YGmain />
       </YatirimGecmisiStyled>
     </PageLayout>
   );

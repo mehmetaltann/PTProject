@@ -1,17 +1,13 @@
-import styled from "styled-components";
 import { Rotalar } from "./Routes";
+import { ThemeProvider } from "@mui/material";
+import { GlobalTheme } from "./styles/GlobalTheme";
 
 function App() {
   return (
-    <AppStyled>
+    <ThemeProvider theme={GlobalTheme}>
       <Rotalar />
-    </AppStyled>
+    </ThemeProvider>
   );
 }
-
-const AppStyled = styled.div`
-  height: 100vh;
-  position: relative;
-`;
 
 export default App;

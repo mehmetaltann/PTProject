@@ -38,5 +38,7 @@ export const tadilat = <i className="fa-solid fa-screwdriver-wrench"></i>;
 export const market = <i className="fa-solid fa-cart-shopping"></i>;
 export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>;
 export const incomes = <i className="fa-solid fa-money-bill-transfer"></i>;
-export const search = <i className="fa-solid fa-magnifying-glass"></i>
-export const carpi = <i className="fa-solid fa-xmark"></i>
+export const search = <i className="fa-solid fa-magnifying-glass"></i>;
+export const carpi = <i className="fa-solid fa-xmark"></i>;
+export const sortUp = <i className="fa-solid fa-arrow-up-wide-short"></i>;
+export const sortDown = <i className="fa-solid fa-arrow-up-short-wide"></i>;

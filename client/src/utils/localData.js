@@ -81,7 +81,7 @@ export const butceCategoryData = [
     icon: aidat,
   },
   {
-    id:8,
+    id: 8,
     type: "Gider",
     categoryA: "Fatura",
     categoryB: "Yakıt Parası",

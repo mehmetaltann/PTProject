@@ -1,59 +1,28 @@
 const { acikPoziyonUpdate } = require("./updates");
 const { gecmisIslemEkle } = require("./gecmisIslemler");
 
-exports.tradeTransection = async (
-  kod,
-  satılanAdet,
-  fiyat,
-  tarih,
-  komisyon,
-  alimlist
-) => {
-  while (satılanAdet > 0) {
-    let secilenAlim = alimlist[0];
-    let secilenAlimAdet = Number(Number(secilenAlim.adet).toFixed(8));
-    satılanAdet = Number(Number(satılanAdet).toFixed(8));
+exports.tradeTransection = async (satis_id, satilanAdet, alim_list) => {
+  while (satilanAdet > 0) {
+    let secilenAlim = alim_list[0];
+    let secilenAlimIlkAdet = Number(Number(secilenAlim.adet).toFixed(8));
+    satilanAdet = Number(Number(satilanAdet).toFixed(8));
 
-    if (secilenAlimAdet === satılanAdet) {
-      await acikPoziyonUpdate("Kapalı", 0, secilenAlim.id, tarih);
-      await gecmisIslemEkle(
-        kod,
-        satılanAdet,
-        secilenAlim.id,
-        tarih,
-        fiyat,
-        komisyon
-      );
-      satılanAdet = 0;
-    } else if (secilenAlimAdet > satılanAdet) {
-      secilenAlimAdet -= satılanAdet;
-      await acikPoziyonUpdate(
-        "Güncellendi",
-        secilenAlimAdet,
-        secilenAlim.id,
-        tarih
-      );
-      await gecmisIslemEkle(
-        kod,
-        satılanAdet,
-        secilenAlim.id,
-        tarih,
-        fiyat,
-        komisyon
-      );
-      satılanAdet = 0;
+    const dataArrange = async (islem_adet, durum, secilenAlimSonAdet) => {
+      await acikPoziyonUpdate(secilenAlim.id, durum, secilenAlimSonAdet);
+      await gecmisIslemEkle(islem_adet, satis_id, secilenAlim.id);
+    };
+
+    if (secilenAlimIlkAdet === satilanAdet) {
+      await dataArrange(satilanAdet, "Kapalı", 0);
+      satilanAdet = 0;
+    } else if (secilenAlimIlkAdet > satilanAdet) {
+      secilenAlimIlkAdet -= satilanAdet;
+      await dataArrange(satilanAdet, "Güncellendi", secilenAlimIlkAdet);
+      satilanAdet = 0;
     } else {
-      await acikPoziyonUpdate("Kapalı", 0, secilenAlim.id, tarih);
-      await gecmisIslemEkle(
-        kod,
-        satılanAdet,
-        secilenAlim.id,
-        tarih,
-        fiyat,
-        komisyon
-      );
-      satılanAdet -= secilenAlimAdet;
-      alimlist.splice(0, 1);
+      await dataArrange(secilenAlimIlkAdet, "Kapalı", 0);
+      satilanAdet -= secilenAlimIlkAdet;
+      alim_list.splice(0, 1);
     }
   }
 };
