@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Container } from "@mui/material";
 import HomePage from "./pages/HomePage";
-import YatirimIslemleri from "./pages/YatirimIslemleri.jsx"
-import YatirimGecmisi from "./pages/YatirimGecmisi"
+import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
+import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
 import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
 import ButceKayitPage from "./pages/ButceKayitPage";
@@ -33,11 +34,17 @@ export const Rotalar = () => {
   return (
     <Router>
       <NavBar />
-      <Routes>
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={<route.component />} />
-        ))}
-      </Routes>
+      <Container disableGutters>
+        <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
+        </Routes>
+      </Container>
     </Router>
   );
 };

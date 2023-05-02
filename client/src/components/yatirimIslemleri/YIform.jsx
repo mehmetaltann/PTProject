@@ -5,10 +5,10 @@ import FormDatePicker from "../UI/formElements/FormDatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import * as Yup from "yup";
-import { Fragment, useState } from "react";
-import { Form, Formik, FieldArray } from "formik";
-import { useYatirimContext } from "../../context/yatirimContext";
+import { Fragment, useState, useMemo } from "react";
+import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../utils/help-functions";
+import { useYatirimContext } from "../../context/yatirimContext";
 import {
   Card,
   CardContent,
@@ -16,12 +16,13 @@ import {
   IconButton,
   Stack,
   Typography,
+  MenuItem,
 } from "@mui/material";
 
 const YIform = () => {
-  const { yatirimIslemiEkle, selectedPortfoy, portfoyler } =
-    useYatirimContext();
   const [islemTuru, setIslemTuru] = useState("Alış");
+  const { selectedPortfoy, yatirimIslemiEkle, portfoyler } =
+    useYatirimContext();
 
   const initialFonInfo = {
     date: materialDateInput,
@@ -30,6 +31,8 @@ const YIform = () => {
     fiyat: 0,
     komisyon: 0,
   };
+
+  const initialFonInfoMemo = useMemo(() => initialFonInfo, []);
 
   const submitHandler = async (values, { resetForm }) => {
     let portfoy_ismi = values.portfoy;
@@ -81,8 +84,8 @@ const YIform = () => {
         </Typography>
         <Formik
           initialValues={{
-            portfoy: "Bireysel Emeklilik Fonları",
-            fons: [initialFonInfo],
+            portfoy: selectedPortfoy,
+            fons: [initialFonInfoMemo],
           }}
           onSubmit={submitHandler}
           validationSchema={validateSchema}
@@ -96,15 +99,17 @@ const YIform = () => {
                 spacing={{ lg: 0, xs: 2 }}
               >
                 <Grid item="true" order={{ xs: 1, sm: 0, lg: 0 }}>
-                  <FormSelect
-                    sx={{ minWidth: 220 }}
-                    label="Fon seçimi"
-                    type="text"
+                  <Field
                     name="portfoy"
-                    options={portfoyler}
-                    attr="isim"
                     defaultValue="Bireysel Emeklilik Fonları"
-                  ></FormSelect>
+                    component={FormSelect}
+                  >
+                    {portfoyler.map((item, index) => (
+                      <MenuItem value={item["isim"]} key={index}>
+                        {item["isim"]}
+                      </MenuItem>
+                    ))}
+                  </Field>
                 </Grid>
                 <Grid order={{ xs: 2, sm: 2, lg: 1 }}>
                   <FieldArray name="fons">
@@ -173,7 +178,7 @@ const YIform = () => {
                         ))}
                         <Grid item="true">
                           <Button
-                            onClick={() => push(initialFonInfo)}
+                            onClick={() => push(initialFonInfoMemo)}
                             variant="contained"
                             size="small"
                           >

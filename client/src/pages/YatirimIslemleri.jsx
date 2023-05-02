@@ -1,20 +1,27 @@
-import styled from "styled-components";
-import { PageLayout } from "../styles/Layout";
-import YImain from "../components/yatirimIslemleri/YImain";
+import { useYatirimContext } from "../context/yatirimContext";
+import { Fragment, useEffect } from "react";
+import { Stack } from "@mui/material";
+import YIform from "../components/yatirimIslemleri/YIform";
+import YIsonIslemler from "../components/yatirimIslemleri/YIsonIslemler";
+import PageTitle from "../components/UI/PageTitle";
 
 const YatirimIslemleri = () => {
+  const { yatirimIslemleriSorgula, portfoySorgula } = useYatirimContext();
+
+  useEffect(() => {
+    yatirimIslemleriSorgula();
+    portfoySorgula();
+  }, []);
+
   return (
-    <PageLayout>
-      <YatirimIslemleriStyled>
-        <YImain />
-      </YatirimIslemleriStyled>
-    </PageLayout>
+    <Fragment>
+      <PageTitle title="Yatırım İşlemleri" />
+      <Stack spacing={1}>
+        <YIform />
+        <YIsonIslemler />
+      </Stack>
+    </Fragment>
   );
 };
-
-const YatirimIslemleriStyled = styled.main`
-  height: 90%;
-  width: 100%;
-`;
 
 export default YatirimIslemleri;

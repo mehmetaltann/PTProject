@@ -7,7 +7,7 @@ const YIsonIslemler = () => {
       <CardContent>
         <Typography
           variant="h5"
-          sx={{ borderBottom: 1, mb: 4, borderColor: "grey.500" }}
+          sx={{ borderBottom: 1, mb: 2, borderColor: "grey.500" }}
         >
           Son İşlemler
         </Typography>
