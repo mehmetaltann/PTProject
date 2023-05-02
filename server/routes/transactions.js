@@ -29,6 +29,16 @@ router.post("/portfoy-ekle", portfoyEkle);
 router.delete("/portfoy-sil/:id", portfoySil);
 router.get("/portfoy-sorgula", portfoySorgula);
 
+//Kategori İşlemleri Rotaları
+const {
+  categorySorgula,
+  categoryEkle,
+  categorySil,
+} = require("../controllers/category/ctgryIslemleri");
+router.post("/category-ekle", categoryEkle);
+router.delete("/category-sil/:id", categorySil);
+router.get("/category-sorgula", categorySorgula);
+
 //MongoDb Sorgu Rotaları
 const {
   mongoSorgu,

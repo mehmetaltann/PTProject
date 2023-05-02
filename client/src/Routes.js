@@ -6,6 +6,7 @@ import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
 import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
 import ButceKayitPage from "./pages/ButceKayitPage";
+import ButceGiris from "./pages/ButceGiris";
 
 const routes = [
   {
@@ -19,6 +20,10 @@ const routes = [
   {
     path: "/yatirim-gecmisi",
     component: YatirimGecmisi,
+  },
+  {
+    path: "/butce-kayit",
+    component: ButceGiris,
   },
   {
     path: "/genel-durum",

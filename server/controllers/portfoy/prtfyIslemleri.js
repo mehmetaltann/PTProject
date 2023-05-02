@@ -2,7 +2,7 @@ const Portfoy = require("../../models/PortfoyModel");
 
 exports.portfoySorgula = async (req, res) => {
   try {
-    const portfoyler = await Portfoy.find().then((kayit) =>
+    await Portfoy.find().then((kayit) =>
       res.status(200).json(kayit)
     );
   } catch (error) {

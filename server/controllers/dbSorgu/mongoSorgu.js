@@ -6,9 +6,10 @@ const categoryB = "categoryB";
 const description = "description";
 
 let queryObject = {
-  type:"gider",categoryB: "Eğitim/Kitap"
+  type: "gelir",
+  categoryA: "Fon Satış",
 };
-let newObject = { $set: { categoryB: "Eğitim-Kitap" } };
+let newObject = { $set: { categoryB: "Fon Satış", categoryA: "İlave Gelirler" } };
 
 exports.mongoUpdate = async (req, res) => {
   try {

@@ -90,7 +90,7 @@ const YIform = () => {
           onSubmit={submitHandler}
           validationSchema={validateSchema}
         >
-          {({ values, errors, isSubmitting, setFieldValue }) => (
+          {({ values, isSubmitting }) => (
             <Form>
               <Grid
                 container
