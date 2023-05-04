@@ -1,12 +1,13 @@
 import { createContext, useState, useContext } from "react";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:1623/api/v1/";
+export const BASE_URL = "http://localhost:1623/api/v1/";
 
 export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [butceData, setButceData] = useState([]);
+  const [category, setCategory] = useState([]);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
@@ -92,6 +93,7 @@ export const GlobalProvider = ({ children }) => {
       value={{
         capitalizedTitle,
         butceData,
+        category,
         butceKalemiGetir,
         butceKalemiEkle,
         butceKalemiSil,

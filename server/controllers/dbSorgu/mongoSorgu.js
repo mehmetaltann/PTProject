@@ -5,10 +5,10 @@ const categoryA = "categoryA";
 const categoryB = "categoryB";
 const description = "description";
 
-let queryObject = {
-  type:"gider",categoryB: "Eğitim/Kitap"
+const queryObject = {
+  type: "gider",
 };
-let newObject = { $set: { categoryB: "Eğitim-Kitap" } };
+const newObject = { $set: { type: "Gider" } };
 
 exports.mongoUpdate = async (req, res) => {
   try {

@@ -6,6 +6,7 @@ const data = [
   { title: "Anasayfa", link: "" },
   { title: "Yatırım İşlemleri", link: "yatirim-islemleri" },
   { title: "Yatırım Geçmişi", link: "yatirim-gecmisi" },
+  { title: "Bütçe İşlemleri", link: "butce-kayit" },
   { title: "Bütçe Kayıt", link: "butce" },
   { title: "Bütçe Durum", link: "genel-durum" },
 ];

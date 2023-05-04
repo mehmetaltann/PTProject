@@ -84,7 +84,7 @@ export const butceCategoryData = [
     id: 8,
     type: "Gider",
     categoryA: "Fatura",
-    categoryB: "Yakıt Parası",
+    categoryB: "Site ",
     icon: yakit,
   },
   {
@@ -269,10 +269,10 @@ export const menuItems = [
 ];
 
 export const tarihSecim = [
-  { id: 1, title: "Son 1 Ay" },
-  { id: 2, title: "Son 3 Ay" },
-  { id: 3, title: "Son 6 Ay" },
-  { id: 4, title: "Son 1 Yıl" },
-  { id: 5, title: "Son 3 Yıl" },
-  { id: 0, title: "Tümü" },
+  { value: 1, label: "Son 1 Ay" },
+  { value: 2, label: "Son 3 Ay" },
+  { value: 3, label: "Son 6 Ay" },
+  { value: 4, label: "Son 1 Yıl" },
+  { value: 5, label: "Son 3 Yıl" },
+  { value: 0, label: "Tümü" },
 ];

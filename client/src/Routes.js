@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
 import ButceGenelDurumPage from "./pages/ButceGenelDurumPage";
 import ButceKayitPage from "./pages/ButceKayitPage";
+import ButceGiris from "./pages/ButceGiris";
 
 const routes = [
   {
@@ -21,6 +22,10 @@ const routes = [
     component: YatirimGecmisi,
   },
   {
+    path: "/butce-kayit",
+    component: ButceGiris,
+  },
+  {
     path: "/genel-durum",
     component: ButceGenelDurumPage,
   },
@@ -34,17 +39,19 @@ export const Rotalar = () => {
   return (
     <Router>
       <NavBar />
-      <Container disableGutters>
-        <Routes>
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={<route.component />}
-            />
-          ))}
-        </Routes>
-      </Container>
+      <Box sx={{ height: "100vh", overflow: "auto" }}>
+        <Container>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.component />}
+              />
+            ))}
+          </Routes>
+        </Container>
+      </Box>
     </Router>
   );
 };

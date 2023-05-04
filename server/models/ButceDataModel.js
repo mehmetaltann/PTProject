@@ -29,13 +29,13 @@ const ButceSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 25,
+      maxLength: 30,
     },
     categoryB: {
       type: String,
       default: "",
       trim: true,
-      maxLength: 25,
+      maxLength: 30,
     },
     description: {
       type: String,
