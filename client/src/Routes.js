@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
@@ -39,17 +39,19 @@ export const Rotalar = () => {
   return (
     <Router>
       <NavBar />
-      <Container disableGutters>
-        <Routes>
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={<route.component />}
-            />
-          ))}
-        </Routes>
-      </Container>
+      <Box sx={{ height: "100vh", overflow: "auto" }}>
+        <Container>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<route.component />}
+              />
+            ))}
+          </Routes>
+        </Container>
+      </Box>
     </Router>
   );
 };

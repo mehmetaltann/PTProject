@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-const BIformSelect = ({ children, label, form, field, disabled }) => {
+const BIformSelect = ({ children, minW, label, form, field, disabled, name2 }) => {
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -10,10 +10,13 @@ const BIformSelect = ({ children, label, form, field, disabled }) => {
       label={label}
       type="text"
       disabled={disabled}
-      sx={{ minWidth: 150}}
+      sx={{ minWidth: minW }}
       name={name}
       value={value}
-      onChange={(e) => setFieldValue(name, e.target.value)}
+      onChange={(e) => {
+        setFieldValue(name, e.target.value);
+        setFieldValue(name2, e.target.value);
+      }}
       size="small"
     >
       {children}

@@ -8,7 +8,7 @@ const ButceGiris = () => {
   return (
     <Fragment>
       <PageTitle title="Bütçe Kayıt" />
-      <Stack spacing={1}>
+      <Stack spacing={2} sx={{ overflow: "auto" }}>
         <BIform />
         <BIsonIslemler />
       </Stack>
