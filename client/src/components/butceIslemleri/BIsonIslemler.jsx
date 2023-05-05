@@ -7,6 +7,7 @@ import { tarihSecim } from "../../utils/localData";
 import { useGlobalContext } from "../../context/globalContext";
 import { MenuItem, Typography, TextField, Paper, Box } from "@mui/material";
 import useAxios from "../../hooks/useAxios";
+import useHttp from "../../hooks/use-http";
 
 const BIsonIslemler = () => {
   const [selectedDate, setSelectedDate] = useState(2);
@@ -14,20 +15,26 @@ const BIsonIslemler = () => {
   const { butceKalemiSil, error, message, setMessage, setError } =
     useGlobalContext();
 
-  const { response } = useAxios({
-    method: "get",
-    url: `butce-sorgula/${selectedDate}`,
-  });
+  const { sendRequest } = useHttp();
 
   useEffect(() => {
-    if (response !== null) {
-      let filteredData = response.map(({ _id: id, ...rest }) => ({
+    const transformData = (fetchData) => {
+      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
         id,
         ...rest,
       }));
+
       setData(filteredData);
-    }
-  }, [response]);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `butce-sorgula/${selectedDate}`,
+      },
+      transformData
+    );
+  }, [sendRequest, selectedDate]);
 
   useEffect(() => {
     if (error) {
