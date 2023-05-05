@@ -179,19 +179,18 @@ const BIform = () => {
                           {values.infos.map((i, index) => (
                             <Grid
                               container="true"
-                              item="true"
                               spacing={{ xs: 2, md: 1 }}
                               sx={{ mb: 1 }}
                               key={index}
                             >
-                              <Grid item="true">
+                              <Grid>
                                 <FormDatePicker
                                   name={`infos.${index}.date`}
                                   label="Tarih"
                                   size="small"
                                 />
                               </Grid>
-                              <Grid item="true">
+                              <Grid>
                                 {values.categoryA ? (
                                   <Field
                                     name={`infos.${index}.categoryB`}
@@ -229,7 +228,7 @@ const BIform = () => {
                                   </Field>
                                 )}
                               </Grid>
-                              <Grid item="true">
+                              <Grid>
                                 <FormTextField
                                   sx={{ maxWidth: 180 }}
                                   name={`infos.${index}.title`}
@@ -237,7 +236,7 @@ const BIform = () => {
                                   size="small"
                                 />
                               </Grid>
-                              <Grid item="true">
+                              <Grid>
                                 <FormTextField
                                   sx={{ maxWidth: 100 }}
                                   name={`infos.${index}.amount`}
@@ -246,7 +245,7 @@ const BIform = () => {
                                   size="small"
                                 />
                               </Grid>
-                              <Grid item="true">
+                              <Grid>
                                 <FormTextField
                                   name={`infos.${index}.description`}
                                   label="Açıklama"
@@ -255,7 +254,7 @@ const BIform = () => {
                                   size="small"
                                 />
                               </Grid>
-                              <Grid item="true">
+                              <Grid>
                                 <IconButton
                                   aria-label="delete"
                                   onClick={() => remove(index)}

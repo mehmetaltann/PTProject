@@ -1,12 +1,12 @@
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {
-  Card,
-  CardContent,
-  Stack,
   MenuItem,
   Typography,
   TextField,
+  Paper,
+  Box,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { tarihSecim } from "../../utils/localData";
 import BIdataTable from "./BIdataTable";
@@ -15,25 +15,31 @@ const BIsonIslemler = () => {
   const [selectedDate, setSelectedDate] = useState(2);
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Stack spacing={2}>
-          <Stack
-            direction="row"
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
+    <Paper variant="outlined" sx={{ p: 2 }}>
+      <Grid container spacing={2}>
+        <Grid container xs={12} justifyContent={"space-between"} spacing={1}>
+          <Grid xs={12} sm={3}>
             <Typography variant="h5">İşlemler</Typography>
-            <Stack
-              direction="row"
-              justifyContent={"center"}
-              alignItems={"center"}
-              spacing={2}
-            >
+          </Grid>
+
+          <Grid
+            container
+            spacing={1}
+            xs={12}
+            sm={9}
+            justifyContent={{ xs: "flex-start", sm: "flex-end" }}
+          >
+            <Grid>
               <Typography variant="h6">Dönem :</Typography>
+            </Grid>
+
+            <Grid>
               <CalendarMonthIcon
                 sx={{ color: "action.active", mr: 1, my: 0.5 }}
               />
+            </Grid>
+
+            <Grid>
               <TextField
                 id="outlined-select-currency"
                 select
@@ -48,12 +54,17 @@ const BIsonIslemler = () => {
                   </MenuItem>
                 ))}
               </TextField>
-            </Stack>
-          </Stack>
-          <BIdataTable selectedDate={selectedDate}/>
-        </Stack>
-      </CardContent>
-    </Card>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container xs={12}>
+          <Box sx={{ height: 500, width: "auto" }}>
+            <BIdataTable selectedDate={selectedDate} />
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 

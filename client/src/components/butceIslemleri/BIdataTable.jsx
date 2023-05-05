@@ -1,19 +1,15 @@
 import useAxios from "../../hooks/useAxios";
 import CustomNoRowsOverlay from "../UI/CustomNoRowsOverlay";
+import BIdataTableFooter from "./BIdataTableFooter";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../utils/help-functions";
 import { Badge, Box } from "@mui/material";
-import {
-  DataGrid,
-  GridToolbar,
-  trTR,
-  GridFooterContainer,
-  GridFooter,
-} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const BIdataTable = ({ selectedDate }) => {
   const [data, setData] = useState([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
   const { response } = useAxios({
     method: "get",
@@ -66,57 +62,40 @@ const BIdataTable = ({ selectedDate }) => {
     },
     { flex: 1, field: "description", headerName: "Açıklama", width: 150 },
   ];
-  const columns = useMemo(() => COLUMNS, []);
-
-  function CustomFooter() {
-    return (
-      <GridFooterContainer sx={{ fontSize: 20 }}>
-        Total Amount : {"asda"}, Total No.of Gifts : {"asd"}
-        <GridFooter
-          sx={{
-            border: "none", // To delete double border.
-          }}
-        />
-      </GridFooterContainer>
-    );
-  }
+  const columns = useMemo(() => COLUMNS, []); 
   return (
-    <Box
-      sx={{
-        height: 600,
-        width: "100%",
-        "& .bold": {
-          fontWeight: 600,
+    <DataGrid
+    getRowHeight={() => 'auto'}
+      columns={columns}
+      rows={filteredData}
+      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
+      slots={{
+        toolbar: GridToolbar,
+        noRowsOverlay: CustomNoRowsOverlay,
+        footer: BIdataTableFooter,
+      }}
+      slotProps={{
+        footer: { filteredData, rowSelectionModel },
+        toolbar: {
+          showQuickFilter: true,
+          quickFilterProps: { debounceMs: 500 },
         },
       }}
-    >
-      <DataGrid
-        columns={columns}
-        rows={filteredData}
-        localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
-        slots={{
-          toolbar: GridToolbar,
-          noRowsOverlay: CustomNoRowsOverlay,
-          Footer: CustomFooter,
-        }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        pageSize={25}
-        sx={{
-          boxShadow: 2,
-          "& .MuiDataGrid-cell:hover": {
-            color: "primary.main",
-          },
-        }}
-        disableRowSelectionOnClick
-        disableColumnSelector
-        disableColumnMenu
-      />
-    </Box>
+      sx={{
+        boxShadow: 2,
+        "& .MuiDataGrid-cell:hover": {
+          color: "primary.main",
+        },
+      }}
+      onRowSelectionModelChange={(newRowSelectionModel) => {
+        setRowSelectionModel(newRowSelectionModel);
+      }}
+      rowSelectionModel={rowSelectionModel}
+      disableRowSelectionOnClick
+      disableColumnSelector
+      disableColumnMenu
+      checkboxSelection
+    />
   );
 };
 
