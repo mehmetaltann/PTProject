@@ -1,13 +1,13 @@
 const router = require("express").Router();
 
 //Bütçe Rotaları
-const { butceDataEkle } = require("../controllers/butce/butceDataEkle");
-const { butceDataSil } = require("../controllers/butce/butceDataSil");
-const { butceSorgula } = require("../controllers/butce/butceSorgu");
-const { butceIslemSorgula } = require("../controllers/butce/butceIslemler");
-router.post("/butce-veri-ekle/:type", butceDataEkle);
-router.delete("/butce-veri-sil/:id", butceDataSil);
-router.get("/butce-getir/:tarih/:category", butceSorgula);
+const {
+  butceIslemSorgula,
+  butceIslemSil,
+  butceIslemEkle,
+} = require("../controllers/butce/butceIslemler");
+router.post("/butce-veri-ekle", butceIslemEkle);
+router.delete("/butce-veri-sil/:id", butceIslemSil);
 router.get("/butce-sorgula/:date", butceIslemSorgula);
 
 //Yatırım İşlemleri Rotaları

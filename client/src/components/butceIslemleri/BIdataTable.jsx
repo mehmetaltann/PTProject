@@ -1,48 +1,16 @@
-import useAxios from "../../hooks/useAxios";
 import CustomNoRowsOverlay from "../UI/CustomNoRowsOverlay";
+import BIdataTableFooter from "./BIdataTableFooter";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../utils/help-functions";
-import { Badge, Box } from "@mui/material";
-import {
-  DataGrid,
-  GridToolbar,
-  trTR,
-  GridFooterContainer,
-  GridFooter,
-} from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Badge, IconButton } from "@mui/material";
+import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
+import { useGlobalContext } from "../../context/globalContext";
 
-const BIdataTable = ({ selectedDate }) => {
-  const [data, setData] = useState([]);
+const BIdataTable = ({ data }) => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  console.log(rowSelectionModel);
+  const { butceKalemiSil } = useGlobalContext();
 
-  const { response } = useAxios({
-    method: "get",
-    url: `butce-sorgula/${selectedDate}`,
-  });
-
-  useEffect(() => {
-    if (response !== null) {
-      setData(response);
-    }
-  }, [response]);
-
-  const filteredData = data.map(({ _id: id, ...rest }) => ({
-    id,
-    ...rest,
-  }));
-
-  const calculations = () => {
-    let totalAmount = 0;
-    const checkedList = filteredData.filter(
-      (item) => item.id in rowSelectionModel
-    );
-    console.log(checkedList);
-  };
-
-  calculations();
-  
   const COLUMNS = [
     {
       field: "Tip",
@@ -77,65 +45,67 @@ const BIdataTable = ({ selectedDate }) => {
       align: "left",
     },
     { flex: 1, field: "description", headerName: "Açıklama", width: 150 },
+    {
+      field: "actions",
+      width: 80,
+      headerName: "İşlem",
+      renderCell: (params, index) => {
+        return (
+          <IconButton
+            key={index}
+            size="small"
+            color="error"
+            onClick={() => {
+              butceKalemiSil(params.row.id);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+      filterable: false,
+      sortable: false,
+    },
   ];
   const columns = useMemo(() => COLUMNS, []);
 
-  function CustomFooter() {
-    return (
-      <GridFooterContainer sx={{ fontSize: 20 }}>
-        Total Amount : {"asda"}, Total No.of Gifts : {"asd"}
-        <GridFooter
-          sx={{
-            border: "none", // To delete double border.
-          }}
-        />
-      </GridFooterContainer>
-    );
-  }
-
   return (
-    <Box
-      sx={{
-        height: 350,
-        width: "100%",
-        "& .bold": {
-          fontWeight: 600,
+    <DataGrid
+      columns={columns}
+      rows={data}
+      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
+      slots={{
+        toolbar: GridToolbar,
+        noRowsOverlay: CustomNoRowsOverlay,
+        footer: BIdataTableFooter,
+      }}
+      slotProps={{
+        footer: { data, rowSelectionModel },
+        toolbar: {
+          showQuickFilter: true,
+          quickFilterProps: { debounceMs: 500 },
         },
       }}
-    >
-      <DataGrid
-        checkboxSelection
-        columns={columns}
-        rows={filteredData}
-        localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
-        slots={{
-          toolbar: GridToolbar,
-          noRowsOverlay: CustomNoRowsOverlay,
-          footer: CustomFooter,
-        }}
-        slotProps={{
-          footer: { rowSelectionModel },
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelectionModel(newRowSelectionModel);
-        }}
-        rowSelectionModel={rowSelectionModel}
-        pageSize={25}
-        sx={{
-          boxShadow: 2,
-          "& .MuiDataGrid-cell:hover": {
-            color: "primary.main",
-          },
-        }}
-        disableRowSelectionOnClick
-        disableColumnSelector
-        disableColumnMenu
-      />
-    </Box>
+      sx={{
+        boxShadow: 2,
+        "& .MuiDataGrid-cell:hover": {
+          color: "primary.main",
+        },
+      }}
+      onRowSelectionModelChange={(newRowSelectionModel) => {
+        setRowSelectionModel(newRowSelectionModel);
+      }}
+      initialState={{
+        ...data.initialState,
+        pagination: { paginationModel: { pageSize: 10 } },
+      }}
+      pageSizeOptions={[10, 25, 50]}
+      rowSelectionModel={rowSelectionModel}
+      disableRowSelectionOnClick
+      disableColumnSelector
+      disableColumnMenu
+      checkboxSelection
+    />
   );
 };
 

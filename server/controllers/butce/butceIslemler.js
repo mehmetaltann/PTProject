@@ -51,3 +51,25 @@ exports.butceIslemSorgula = async (req, res) => {
     res.status(500).json({ message: "Server Bağlantı Hatası" });
   }
 };
+
+exports.butceIslemSil = async (req, res) => {
+  const { id } = req.params;
+  ButceSchema.findByIdAndDelete(id)
+    .then((data) => {
+      res.status(200).json({ message: "Bütçe Kalemi Silindi" });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Server Bağlantı Hatası" });
+    });
+};
+
+exports.butceIslemEkle = async (req, res) => {
+  console.log(req.body);
+  await ButceSchema.insertMany(req.body)
+    .then((data) => {
+      res.status(200).json({ message: "Bütçe İşlemleri Eklendi" });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Server Bağlantı Hatası" });
+    });
+};

@@ -6,8 +6,8 @@ const useAxios = ({ url, method, body = null, headers = null }) => {
   const [error, setError] = useState("");
   const [loading, setloading] = useState(true);
 
-  const fetchData = () => {
-    axios[method](
+  const fetchData = async () => {
+    await axios[method](
       `http://localhost:1623/api/v1/${url}`,
       JSON.parse(headers),
       JSON.parse(body)
@@ -27,7 +27,7 @@ const useAxios = ({ url, method, body = null, headers = null }) => {
     fetchData();
   }, [method, url, body, headers]);
 
-  return { response, error, loading };
+  return { fetchData, response, error, loading };
 };
 
 export default useAxios;
