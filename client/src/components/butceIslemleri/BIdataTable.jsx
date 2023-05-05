@@ -1,31 +1,13 @@
-import useAxios from "../../hooks/useAxios";
 import CustomNoRowsOverlay from "../UI/CustomNoRowsOverlay";
 import BIdataTableFooter from "./BIdataTableFooter";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../utils/help-functions";
-import { Badge, Box } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-const BIdataTable = ({ selectedDate }) => {
-  const [data, setData] = useState([]);
+const BIdataTable = ({ data, butceKalemiSil }) => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-
-  const { response } = useAxios({
-    method: "get",
-    url: `butce-sorgula/${selectedDate}`,
-  });
-
-  useEffect(() => {
-    if (response !== null) {
-      setData(response);
-    }
-  }, [response]);
-
-  const filteredData = data.map(({ _id: id, ...rest }) => ({
-    id,
-    ...rest,
-  }));
 
   const COLUMNS = [
     {
@@ -61,13 +43,34 @@ const BIdataTable = ({ selectedDate }) => {
       align: "left",
     },
     { flex: 1, field: "description", headerName: "Açıklama", width: 150 },
+    {
+      field: "actions",
+      width: 80,
+      headerName: "İşlem",
+      renderCell: (params, index) => {
+        return (
+          <IconButton
+            key={index}
+            size="small"
+            color="error"
+            onClick={() => {
+              butceKalemiSil(params.row.id);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+      filterable: false,
+      sortable: false,
+    },
   ];
-  const columns = useMemo(() => COLUMNS, []); 
+  const columns = useMemo(() => COLUMNS, []);
+
   return (
     <DataGrid
-    getRowHeight={() => 'auto'}
       columns={columns}
-      rows={filteredData}
+      rows={data}
       localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
       slots={{
         toolbar: GridToolbar,
@@ -75,7 +78,7 @@ const BIdataTable = ({ selectedDate }) => {
         footer: BIdataTableFooter,
       }}
       slotProps={{
-        footer: { filteredData, rowSelectionModel },
+        footer: { data, rowSelectionModel },
         toolbar: {
           showQuickFilter: true,
           quickFilterProps: { debounceMs: 500 },
@@ -90,6 +93,11 @@ const BIdataTable = ({ selectedDate }) => {
       onRowSelectionModelChange={(newRowSelectionModel) => {
         setRowSelectionModel(newRowSelectionModel);
       }}
+      initialState={{
+        ...data.initialState,
+        pagination: { paginationModel: { pageSize: 10 } },
+      }}
+      pageSizeOptions={[10, 25, 50]}
       rowSelectionModel={rowSelectionModel}
       disableRowSelectionOnClick
       disableColumnSelector

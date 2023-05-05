@@ -41,7 +41,6 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => {
         setError(err.response.data.message);
       });
-    butceKalemiGetir();
   };
 
   const toplamButceData = (type) => {

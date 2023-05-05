@@ -14,7 +14,7 @@ import BIchart from "./BIchart";
 import CallMadeIcon from "@mui/icons-material/CallMade";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const BIdataTableFooter = ({ filteredData, rowSelectionModel }) => {
+const BIdataTableFooter = ({ data, rowSelectionModel }) => {
   const [toplamGelirModalOpen, setToplamGelirModalOpen] = useState(false);
   const [toplamGiderModalOpen, setToplamGiderModalOpen] = useState(false);
   const [secilenIslemModalOpen, setSecilenIslemModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const BIdataTableFooter = ({ filteredData, rowSelectionModel }) => {
   };
 
   const pickCalculation = () => {
-    const checkedDataList = filteredData.filter((item) =>
+    const checkedDataList = data.filter((item) =>
       rowSelectionModel.includes(item.id)
     );
 
@@ -42,17 +42,17 @@ const BIdataTableFooter = ({ filteredData, rowSelectionModel }) => {
     };
 
     const toplamGelir = totalCalc(
-      filteredData.filter((item) => item.type === "Gelir")
+      data.filter((item) => item.type === "Gelir")
     );
 
     const toplamGider = totalCalc(
-      filteredData.filter((item) => item.type === "Gider")
+      data.filter((item) => item.type === "Gider")
     );
     const gelirGiderFark = (toplamGelir - toplamGider).toFixed(2);
     const pickTotalAmount = totalCalc(checkedDataList);
 
     const pickAverageAmount =
-      pickTotalAmount != 0
+      pickTotalAmount !== 0
         ? (pickTotalAmount / checkedDataList.length).toFixed(2)
         : 0;
 
@@ -99,7 +99,7 @@ const BIdataTableFooter = ({ filteredData, rowSelectionModel }) => {
                       <Box sx={style}>
                         Toplam Gelir
                         <BIchart
-                          dataList={filteredData.filter(
+                          dataList={data.filter(
                             (item) => item.type === "Gelir"
                           )}
                           lab="Toplam Gelir"
@@ -129,7 +129,7 @@ const BIdataTableFooter = ({ filteredData, rowSelectionModel }) => {
                       <Box sx={style}>
                         Toplam Gider
                         <BIchart
-                          dataList={filteredData.filter(
+                          dataList={data.filter(
                             (item) => item.type === "Gider"
                           )}
                           lab="Toplam Gider"
