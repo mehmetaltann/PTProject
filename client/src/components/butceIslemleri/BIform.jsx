@@ -130,10 +130,10 @@ const BIform = () => {
       >
         <Box sx={style}>
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
-              textAlign: "center",
-              mb: 2,
+            
+              mb: 4,
               borderBottom: 1,
               borderColor: "grey.500",
             }}

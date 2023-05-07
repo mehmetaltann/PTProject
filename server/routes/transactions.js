@@ -36,7 +36,7 @@ const {
   categorySorgula,
   categoryEkle,
   categorySil,
-} = require("../controllers/category/ctgryIslemleri");
+} = require("../controllers/butce/butcectgryIslemleri");
 router.post("/category-ekle", categoryEkle);
 router.delete("/category-sil/:id", categorySil);
 router.get("/category-sorgula", categorySorgula);

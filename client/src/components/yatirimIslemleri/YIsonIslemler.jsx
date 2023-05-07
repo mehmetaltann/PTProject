@@ -1,19 +1,13 @@
-import { Card, CardContent, Typography } from "@mui/material";
 import YIdataTable from "./YIdataTable";
+import DataTableWrapper from "../DataTableWrapper";
 
-const YIsonIslemler = () => {
+const YIsonIslemler = ({ data, setSelectedDate }) => {
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography
-          variant="h5"
-          sx={{ borderBottom: 1, mb: 2, borderColor: "grey.500" }}
-        >
-          Son İşlemler
-        </Typography>
-        <YIdataTable />
-      </CardContent>
-    </Card>
+    <DataTableWrapper
+      DataTableComponent={YIdataTable}
+      data={data}
+      setSelectedDate={setSelectedDate}
+    />
   );
 };
 

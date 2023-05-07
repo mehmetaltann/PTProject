@@ -1,10 +1,9 @@
-import { Stack, Box } from "@mui/material";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useGlobalContext } from "../context/globalContext";
-import PageTitle from "../components/UI/PageTitle";
 import BIform from "../components/butceIslemleri/BIform";
 import BIsonIslemler from "../components/butceIslemleri/BIsonIslemler";
 import useHttp from "../hooks/use-http";
+import Transections from "../components/Transections";
 
 const ButceGiris = () => {
   const {
@@ -37,25 +36,18 @@ const ButceGiris = () => {
     );
   }, [selectedDate, sendRequest, butceKalemiSil, butceKalemEkle]);
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => setError(null), 1500);
-    }
-    if (message) {
-      setTimeout(() => setMessage(null), 1500);
-    }
-  }, [error, message]);
-
   return (
-    <Stack spacing={2}>
-      <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>
-        <PageTitle title="Bütçe Kayıt" />
-        <BIform />
-      </Stack>
-      {message && <Box>{message}</Box>}
-      {error && <Box>{error}</Box>}
-      <BIsonIslemler data={data} setSelectedDate={setSelectedDate} />
-    </Stack>
+    <Transections
+      title="Bütçe Kayıt"
+      FormComponent={BIform}
+      SonIslemComponent={BIsonIslemler}
+      data={data}
+      setSelectedDate={setSelectedDate}
+      error={error}
+      setError={setError}
+      message={message}
+      setMessage={setMessage}
+    />
   );
 };
 

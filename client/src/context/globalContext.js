@@ -7,6 +7,26 @@ export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const { loading, error, setError, sendRequest } = useHttp();
   const [message, setMessage] = useState("");
+  const [selectedDate, setSelectedDate] = useState(2);
+  const [data, setData] = useState([]);
+
+  const butceKalemSorgula = async (selectedDate) => {
+    const transformData = (fetchData) => {
+      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
+        id,
+        ...rest,
+      }));
+      setData(filteredData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `butce-sorgula/${selectedDate}`,
+      },
+      transformData
+    );
+  };
 
   const butceKalemiSil = async (id) => {
     const getMessage = (fetchData) => {
@@ -40,12 +60,17 @@ export const GlobalProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
+        butceKalemSorgula,
         butceKalemiSil,
         butceKalemEkle,
         message,
         setMessage,
         error,
         setError,
+        data,
+        setData,
+        selectedDate,
+        setSelectedDate,
       }}
     >
       {children}
