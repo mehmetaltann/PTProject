@@ -1,16 +1,14 @@
-import { useMemo, useCallback } from "react";
+import CustomNoRowsOverlay from "../UI/table/CustomNoRowsOverlay";
+import { useMemo, useState } from "react";
 import { dateFormat } from "../../utils/help-functions";
-import { DataGrid } from "@mui/x-data-grid";
-import { Badge, Box, IconButton } from "@mui/material";
+import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
+import { Badge, IconButton } from "@mui/material";
 import { useYatirimContext } from "../../context/yatirimContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const YIdataTable = () => {
-  const { islemler, yatirimIslemiSil, selectedPortfoy } = useYatirimContext();
-
-  const islemlerFiltered = islemler.filter(
-    (islem) => islem.portfoy === selectedPortfoy
-  );
+const YIdataTable = ({ data }) => {
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const { yatirimKalemiSil } = useYatirimContext();
 
   const COLUMNS = [
     {
@@ -28,11 +26,12 @@ const YIdataTable = () => {
         ),
     },
     {
-      field: "islem",
+      field: "action",
       headerName: "İşlem Tipi",
       width: 80,
       align: "center",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "kod",
@@ -40,14 +39,16 @@ const YIdataTable = () => {
       align: "center",
       headerAlign: "center",
       width: 80,
+      flex: 0.8,
     },
     {
-      field: "tarih",
+      field: "date",
       headerName: "Tarih",
       align: "center",
       headerAlign: "center",
       width: 100,
       valueFormatter: (params) => dateFormat(params.value),
+      flex: 1,
     },
     {
       field: "adet",
@@ -57,6 +58,7 @@ const YIdataTable = () => {
       headerAlign: "center",
       type: "number",
       filterable: false,
+      flex: 0.8,
     },
     {
       field: "fiyat",
@@ -66,6 +68,7 @@ const YIdataTable = () => {
       type: "number",
       width: 100,
       valueFormatter: ({ value }) => `${value} TL`,
+      flex: 1,
     },
     {
       field: "komisyon",
@@ -75,6 +78,7 @@ const YIdataTable = () => {
       headerAlign: "center",
       width: 100,
       valueFormatter: ({ value }) => `${value} TL`,
+      flex: 1,
     },
     {
       field: "totalCost",
@@ -86,6 +90,7 @@ const YIdataTable = () => {
       valueGetter: (params) =>
         params.row.adet * params.row.fiyat + params.row.komisyon,
       valueFormatter: ({ value }) => `${value} TL`,
+      flex: 1,
     },
     {
       field: "actions",
@@ -96,7 +101,7 @@ const YIdataTable = () => {
           <IconButton
             size="small"
             color="error"
-            onClick={() => yatirimIslemiSil(params.row.id)}
+            onClick={() => yatirimKalemiSil(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -111,31 +116,37 @@ const YIdataTable = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-  const getRowSpacing = useCallback((params) => {
-    return {
-      top: params.isFirstVisible ? 0 : 0.2,
-      bottom: params.isLastVisible ? 0 : 0.2,
-    };
-  }, []);
-
   return (
-    <Box sx={{ height: 400, width: "auto" }}>
-      <DataGrid
-        columns={columns}
-        rows={islemlerFiltered}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
-          },
-        }}
-        pageSizeOptions={[10, 25, 50]}
-        getRowSpacing={getRowSpacing}
-        rowSpacingType="border"
-        disableRowSelectionOnClick
-      />
-    </Box>
+    <DataGrid
+      columns={columns}
+      rows={data}
+      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
+      sx={{
+        boxShadow: 2,
+        "& .MuiDataGrid-cell:hover": {
+          color: "primary.main",
+        },
+      }}
+      initialState={{
+        ...data.initialState,
+        pagination: { paginationModel: { pageSize: 10 } },
+      }}
+      slots={{
+        toolbar: GridToolbar,
+        noRowsOverlay: CustomNoRowsOverlay,
+      }}
+      slotProps={{
+        toolbar: {
+          showQuickFilter: true,
+          quickFilterProps: { debounceMs: 500 },
+        },
+      }}
+      pageSizeOptions={[10, 25, 50]}
+      disableRowSelectionOnClick
+      disableColumnSelector
+      disableColumnMenu
+      checkboxSelection
+    />
   );
 };
 

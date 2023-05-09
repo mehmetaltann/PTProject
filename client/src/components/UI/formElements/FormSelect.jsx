@@ -1,8 +1,6 @@
 import { TextField } from "@mui/material";
-import { useYatirimContext } from "../../../context/yatirimContext";
 
 const FormSelect = ({ children, form, field }) => {
-  const { setSelectedPortfoy } = useYatirimContext();
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -16,7 +14,6 @@ const FormSelect = ({ children, form, field }) => {
       value={value}
       onChange={(e) => {
         setFieldValue(name, e.target.value);
-        setSelectedPortfoy(e.target.value);
       }}
     >
       {children}

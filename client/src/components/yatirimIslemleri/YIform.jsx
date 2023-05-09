@@ -1,229 +1,110 @@
-import Grid from "@mui/material/Unstable_Grid2";
-import FormTextField from "../UI/formElements/FormTextField";
-import FormSelect from "../UI/formElements/FormSelect";
-import FormDatePicker from "../UI/formElements/FormDatePicker";
-import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
-import * as Yup from "yup";
-import { Fragment, useState, useMemo } from "react";
-import { Form, Formik, FieldArray, Field } from "formik";
-import { materialDateInput } from "../../utils/help-functions";
-import { useYatirimContext } from "../../context/yatirimContext";
-import {
-  Card,
-  CardContent,
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  MenuItem,
-} from "@mui/material";
+import YIalisModal from "./YIalisModal";
+import YIsatisModal from "./YIsatisModal";
+import { Button, Stack, Modal, Box } from "@mui/material";
+import { useState } from "react";
 
-const YIform = () => {
-  const [islemTuru, setIslemTuru] = useState("Alış");
-  const { selectedPortfoy, yatirimIslemiEkle, portfoyler } =
-    useYatirimContext();
+const style = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  height: "70%",
+  width: "50%",
+  overflow: "auto",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  borderRadius: 2,
+  boxShadow: 24,
+  p: 2,
+};
 
-  const initialFonInfo = {
-    date: materialDateInput,
-    kod: "",
-    adet: 0,
-    fiyat: 0,
-    komisyon: 0,
-  };
-
-  const initialFonInfoMemo = useMemo(() => initialFonInfo, []);
-
-  const submitHandler = async (values, { resetForm }) => {
-    let portfoy_ismi = values.portfoy;
-    const yeniKayitListesi = values.fons.map((fon) => {
-      return {
-        action: islemTuru,
-        kod: fon.kod.toUpperCase().trim(),
-        date: fon.date,
-        adet: fon.adet,
-        fiyat: fon.fiyat,
-        komisyon: fon.komisyon,
-        portfoy_ismi: portfoy_ismi,
-      };
-    });
-    yatirimIslemiEkle(yeniKayitListesi);
-    //yeniKayitListesi.map((kayit) => yatirimKalemiEkle(kayit));
-    resetForm({
-      values: { portfoy: selectedPortfoy, fons: [initialFonInfo] },
-    });
-  };
-
-  const validateSchema = Yup.object().shape({
-    portfoy: Yup.string().required("Gerekli"),
-    fons: Yup.array().of(
-      Yup.object().shape({
-        kod: Yup.string()
-          .min(3, "En az 3 Karakter")
-          .max(5, "En fazla 5 Karakter")
-          .required("Boş Olamaz"),
-        adet: Yup.number()
-          .required("Gerekli")
-          .moreThan(0, "Sıfırdan Büyük Olmalıdır"),
-        fiyat: Yup.number()
-          .required("Gerekli")
-          .moreThan(0, "Sıfırdan Büyük Olmalıdır"),
-        komisyon: Yup.number(),
-      })
-    ),
-  });
+const YIform = ({ portfoyler, selectedPortfoy, setSelectedPortfoy }) => {
+  const [openAlis, setOpenAlis] = useState(false);
+  const [openSatis, setOpenSatis] = useState(false);
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography
-          variant="h5"
-          sx={{ borderBottom: 1, mb: 4, borderColor: "grey.500" }}
-        >
-          Alış Satış İşlemleri
-        </Typography>
-        <Formik
-          initialValues={{
-            portfoy: selectedPortfoy,
-            fons: [initialFonInfoMemo],
+    <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
+      <Button
+        type="button"
+        onClick={() => setOpenAlis(true)}
+        variant="outlined"
+        color="success"
+        size="large"
+        endIcon={<SendIcon />}
+        sx={{ minWidth: 150 }}
+      >
+        Alış
+      </Button>
+      <Modal
+        open={openAlis}
+        onClose={() => setOpenAlis(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            height: "70%",
+            width: { md: "70%", sm: "70%", xs: "85%", xl: "35%", lg: "55%" },
+            overflow: "auto",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 2,
           }}
-          onSubmit={submitHandler}
-          validationSchema={validateSchema}
         >
-          {({ values, isSubmitting }) => (
-            <Form>
-              <Grid
-                container
-                justifyContent={{ lg: "space-between" }}
-                direction={{ sm: "row", xs: "column" }}
-                spacing={{ lg: 0, xs: 2 }}
-              >
-                <Grid item="true" order={{ xs: 1, sm: 0, lg: 0 }}>
-                  <Field
-                    name="portfoy"
-                    defaultValue="Bireysel Emeklilik Fonları"
-                    component={FormSelect}
-                  >
-                    {portfoyler.map((item, index) => (
-                      <MenuItem value={item["isim"]} key={index}>
-                        {item["isim"]}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Grid>
-                <Grid order={{ xs: 2, sm: 2, lg: 1 }}>
-                  <FieldArray name="fons">
-                    {({ push, remove }) => (
-                      <Fragment>
-                        {values.fons.map((i, index) => (
-                          <Grid
-                            container="true"
-                            item="true"
-                            sx={{ pb: 2 }}
-                            key={index}
-                            spacing={{ sm: 1, xs: 2, lg: 0 }}
-                          >
-                            <Grid item="true">
-                              <FormDatePicker
-                                name={`fons.${index}.date`}
-                                label="Tarih"
-                                size="small"
-                              />
-                            </Grid>
-                            <Grid item="true">
-                              <FormTextField
-                                sx={{ maxWidth: 100 }}
-                                name={`fons.${index}.kod`}
-                                label="Kod"
-                                size="small"
-                              />
-                            </Grid>
-                            <Grid item="true">
-                              <FormTextField
-                                sx={{ maxWidth: 100 }}
-                                name={`fons.${index}.adet`}
-                                label="Adet"
-                                type="number"
-                                size="small"
-                              />
-                            </Grid>
-                            <Grid item="true">
-                              <FormTextField
-                                sx={{ maxWidth: 100 }}
-                                name={`fons.${index}.fiyat`}
-                                label="Fiyat"
-                                type="number"
-                                size="small"
-                              />
-                            </Grid>
-                            <Grid item="true">
-                              <FormTextField
-                                sx={{ maxWidth: 100 }}
-                                name={`fons.${index}.komisyon`}
-                                label="Komisyon"
-                                type="number"
-                                size="small"
-                              />
-                            </Grid>
-                            <Grid item="true">
-                              <IconButton
-                                aria-label="delete"
-                                onClick={() => remove(index)}
-                                size="small"
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
-                        ))}
-                        <Grid item="true">
-                          <Button
-                            onClick={() => push(initialFonInfoMemo)}
-                            variant="contained"
-                            size="small"
-                          >
-                            Ekle
-                          </Button>
-                        </Grid>
-                      </Fragment>
-                    )}
-                  </FieldArray>
-                </Grid>
-
-                <Grid order={{ xs: 0, sm: 1, lg: 2 }}>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      onClick={() => setIslemTuru("Alış")}
-                      sx={{ borderRadius: "5%", minWidth: 120 }}
-                      size="large"
-                      variant="contained"
-                      color="success"
-                      endIcon={<SendIcon />}
-                    >
-                      Alış
-                    </Button>
-                    <Button
-                      onClick={() => setIslemTuru("Satış")}
-                      disabled={isSubmitting}
-                      type="submit"
-                      sx={{ borderRadius: "5%", minWidth: 120 }}
-                      size="large"
-                      variant="contained"
-                      color="error"
-                      endIcon={<SendIcon />}
-                    >
-                      Satış
-                    </Button>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </Form>
-          )}
-        </Formik>
-      </CardContent>
-    </Card>
+          <YIalisModal
+            setOpenAlis={setOpenAlis}
+            selectedPortfoy={selectedPortfoy}
+            portfoyler={portfoyler}
+            setSelectedPortfoy={setSelectedPortfoy}
+          />
+        </Box>
+      </Modal>
+      <Button
+        endIcon={<SendIcon />}
+        type="button"
+        onClick={() => setOpenSatis(true)}
+        variant="outlined"
+        color="error"
+        size="large"
+        sx={{ minWidth: 150 }}
+      >
+        Satış
+      </Button>
+      <Modal
+        open={openSatis}
+        onClose={() => setOpenSatis(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            height: { xs: "55%", sm: "30%", md: "30%", lg: "25%" },
+            width: { md: "56%", sm: "70%", xs: "80%" },
+            overflow: "auto",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 2,
+          }}
+        >
+          <YIsatisModal
+            setOpenSatis={setOpenSatis}
+            selectedPortfoy={selectedPortfoy}
+            portfoyler={portfoyler}
+            setSelectedPortfoy={setSelectedPortfoy}
+          />
+        </Box>
+      </Modal>
+    </Stack>
   );
 };
 

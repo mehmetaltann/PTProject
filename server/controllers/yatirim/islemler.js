@@ -44,14 +44,3 @@ exports.islemEkle = async (req, res) => {
     res.status(500).json({ message: "Server Bağlantı Hatası" });
   }
 };
-
-exports.islemSil = async (req, res) => {
-  const { id } = req.params;
-  Islem.findByIdAndDelete(id)
-    .then((data) => {
-      res.status(200).json({ message: "İşlem Kalemi Silindi" });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Server Bağlantı Hatası" });
-    });
-};

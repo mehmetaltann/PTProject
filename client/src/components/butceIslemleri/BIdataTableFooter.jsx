@@ -1,3 +1,8 @@
+import BIchart from "./BIchart";
+import CallMadeIcon from "@mui/icons-material/CallMade";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { GridFooterContainer, GridFooter } from "@mui/x-data-grid";
+import { useState } from "react";
 import {
   Grid,
   Modal,
@@ -8,11 +13,6 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import { GridFooterContainer, GridFooter } from "@mui/x-data-grid";
-import { useState } from "react";
-import BIchart from "./BIchart";
-import CallMadeIcon from "@mui/icons-material/CallMade";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const BIdataTableFooter = ({ data, rowSelectionModel }) => {
   const [toplamGelirModalOpen, setToplamGelirModalOpen] = useState(false);
@@ -41,13 +41,9 @@ const BIdataTableFooter = ({ data, rowSelectionModel }) => {
       return total.toFixed(2);
     };
 
-    const toplamGelir = totalCalc(
-      data.filter((item) => item.type === "Gelir")
-    );
+    const toplamGelir = totalCalc(data.filter((item) => item.type === "Gelir"));
 
-    const toplamGider = totalCalc(
-      data.filter((item) => item.type === "Gider")
-    );
+    const toplamGider = totalCalc(data.filter((item) => item.type === "Gider"));
     const gelirGiderFark = (toplamGelir - toplamGider).toFixed(2);
     const pickTotalAmount = totalCalc(checkedDataList);
 

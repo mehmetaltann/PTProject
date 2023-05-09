@@ -1,10 +1,5 @@
 const ButceSchema = require("../../models/ButceDataModel");
 
-const title = "title";
-const categoryA = "categoryA";
-const categoryB = "categoryB";
-const description = "description";
-
 const queryObject = {
   type: "gider",
 };
@@ -20,7 +15,10 @@ exports.mongoUpdate = async (req, res) => {
 };
 
 exports.mongoSorgu = async (req, res) => {
-  const butceKalemi = await ButceSchema.find(queryObject).then((butceKalemi) =>
-    res.status(200).json(butceKalemi)
-  );
+  try {
+    const response = await ButceSchema.find(queryObject);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: "Server Bağlantı Hatası" });
+  }
 };

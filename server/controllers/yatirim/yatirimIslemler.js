@@ -1,5 +1,6 @@
-const ButceSchema = require("../../models/ButceDataModel");
+const Islem = require("../../models/YatirimIslemlerModel");
 const { dbDeleteOne, dbInsertMany, dbFind } = require("../dbTransections");
+const { acikPoziyonIslemSorgu } = require("./yatirimDbQueries");
 const {
   thisMonthLastDay,
   thisMonthFirstDay,
@@ -9,7 +10,7 @@ const {
   prevThreeYearFirstDay,
 } = require("../../utils/helpFunctions");
 
-exports.butceIslemSorgula = async (req, res) => {
+exports.yatirimIslemSorgula = async (req, res) => {
   const activeDate = req.params.date;
   const dateQuery = (first, second) => {
     return {
@@ -21,7 +22,7 @@ exports.butceIslemSorgula = async (req, res) => {
   };
   const sortQuery = { date: -1 };
   const dataQuery = (query = null) => {
-    dbFind(ButceSchema, query, sortQuery, res);
+    dbFind(Islem, query, sortQuery, res);
   };
 
   if (activeDate == 1) {
@@ -39,10 +40,26 @@ exports.butceIslemSorgula = async (req, res) => {
   }
 };
 
-exports.butceIslemSil = async (req, res) => {
-  dbDeleteOne(ButceSchema, req.params.id, "Bütçe Kalemi Silindi", res);
+exports.yatirimIslemSil = async (req, res) => {
+  dbDeleteOne(Islem, req.params.id, "Yatırım Kalemi Silindi", res);
 };
 
-exports.butceIslemEkle = async (req, res) => {
-  dbInsertMany(ButceSchema, req.body, "Bütçe İşlemleri Eklendi", res);
+exports.yatirimAlisIslemEkle = async (req, res) => {
+  dbInsertMany(Islem, req.body, "Yatırım İşlemleri Eklendi", res);
+};
+
+exports.yatirimSatisIslemEkle = async (req, res) => {
+  const { action, kod, adet, fiyat, komisyon, date, portfoy_ismi } = req.body;
+  const islem = Islem({
+    action,
+    kod,
+    adet,
+    fiyat,
+    komisyon,
+    date,
+    portfoy_ismi,
+  });
+
+  const alim_list = acikPoziyonIslemSorgu(kod); //duurumu açık veya güncellendi olan alışlar
+  res.status(200).json(alim_list);
 };

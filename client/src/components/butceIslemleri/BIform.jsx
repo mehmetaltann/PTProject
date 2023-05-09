@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import useAxios from "../../hooks/useAxios";
+import useHttp from "../../hooks/use-http";
 import Grid from "@mui/material/Unstable_Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
@@ -8,6 +8,7 @@ import BIformSelect from "./form ui/BIformSelect";
 import FormTextField from "../UI/formElements/FormTextField";
 import FormDatePicker from "../UI/formElements/FormDatePicker";
 import React, { useState, useMemo, useEffect, Fragment } from "react";
+import { useGlobalContext } from "../../context/globalContext";
 import { uniqListFunc } from "../../utils/help-functions";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../utils/help-functions";
@@ -25,7 +26,8 @@ const style = {
   position: "absolute",
   top: "40%",
   left: "50%",
-  height: "40%",
+  height: "70%",
+  width: "70%",
   overflow: "auto",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
@@ -37,17 +39,22 @@ const style = {
 const BIform = () => {
   const [open, setOpen] = useState({ durum: false, type: "Gelir" });
   const [category, setCategory] = useState([]);
-
-  const { response } = useAxios({
-    method: "get",
-    url: "category-sorgula",
-  });
+  const { butceKalemEkle } = useGlobalContext();
+  const { sendRequest } = useHttp();
 
   useEffect(() => {
-    if (response !== null) {
-      setCategory(response);
-    }
-  }, [response]);
+    const transformData = (fetchData) => {
+      setCategory(fetchData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `category-sorgula`,
+      },
+      transformData
+    );
+  }, [sendRequest]);
 
   const handleGelirOpen = () => setOpen({ durum: true, type: "Gelir" });
   const handleGiderOpen = () => setOpen({ durum: true, type: "Gider" });
@@ -66,16 +73,16 @@ const BIform = () => {
     let category_a = values.categoryA;
     const yeniKayitListesi = values.infos.map((info) => {
       return {
-        type: open.type,
         title: info.title,
-        categorA: category_a,
-        categoryB: info.categoryB,
-        date: info.date,
         amount: info.amount,
+        type: open.type,
+        date: info.date,
+        categoryA: category_a,
+        categoryB: info.categoryB,
         description: info.description,
       };
     });
-    console.log(yeniKayitListesi);
+    butceKalemEkle(yeniKayitListesi);
     handleClose();
   };
 
@@ -122,10 +129,9 @@ const BIform = () => {
       >
         <Box sx={style}>
           <Typography
-            variant="h4"
+            variant="h5"
             sx={{
-              textAlign: "center",
-              mb: 2,
+              mb: 4,
               borderBottom: 1,
               borderColor: "grey.500",
             }}

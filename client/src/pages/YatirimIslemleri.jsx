@@ -1,26 +1,76 @@
 import { useYatirimContext } from "../context/yatirimContext";
-import { Fragment, useEffect } from "react";
-import { Stack } from "@mui/material";
+import { useEffect, useState } from "react";
 import YIform from "../components/yatirimIslemleri/YIform";
 import YIsonIslemler from "../components/yatirimIslemleri/YIsonIslemler";
-import PageTitle from "../components/UI/PageTitle";
+import useHttp from "../hooks/use-http";
+import Transections from "../components/Transections";
 
 const YatirimIslemleri = () => {
-  const { yatirimIslemleriSorgula, portfoySorgula } = useYatirimContext();
+  const {
+    message,
+    setMessage,
+    error,
+    setError,
+    yatirimKalemiSil,
+    yatirimKalemiEkle,
+  } = useYatirimContext();
+
+  const [selectedDate, setSelectedDate] = useState(2);
+  const [selectedPortfoy, setSelectedPortfoy] = useState(
+    "Bireysel Emeklilik Fonları"
+  );
+  const [portfoyler, setPortfoyler] = useState([]);
+  const [data, setData] = useState([]);
+  const { sendRequest } = useHttp();
 
   useEffect(() => {
-    yatirimIslemleriSorgula();
-    portfoySorgula();
+    const transformData = (fetchData) => {
+      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
+        id,
+        ...rest,
+      }));
+
+      setData(filteredData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `yatirim-islem-sorgula/${selectedDate}`,
+      },
+      transformData
+    );
+  }, [selectedDate, sendRequest, yatirimKalemiSil, yatirimKalemiEkle]);
+
+  useEffect(() => {
+    const transformData = (fetchData) => {
+      setPortfoyler(fetchData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `portfoy-sorgula`,
+      },
+      transformData
+    );
   }, []);
 
   return (
-    <Fragment>
-      <PageTitle title="Yatırım İşlemleri" />
-      <Stack spacing={1}>
-        <YIform />
-        <YIsonIslemler />
-      </Stack>
-    </Fragment>
+    <Transections
+      title="Yatırım İşlemi"
+      FormComponent={YIform}
+      SonIslemComponent={YIsonIslemler}
+      data={data}
+      setSelectedDate={setSelectedDate}
+      error={error}
+      setError={setError}
+      message={message}
+      setMessage={setMessage}
+      portfoyler={portfoyler}
+      selectedPortfoy={selectedPortfoy}
+      setSelectedPortfoy={setSelectedPortfoy}
+    />
   );
 };
 

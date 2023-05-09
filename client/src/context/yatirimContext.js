@@ -1,94 +1,67 @@
 import { createContext, useState, useContext } from "react";
-import axios from "axios";
+import useHttp from "../hooks/use-http";
 
 const BASE_URL = "http://localhost:1623/api/v1/";
-
 export const YatirimContext = createContext();
 
 export const YatirimProvider = ({ children }) => {
-  const [portfoyler, setPortfoyler] = useState([]);
-  const [islemler, setIslemler] = useState([]);
-  const [gecmisIslemler, setGecmisIslemler] = useState([]);
+  const { error, setError, sendRequest } = useHttp();
   const [message, setMessage] = useState(null);
-  const [messageList, setMessageList] = useState([]);
-  const [error, setError] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
-  const [selectedPortfoy, setSelectedPortfoy] = useState(
-    "Bireysel Emeklilik Fonları"
-  );
 
-  const yatirimIslemleriSorgula = async () => {
-    const { data } = await axios.get(`${BASE_URL}yatirim-islem-sorgula`);
-    setIslemler(data);
-  };
-
-  const yatirimIslemiEkle = async (islemler) => {
-    let axiosArray = [];
-    for (let islem of islemler) {
-      let newPromise = axios({
+  const yatirimKalemiAlisEkle = async (postData) => {
+    const getMessage = (fetchData) => {
+      let resMessage = fetchData.message;
+      setMessage(resMessage);
+    };
+    sendRequest(
+      {
         method: "post",
-        url: `${BASE_URL}yatirim-islem`,
-        data: islem,
-      });
-      axiosArray.push(newPromise);
-    }
-
-    await axios
-      .all(axiosArray)
-      .then(
-        axios.spread((...responses) => {
-          responses.forEach((res) => {
-            let newMessage = res.data.message;
-            setMessageList([...messageList, newMessage]);
-          });
-        })
-      )
-      .catch((err) => {});
-
-    yatirimIslemleriSorgula();
+        url: `yatirim-alis_ekle`,
+        body: postData,
+      },
+      getMessage
+    );
   };
 
-  const yatirimIslemiSil = async (id) => {
-    await axios
-      .delete(`${BASE_URL}yatirim-islem-sil/${id}`)
-      .then((response) => setMessage(response.data.message))
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    yatirimIslemleriSorgula();
+  const yatirimKalemiSatisEkle = async (postData) => {
+    const getMessage = (fetchData) => {
+      let resMessage = fetchData.message;
+      setMessage(resMessage);
+    };
+    sendRequest(
+      {
+        method: "post",
+        url: `yatirim-satis-ekle`,
+        body: postData,
+      },
+      getMessage
+    );
   };
 
-  const portfoySorgula = async () => {
-    const { data } = await axios.get(`${BASE_URL}portfoy-sorgula`);
-    setPortfoyler(data);
-  };
-
-  const yatirimGecmisIslemSorgula = async () => {
-    const { data } = await axios.get(`${BASE_URL}gecmis-islem-sorgula`);
-    setGecmisIslemler(data);
+  const yatirimKalemiSil = async (id) => {
+    const getMessage = (fetchData) => {
+      let resMessage = fetchData.message;
+      setMessage(resMessage);
+    };
+    sendRequest(
+      {
+        method: "delete",
+        url: `yatirim-islem-sil/${id}`,
+      },
+      getMessage
+    );
   };
 
   return (
     <YatirimContext.Provider
       value={{
-        yatirimIslemleriSorgula,
-        islemler,
-        yatirimIslemiEkle,
-        yatirimIslemiSil,
-        yatirimGecmisIslemSorgula,
-        gecmisIslemler,
-        portfoySorgula,
-        portfoyler,
-        setPortfoyler,
-        messageList,
         message,
         setMessage,
-        setMessageList,
         error,
         setError,
-        startDate,
-        selectedPortfoy,
-        setSelectedPortfoy,
+        yatirimKalemiSil,
+        yatirimKalemiAlisEkle,
+        yatirimKalemiSatisEkle,
       }}
     >
       {children}
@@ -99,16 +72,3 @@ export const YatirimProvider = ({ children }) => {
 export const useYatirimContext = () => {
   return useContext(YatirimContext);
 };
-
-/*
-  const yatirimKalemiEkle = async (islem) => {
-    try {
-      const { data } = await axios.post(`${BASE_URL}yatirim-islem`, islem);
-      setMessage(data.message)
-      //setMessageList((old) => [...old, data.message]);
-    } catch (err) {
-      setError(err.data.message)
-    }
-    yatirimIslemleriSorgula();
-  };
-  */

@@ -1,13 +1,15 @@
-import CustomNoRowsOverlay from "../UI/CustomNoRowsOverlay";
+import CustomNoRowsOverlay from "../UI/table/CustomNoRowsOverlay";
 import BIdataTableFooter from "./BIdataTableFooter";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../utils/help-functions";
 import { Badge, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
+import { useGlobalContext } from "../../context/globalContext";
 
-const BIdataTable = ({ data, butceKalemiSil }) => {
+const BIdataTable = ({ data }) => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const { butceKalemiSil } = useGlobalContext();
 
   const COLUMNS = [
     {
