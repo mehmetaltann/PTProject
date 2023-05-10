@@ -1,12 +1,18 @@
 import { createContext, useState, useContext } from "react";
-import useHttp from "../hooks/use-http";
+import useHttp from "../../../hooks/use-http";
 
-const BASE_URL = "http://localhost:1623/api/v1/";
 export const YatirimContext = createContext();
 
 export const YatirimProvider = ({ children }) => {
-  const { error, setError, sendRequest } = useHttp();
+  const [portfoyler, setPortfoyler] = useState([]);
   const [message, setMessage] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(2);
+  const [openAlis, setOpenAlis] = useState(false);
+  const [openSatis, setOpenSatis] = useState(false);
+  const [selectedPortfoy, setSelectedPortfoy] = useState(
+    "Bireysel Emeklilik Fonları"
+  );
+  const { error, setError, sendRequest } = useHttp();
 
   const yatirimKalemiAlisEkle = async (postData) => {
     const getMessage = (fetchData) => {
@@ -16,7 +22,7 @@ export const YatirimProvider = ({ children }) => {
     sendRequest(
       {
         method: "post",
-        url: `yatirim-alis_ekle`,
+        url: `yatirim-alis-ekle`,
         body: postData,
       },
       getMessage
@@ -55,10 +61,22 @@ export const YatirimProvider = ({ children }) => {
   return (
     <YatirimContext.Provider
       value={{
-        message,
-        setMessage,
         error,
+        message,
+        openAlis,
+        openSatis,
+        portfoyler,
+        selectedDate,
+        selectedPortfoy,
+
         setError,
+        setMessage,
+        setOpenAlis,
+        setOpenSatis,
+        setPortfoyler,
+        setSelectedDate,
+        setSelectedPortfoy,
+
         yatirimKalemiSil,
         yatirimKalemiAlisEkle,
         yatirimKalemiSatisEkle,

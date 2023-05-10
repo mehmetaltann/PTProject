@@ -1,24 +1,13 @@
-import YIdataTable from "./YIdataTable";
+import YGdataTable from "./YGdataTable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import FolderSpecialIcon from "@mui/icons-material/FolderSpecial";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { MenuItem, Typography, TextField, Paper, Box } from "@mui/material";
-import { tarihSecim } from "../../utils/localData";
-import FilterTableSelect from "../UI/table/FilterTableSelect";
+import FilterTableSelect from "../../UI/table/FilterTableSelect";
+import { tarihSecim } from "../../../utils/localData";
+import { MenuItem, Typography, Paper, Box } from "@mui/material";
+import { useYGContext } from "../store/ygContext";
 
-const deneme = "Bireysel Emeklilik Fonları";
-
-const YIsonIslemler = ({
-  data,
-  setSelectedDate,
-  selectedPortfoy,
-  setSelectedPortfoy,
-  portfoyler,
-}) => {
-  const filteredData = data.filter(
-    (item) => item.portfoy_ismi === selectedPortfoy
-  );
-
+const YGsonIslemler = () => {
+  const { setSelectedDate } = useYGContext();
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
       <Grid container spacing={2} sx={{ p: 1, height: "100%" }}>
@@ -32,7 +21,6 @@ const YIsonIslemler = ({
           <Grid xs={12} sm={2}>
             <Typography variant="h5">İşlemler</Typography>
           </Grid>
-
           <FilterTableSelect
             Icon={CalendarMonthIcon}
             setSelect={setSelectedDate}
@@ -46,25 +34,10 @@ const YIsonIslemler = ({
               </MenuItem>
             ))}
           </FilterTableSelect>
-
-          <FilterTableSelect
-            Icon={FolderSpecialIcon}
-            setSelect={setSelectedPortfoy}
-            defaultvalue=""
-            minWidth={200}
-            title="Portföy :"
-          >
-            {portfoyler.map((portfoy) => (
-              <MenuItem key={portfoy._id} value={portfoy.isim}>
-                {portfoy.isim}
-              </MenuItem>
-            ))}
-          </FilterTableSelect>
         </Grid>
-
         <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
           <Box sx={{ height: "100%", width: "100%" }}>
-            <YIdataTable data={filteredData} />
+            <YGdataTable />
           </Box>
         </Grid>
       </Grid>
@@ -72,4 +45,4 @@ const YIsonIslemler = ({
   );
 };
 
-export default YIsonIslemler;
+export default YGsonIslemler;

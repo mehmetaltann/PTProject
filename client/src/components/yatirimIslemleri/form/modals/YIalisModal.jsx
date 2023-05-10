@@ -1,16 +1,15 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import YIformSelect from "./form_ui/YIformSelect";
-import FormTextField from "../UI/formElements/FormTextField";
-import FormDatePicker from "../UI/formElements/FormDatePicker";
+import YIformSelect from "../form_ui/YIformSelect";
+import FormTextField from "../../../UI/formElements/FormTextField";
+import FormDatePicker from "../../../UI/formElements/FormDatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import * as Yup from "yup";
-import { materialDateInput } from "../../utils/help-functions";
+import { materialDateInput } from "../../../../utils/help-functions";
 import { useMemo, Fragment } from "react";
 import { Form, Formik, FieldArray, Field } from "formik";
-import { useYatirimContext } from "../../context/yatirimContext";
-
+import { useYatirimContext } from "../../store/yatirimContext";
 import {
   Button,
   IconButton,
@@ -28,14 +27,15 @@ const initialFonInfo = {
   komisyon: 0,
 };
 
-const YIalisModal = ({
-  setOpenAlis,
-  selectedPortfoy,
-  portfoyler,
-  setSelectedPortfoy,
-}) => {
+const YIalisModal = () => {
   const initialFonInfoMemo = useMemo(() => initialFonInfo, []);
-  const { yatirimKalemiAlisEkle } = useYatirimContext();
+  const {
+    setOpenAlis,
+    selectedPortfoy,
+    portfoyler,
+    setSelectedPortfoy,
+    yatirimKalemiAlisEkle,
+  } = useYatirimContext();
 
   const submitHandler = async (values) => {
     let portfoy_ismi = values.portfoy;

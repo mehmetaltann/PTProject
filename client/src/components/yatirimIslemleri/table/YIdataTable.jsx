@@ -1,14 +1,51 @@
-import CustomNoRowsOverlay from "../UI/table/CustomNoRowsOverlay";
-import { useMemo, useState } from "react";
-import { dateFormat } from "../../utils/help-functions";
+import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
+import DeleteIcon from "@mui/icons-material/Delete";
+import useHttp from "../../../hooks/use-http";
+import { useMemo, useState, useEffect, useCallback } from "react";
+import { dateFormat } from "../../../utils/help-functions";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import { Badge, IconButton } from "@mui/material";
-import { useYatirimContext } from "../../context/yatirimContext";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { useYatirimContext } from "../store/yatirimContext";
 
-const YIdataTable = ({ data }) => {
+const YIdataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const { yatirimKalemiSil } = useYatirimContext();
+  const [data, setData] = useState([]);
+  const { sendRequest } = useHttp();
+  const {
+    selectedPortfoy,
+    selectedDate,
+    yatirimKalemiSil,
+    yatirimKalemiAlisEkle,
+    yatirimKalemiSatisEkle,
+  } = useYatirimContext();
+
+  useEffect(() => {
+    const transformData = (fetchData) => {
+      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
+        id,
+        ...rest,
+      }));
+
+      setData(filteredData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `yatirim-islem-sorgula/${selectedDate}`,
+      },
+      transformData
+    );
+  }, [
+    selectedDate,
+    yatirimKalemiSil,
+    yatirimKalemiAlisEkle,
+    yatirimKalemiSatisEkle,
+  ]);
+
+  const filteredData = data.filter(
+    (item) => item.portfoy_ismi === selectedPortfoy
+  );
 
   const COLUMNS = [
     {
@@ -119,7 +156,7 @@ const YIdataTable = ({ data }) => {
   return (
     <DataGrid
       columns={columns}
-      rows={data}
+      rows={filteredData}
       localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
       sx={{
         boxShadow: 2,

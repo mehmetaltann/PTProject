@@ -2,9 +2,12 @@ import BIdataTable from "./BIdataTable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { MenuItem, Typography, TextField, Paper, Box } from "@mui/material";
-import { tarihSecim } from "../../utils/localData";
+import { tarihSecim } from "../../../utils/localData";
+import { useButceContext } from "../store/butceContext";
 
-const BIsonIslemler = ({ data, setSelectedDate }) => {
+const BIsonIslemler = () => {
+  const { setSelectedDate } = useButceContext();
+
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
       <Grid container spacing={2} sx={{ p: 1, height: "100%" }}>
@@ -48,7 +51,7 @@ const BIsonIslemler = ({ data, setSelectedDate }) => {
         </Grid>
         <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
           <Box sx={{ height: "100%", width: "auto" }}>
-            <BIdataTable data={data} />
+            <BIdataTable />
           </Box>
         </Grid>
       </Grid>

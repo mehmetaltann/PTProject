@@ -1,22 +1,23 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import YIformSelect from "./form_ui/YIformSelect";
-import FormTextField from "../UI/formElements/FormTextField";
-import FormDatePicker from "../UI/formElements/FormDatePicker";
+import YIformSelect from "../form_ui/YIformSelect";
+import FormTextField from "../../../UI/formElements/FormTextField";
+import FormDatePicker from "../../../UI/formElements/FormDatePicker";
 import SendIcon from "@mui/icons-material/Send";
 import * as Yup from "yup";
-import { materialDateInput } from "../../utils/help-functions";
+import { materialDateInput } from "../../../../utils/help-functions";
 import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
 import { Button, Typography, MenuItem } from "@mui/material";
-import { useYatirimContext } from "../../context/yatirimContext";
+import { useYatirimContext } from "../../store/yatirimContext";
 
-const YIsatisModal = ({
-  setOpenSatis,
-  selectedPortfoy,
-  setSelectedPortfoy,
-  portfoyler,
-}) => {
-  const { yatirimKalemiSatisEkle } = useYatirimContext();
+const YIsatisModal = () => {
+  const {
+    yatirimKalemiSatisEkle,
+    selectedPortfoy,
+    setSelectedPortfoy,
+    portfoyler,
+    setOpenSatis,
+  } = useYatirimContext();
 
   const submitHandler = async (values) => {
     const yeniKayitListesi = {
@@ -28,8 +29,8 @@ const YIsatisModal = ({
       komisyon: values.komisyon,
       portfoy_ismi: values.portfoy,
     };
-    yatirimKalemiSatisEkle(values.portfoy);
-    setSelectedPortfoy("");
+    yatirimKalemiSatisEkle(yeniKayitListesi);
+    setSelectedPortfoy(values.portfoy);
     setOpenSatis(false);
   };
 

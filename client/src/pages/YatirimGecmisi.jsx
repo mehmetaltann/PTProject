@@ -1,20 +1,12 @@
-import styled from "styled-components";
 import YGmain from "../components/yatirimGecmisi/YGmain";
-import { PageLayout } from "../styles/Layout";
+import { YGProvider } from "../components/yatirimGecmisi/store/ygContext";
 
 const YatirimGecmisi = () => {
   return (
-    <PageLayout>
-      <YatirimGecmisiStyled>
-        <YGmain />
-      </YatirimGecmisiStyled>
-    </PageLayout>
+    <YGProvider>
+      <YGmain />
+    </YGProvider>
   );
 };
-
-const YatirimGecmisiStyled = styled.main`
-  height: 90%;
-  width: 100%;
-`;
 
 export default YatirimGecmisi;

@@ -1,4 +1,5 @@
 exports.gecmisIslemQuery = [
+  { $match: { name: "development" } },
   {
     $lookup: {
       let: { userObjId: { $toObjectId: "$alim_islemId" } },

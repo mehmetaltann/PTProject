@@ -1,17 +1,17 @@
 import * as Yup from "yup";
-import useHttp from "../../hooks/use-http";
 import Grid from "@mui/material/Unstable_Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BIformSelect from "./form ui/BIformSelect";
-import FormTextField from "../UI/formElements/FormTextField";
-import FormDatePicker from "../UI/formElements/FormDatePicker";
+import FormTextField from "../../UI/formElements/FormTextField";
+import FormDatePicker from "../../UI/formElements/FormDatePicker";
+import useHttp from "../../../hooks/use-http";
 import React, { useState, useMemo, useEffect, Fragment } from "react";
-import { useGlobalContext } from "../../context/globalContext";
-import { uniqListFunc } from "../../utils/help-functions";
+import { useButceContext } from "../store/butceContext";
+import { uniqListFunc } from "../../../utils/help-functions";
 import { Form, Formik, FieldArray, Field } from "formik";
-import { materialDateInput } from "../../utils/help-functions";
+import { materialDateInput } from "../../../utils/help-functions";
 import {
   Typography,
   MenuItem,
@@ -39,8 +39,8 @@ const style = {
 const BIform = () => {
   const [open, setOpen] = useState({ durum: false, type: "Gelir" });
   const [category, setCategory] = useState([]);
-  const { butceKalemEkle } = useGlobalContext();
   const { sendRequest } = useHttp();
+  const { butceKalemEkle } = useButceContext();
 
   useEffect(() => {
     const transformData = (fetchData) => {
@@ -54,7 +54,7 @@ const BIform = () => {
       },
       transformData
     );
-  }, [sendRequest]);
+  }, []);
 
   const handleGelirOpen = () => setOpen({ durum: true, type: "Gelir" });
   const handleGiderOpen = () => setOpen({ durum: true, type: "Gider" });

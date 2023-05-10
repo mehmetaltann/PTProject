@@ -4,7 +4,7 @@ import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
-import Butce from "./pages/Butce";
+import ButceIslemleri from "./pages/ButceIslemleri";
 
 const routes = [
   {
@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: "/butce-kayit",
-    component: Butce,
+    component: ButceIslemleri,
   },
 ];
 

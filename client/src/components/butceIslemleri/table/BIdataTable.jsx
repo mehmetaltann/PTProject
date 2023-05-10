@@ -1,20 +1,40 @@
-import CustomNoRowsOverlay from "../UI/table/CustomNoRowsOverlay";
+import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import BIdataTableFooter from "./BIdataTableFooter";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useHttp from "../../../hooks/use-http";
 import { useMemo, useState, useEffect } from "react";
-import { dateFormat } from "../../utils/help-functions";
+import { dateFormat } from "../../../utils/help-functions";
 import { Badge, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
-import { useGlobalContext } from "../../context/globalContext";
+import { useButceContext } from "../store/butceContext";
 
-const BIdataTable = ({ data }) => {
+const BIdataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const { butceKalemiSil } = useGlobalContext();
+  const [data, setData] = useState([]);
+  const { butceKalemiSil, selectedDate, butceKalemiEkle } = useButceContext();
+  const { sendRequest } = useHttp();
+
+  useEffect(() => {
+    const transformData = (fetchData) => {
+      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
+        id,
+        ...rest,
+      }));
+      setData(filteredData);
+    };
+
+    sendRequest(
+      {
+        method: "get",
+        url: `butce-sorgula/${selectedDate}`,
+      },
+      transformData
+    );
+  }, [selectedDate, butceKalemiEkle, butceKalemiSil]);
 
   const COLUMNS = [
     {
       field: "Tip",
-      width: 50,
       align: "center",
       renderCell: (params) =>
         params.row.type === "Gelir" ? (
@@ -23,14 +43,14 @@ const BIdataTable = ({ data }) => {
           <Badge color="error" overlap="circular" badgeContent=" " />
         ),
     },
-    { flex: 1, field: "title", headerName: "İşlem", width: 150 },
-    { flex: 1, field: "categoryA", headerName: "Kategori A", width: 150 },
-    { flex: 1, field: "categoryB", headerName: "Kategori B", width: 150 },
+    { flex: 1, field: "title", headerName: "İşlem" },
+    { flex: 1, field: "categoryA", headerName: "Kategori A" },
+    { flex: 1, field: "categoryB", headerName: "Kategori B" },
     {
       flex: 1,
       field: "date",
       headerName: "Tarih",
-      width: 120,
+
       type: "date",
       valueFormatter: (params) => dateFormat(params.value),
     },
@@ -39,15 +59,15 @@ const BIdataTable = ({ data }) => {
       field: "amount",
       headerName: "Tutar",
       type: "number",
-      width: 150,
+
       valueFormatter: (params) => `${params.value} TL`,
       headerAlign: "left",
       align: "left",
     },
-    { flex: 1, field: "description", headerName: "Açıklama", width: 150 },
+    { flex: 1, field: "description", headerName: "Açıklama" },
     {
       field: "actions",
-      width: 80,
+
       headerName: "İşlem",
       renderCell: (params, index) => {
         return (

@@ -11,29 +11,21 @@ const {
 
 exports.butceIslemSorgula = async (req, res) => {
   const activeDate = req.params.date;
-  const dateQuery = (first, second) => {
-    return {
-      date: {
-        $gte: first,
-        $lt: second,
-      },
-    };
-  };
   const sortQuery = { date: -1 };
   const dataQuery = (query = null) => {
     dbFind(ButceSchema, query, sortQuery, res);
   };
 
   if (activeDate == 1) {
-    dataQuery(dateQuery(thisMonthFirstDay, thisMonthLastDay));
+    dataQuery({ date: { $gte: thisMonthFirstDay } });
   } else if (activeDate == 2) {
-    dataQuery(dateQuery(prevThreeMonthFirstDay, thisMonthLastDay));
+    dataQuery({ date: { $gte: prevThreeMonthFirstDay } });
   } else if (activeDate == 3) {
-    dataQuery(dateQuery(prevSixMonthFirstDay, thisMonthLastDay));
+    dataQuery({ date: { $gte: prevSixMonthFirstDay } });
   } else if (activeDate == 4) {
-    dataQuery(dateQuery(prevYearFirstDay, thisMonthLastDay));
+    dataQuery({ date: { $gte: prevYearFirstDay } });
   } else if (activeDate == 5) {
-    dataQuery(dateQuery(prevThreeYearFirstDay, thisMonthLastDay));
+    dataQuery({ date: { $gte: prevThreeYearFirstDay } });
   } else if (activeDate == 0) {
     dataQuery();
   }

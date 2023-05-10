@@ -12,19 +12,25 @@ router.get("/butce-sorgula/:date", butceIslemSorgula);
 
 //Yatırım İşlemleri Rotaları
 const {
-  yatirimIslemSil,
-  yatirimIslemSorgula,
-  yatirimAlisIslemEkle,
-  yatirimSatisIslemEkle,
-} = require("../controllers/yatirim/yatirimIslemler");
-router.post("/yatirim-alis-ekle", yatirimAlisIslemEkle);
-router.post("/yatirim-satis-ekle", yatirimSatisIslemEkle);
-router.delete("/yatirim-islem-sil/:id", yatirimIslemSil);
-router.get("/yatirim-islem-sorgula/:date", yatirimIslemSorgula);
+  yatirimIslemiSil,
+  yatirimIslemiSorgula,
+  yatirimAlisIslemiEkle,
+  yatirimSatisIslemiEkle,
+} = require("../controllers/yatirim/yatirimIslemleri");
+router.post("/yatirim-alis-ekle", yatirimAlisIslemiEkle);
+router.post("/yatirim-satis-ekle", yatirimSatisIslemiEkle);
+router.delete("/yatirim-islem-sil/:id", yatirimIslemiSil);
+router.get("/yatirim-islem-sorgula/:date", yatirimIslemiSorgula);
 
 //Geçmiş Yatırım İşlemleri Rotaları
-const { gecmisIslemSorgula } = require("../controllers/yatirim/gecmisIslemler");
-router.get("/gecmis-islem-sorgula", gecmisIslemSorgula);
+const {
+  gecmisIslemSorgula,
+  gecmisIslemEkle,
+  gecmisIslemSil,
+} = require("../controllers/yatirim/yatirimGecmisIslemler");
+router.get("/gecmis-islem-sorgula/:date", gecmisIslemSorgula);
+router.delete("/gecmis-islem-sil/:id", gecmisIslemSil);
+router.post("/gecmis-islem-ekle", gecmisIslemEkle);
 
 //Portfoy İşlemleri Rotaları
 const {

@@ -1,12 +1,14 @@
 import { createContext, useState, useContext } from "react";
-import useHttp from "../hooks/use-http";
+import useHttp from "../../../hooks/use-http";
 
 export const BASE_URL = "http://localhost:1623/api/v1/";
-export const GlobalContext = createContext();
+export const ButceContext = createContext();
 
-export const GlobalProvider = ({ children }) => {
-  const { error, setError, sendRequest } = useHttp();
+export const ButceProvider = ({ children }) => {
+  const [data, setData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(2);
   const [message, setMessage] = useState("");
+  const { error, setError, sendRequest } = useHttp();
 
   const butceKalemiSil = async (id) => {
     const getMessage = (fetchData) => {
@@ -38,21 +40,24 @@ export const GlobalProvider = ({ children }) => {
   };
 
   return (
-    <GlobalContext.Provider
+    <ButceContext.Provider
       value={{
+        data,
+        error,
+        message,
+        setError,
+        setMessage,
+        selectedDate,
+        setSelectedDate,
         butceKalemiSil,
         butceKalemEkle,
-        message,
-        setMessage,
-        error,
-        setError,
       }}
     >
       {children}
-    </GlobalContext.Provider>
+    </ButceContext.Provider>
   );
 };
 
-export const useGlobalContext = () => {
-  return useContext(GlobalContext);
+export const useButceContext = () => {
+  return useContext(ButceContext);
 };

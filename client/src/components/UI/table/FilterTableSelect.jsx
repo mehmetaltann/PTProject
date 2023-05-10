@@ -7,7 +7,8 @@ const FilterTableSelect = ({
   setSelect,
   defaultvalue,
   minWidth,
-  title
+  title,
+  val,
 }) => {
   return (
     <Grid
@@ -25,8 +26,8 @@ const FilterTableSelect = ({
       </Grid>
       <Grid>
         <TextField
-          id="outlined-select-currency"
           select
+          value={val}
           defaultValue={defaultvalue}
           sx={{ minWidth: minWidth }}
           variant={"standard"}

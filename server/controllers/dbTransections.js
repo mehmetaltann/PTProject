@@ -30,6 +30,15 @@ exports.dbFind = async (islemObj, fQuery = null, sortQuery = null, res) => {
     const data = await islemObj.find(fQuery).sort(sortQuery);
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ message: "Bağlantı Hatası, Kategoriler Alınamadı" });
+    res.status(500).json({ message: "Bağlantı Hatası" });
+  }
+};
+
+exports.dbFindAggregate = async (islemObj, fQuery, res) => {
+  try {
+    const data = await islemObj.aggregate(fQuery);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Bağlantı Hatası" });
   }
 };

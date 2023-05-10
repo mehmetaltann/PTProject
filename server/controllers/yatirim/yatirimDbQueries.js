@@ -6,12 +6,19 @@ exports.acikPoziyonIslemSorgu = async (kod) => {
     kod: kod,
     $or: [{ durum: "Açık" }, { durum: "Güncellendi" }],
   };
-  let dataList = [];
   try {
     const data = await Islem.find(queryObject).sort({ date: "asc" });
-    dataList = data
-    return dataList;
+    return data;
   } catch (error) {
     return "Veri Alınamadı";
   }
+};
+
+exports.acikPoziyonIslemUpdate = async (alim_id, durum, guncelAdet) => {
+  const filter = { _id: alim_id };
+  const update = {
+    durum: durum,
+    adet: guncelAdet,
+  };
+  await Islem.findOneAndUpdate(filter, update);
 };

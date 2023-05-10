@@ -1,11 +1,12 @@
 import PageTitle from "../UI/PageTitle";
-import YGsonIslemler from "./table/YGsonIslemler";
-import { useYGContext } from "./store/ygContext";
-import { Stack, Box } from "@mui/material";
+import BIform from "./form/BIform";
+import BIsonIslemler from "./table/BIsonIslemler";
 import { useEffect } from "react";
+import { useButceContext } from "./store/butceContext";
+import { Stack, Box } from "@mui/material";
 
-const YGmain = () => {
-  const { error, message, setError, setMessage } = useYGContext();
+const BImain = () => {
+  const { error, message, setError, setMessage } = useButceContext();
 
   useEffect(() => {
     if (error) {
@@ -19,13 +20,14 @@ const YGmain = () => {
   return (
     <Stack spacing={2}>
       <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>
-        <PageTitle title="Geçmiş Yatırım İşlemleri" />
+        <PageTitle title="Bütçe İşlemleri" />
+        <BIform />
       </Stack>
       {message && <Box>{message}</Box>}
       {error && <Box>{error}</Box>}
-      <YGsonIslemler />
+      <BIsonIslemler />
     </Stack>
   );
 };
 
-export default YGmain;
+export default BImain;

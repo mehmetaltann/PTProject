@@ -1,26 +1,12 @@
 import SendIcon from "@mui/icons-material/Send";
-import YIalisModal from "./YIalisModal";
-import YIsatisModal from "./YIsatisModal";
+import YIalisModal from "./modals/YIalisModal";
+import YIsatisModal from "./modals/YIsatisModal";
 import { Button, Stack, Modal, Box } from "@mui/material";
-import { useState } from "react";
+import { useYatirimContext } from "../store/yatirimContext";
 
-const style = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  height: "70%",
-  width: "50%",
-  overflow: "auto",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 2,
-};
-
-const YIform = ({ portfoyler, selectedPortfoy, setSelectedPortfoy }) => {
-  const [openAlis, setOpenAlis] = useState(false);
-  const [openSatis, setOpenSatis] = useState(false);
+const YIform = () => {
+  const { openAlis, setOpenAlis, openSatis, setOpenSatis } =
+    useYatirimContext();
 
   return (
     <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
@@ -56,12 +42,7 @@ const YIform = ({ portfoyler, selectedPortfoy, setSelectedPortfoy }) => {
             p: 2,
           }}
         >
-          <YIalisModal
-            setOpenAlis={setOpenAlis}
-            selectedPortfoy={selectedPortfoy}
-            portfoyler={portfoyler}
-            setSelectedPortfoy={setSelectedPortfoy}
-          />
+          <YIalisModal />
         </Box>
       </Modal>
       <Button
@@ -96,12 +77,7 @@ const YIform = ({ portfoyler, selectedPortfoy, setSelectedPortfoy }) => {
             p: 2,
           }}
         >
-          <YIsatisModal
-            setOpenSatis={setOpenSatis}
-            selectedPortfoy={selectedPortfoy}
-            portfoyler={portfoyler}
-            setSelectedPortfoy={setSelectedPortfoy}
-          />
+          <YIsatisModal />
         </Box>
       </Modal>
     </Stack>
