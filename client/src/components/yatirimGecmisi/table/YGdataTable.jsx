@@ -25,7 +25,7 @@ const YGdataTable = () => {
     sendRequest(
       {
         method: "get",
-        url: `yatirim-islem-sorgula/${selectedDate}`,
+        url: `gecmis-islem-sorgula/${selectedDate}`,
       },
       transformData
     );

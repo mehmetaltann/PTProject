@@ -6,30 +6,28 @@ const {
   prevSixMonthFirstDay,
   prevYearFirstDay,
   prevThreeYearFirstDay,
+  birthday,
 } = require("../../utils/helpFunctions");
 
-const addDateQuery = (date = null) => {
+const aggQuery = (creatDate) => {
   const gecmisIslemQuery = [
     {
-      $lookup: {
-        let: { userObjId: { $toObjectId: "$alim_islemId" } },
-        from: "islems",
-        pipeline: [
-          { $match: { $expr: { $eq: ["$_id", "$$userObjId"] } } },
-          { $project: { kod: 1, fiyat: 1, date: 1, portfoy_ismi: 1 } },
-        ],
-        as: "alim",
+      $match: {
+        createdAt: {
+          $gte: creatDate,
+        },
       },
-    },
-    {
-      $unwind: "$alim",
     },
     {
       $lookup: {
         let: { userObjId: { $toObjectId: "$satim_islemId" } },
         from: "islems",
         pipeline: [
-          { $match: { $expr: { $eq: ["$_id", "$$userObjId"] } } },
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$userObjId"] },
+            },
+          },
           { $project: { fiyat: 1, date: 1, komisyon: 1 } },
         ],
         as: "satim",
@@ -42,11 +40,11 @@ const addDateQuery = (date = null) => {
       $project: {
         _id: 0,
         id: "$_id",
-        portfoy: "$alim.portfoy_ismi",
-        kod: "$alim.kod",
+        portfoy: "$portfoy_ismi",
+        kod: 1,
         adet: { $round: ["$adet", 4] },
-        alis_tarihi: "$alim.date",
-        alis_fiyat: { $round: ["$alim.fiyat", 2] },
+        alis_tarihi: 1,
+        alis_fiyat: { $round: ["$alis_fiyati", 2] },
         satis_tarihi: "$satim.date",
         satis_fiyat: { $round: ["$satim.fiyat", 2] },
         komisyon: "$satim.komisyon",
@@ -54,7 +52,7 @@ const addDateQuery = (date = null) => {
           $round: [
             {
               $multiply: [
-                { $subtract: ["$alim.fiyat", "$satim.fiyat"] },
+                { $subtract: ["$alis_fiyati", "$satim.fiyat"] },
                 "$adet",
               ],
             },
@@ -67,8 +65,8 @@ const addDateQuery = (date = null) => {
               $multiply: [
                 {
                   $divide: [
-                    { $abs: { $subtract: ["$alim.fiyat", "$satim.fiyat"] } },
-                    "$alim.fiyat",
+                    { $abs: { $subtract: ["$alis_fiyati", "$satim.fiyat"] } },
+                    "$alis_fiyati",
                   ],
                 },
                 100,
@@ -79,7 +77,7 @@ const addDateQuery = (date = null) => {
         },
         gun_farki: {
           $dateDiff: {
-            startDate: "$alim.date",
+            startDate: "$alis_tarihi",
             endDate: "$satim.date",
             unit: "day",
           },
@@ -92,31 +90,42 @@ const addDateQuery = (date = null) => {
 
 exports.gecmisIslemSorgula = async (req, res) => {
   const activeDate = req.params.date;
-  const dataQuery = (query) => {
-    dbFindAggregate(YtHistory, query, res);
+  const dataQuery = (zaman) => {
+    dbFindAggregate(YtHistory, aggQuery(zaman), res);
   };
 
   if (activeDate == 1) {
-    dataQuery(addDateQuery({ $createdAt: { $gte: thisMonthFirstDay } }));
+    dataQuery(thisMonthFirstDay);
   } else if (activeDate == 2) {
-    dataQuery(addDateQuery({ $createdAt: { $gte: prevThreeMonthFirstDay } }));
+    dataQuery(prevThreeMonthFirstDay);
   } else if (activeDate == 3) {
-    dataQuery(addDateQuery({ $createdAt: { $gte: prevSixMonthFirstDay } }));
+    dataQuery(prevSixMonthFirstDay);
   } else if (activeDate == 4) {
-    dataQuery(addDateQuery({ $createdAt: { $gte: prevYearFirstDay } }));
+    dataQuery(prevYearFirstDay);
   } else if (activeDate == 5) {
-    dataQuery(addDateQuery({ $createdAt: { $gte: prevThreeYearFirstDay } }));
+    dataQuery(prevThreeYearFirstDay);
   } else if (activeDate == 0) {
-    dataQuery(addDateQuery());
+    dataQuery(birthday);
   }
 };
 
-exports.gecmisIslemEkle = async (adet, satim_islemId, alim_islemId) => {
+exports.gecmisIslemEkle = async (
+  adet,
+  kod,
+  alis_fiyati,
+  alis_tarihi,
+  portfoy_ismi,
+  satim_islemId
+) => {
   const gecmisIslem = YtHistory({
     adet,
-    alim_islemId,
+    kod,
+    alis_fiyati,
+    alis_tarihi,
+    portfoy_ismi,
     satim_islemId,
   });
+
   try {
     await gecmisIslem.save();
   } catch (error) {

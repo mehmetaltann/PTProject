@@ -20,7 +20,14 @@ const yatirimFifoIslemi = async (satis_id, satilanAdet, alim_list) => {
     let secilenAlimIlkAdet = Number(Number(secilenAlim.adet).toFixed(8));
 
     if (secilenAlimIlkAdet === satilanAdet) {
-      await gecmisIslemEkle(secilenAlimIlkAdet, satis_id, secilenAlim.id);
+      await gecmisIslemEkle(
+        secilenAlimIlkAdet,
+        secilenAlim.kod,
+        secilenAlim.fiyat,
+        secilenAlim.date,
+        secilenAlim.portfoy_ismi,
+        satis_id
+      );
       await Islem.findByIdAndDelete(secilenAlim.id);
       satilanAdet = 0;
     } else if (secilenAlimIlkAdet > satilanAdet) {
@@ -30,10 +37,24 @@ const yatirimFifoIslemi = async (satis_id, satilanAdet, alim_list) => {
         "Güncellendi",
         secilenAlimIlkAdet
       );
-      await gecmisIslemEkle(satilanAdet, satis_id, secilenAlim.id);
+      await gecmisIslemEkle(
+        satilanAdet,
+        secilenAlim.kod,
+        secilenAlim.fiyat,
+        secilenAlim.date,
+        secilenAlim.portfoy_ismi,
+        satis_id
+      );
       satilanAdet = 0;
     } else {
-      await gecmisIslemEkle(secilenAlimIlkAdet, satis_id, secilenAlim.id);
+      await gecmisIslemEkle(
+        secilenAlimIlkAdet,
+        secilenAlim.kod,
+        secilenAlim.fiyat,
+        secilenAlim.date,
+        secilenAlim.portfoy_ismi,
+        satis_id
+      );
       satilanAdet -= secilenAlimIlkAdet;
       alim_list.splice(0, 1);
       await Islem.findByIdAndDelete(secilenAlim.id);

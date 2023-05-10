@@ -34,6 +34,7 @@ const BIdataTable = () => {
 
   const COLUMNS = [
     {
+      flex: 0.4,
       field: "Tip",
       align: "center",
       renderCell: (params) =>
@@ -43,7 +44,7 @@ const BIdataTable = () => {
           <Badge color="error" overlap="circular" badgeContent=" " />
         ),
     },
-    { flex: 1, field: "title", headerName: "İşlem" },
+    { flex: 1, field: "title", headerName: "Gider" },
     { flex: 1, field: "categoryA", headerName: "Kategori A" },
     { flex: 1, field: "categoryB", headerName: "Kategori B" },
     {
@@ -66,6 +67,7 @@ const BIdataTable = () => {
     },
     { flex: 1, field: "description", headerName: "Açıklama" },
     {
+      flex: 0.4,
       field: "actions",
 
       headerName: "İşlem",

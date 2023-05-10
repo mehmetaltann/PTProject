@@ -34,9 +34,9 @@ exports.dbFind = async (islemObj, fQuery = null, sortQuery = null, res) => {
   }
 };
 
-exports.dbFindAggregate = async (islemObj, fQuery, res) => {
+exports.dbFindAggregate = async (islemObj, query, res) => {
   try {
-    const data = await islemObj.aggregate(fQuery);
+    const data = await islemObj.aggregate(query);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Bağlantı Hatası" });
