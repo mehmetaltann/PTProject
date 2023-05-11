@@ -7,23 +7,7 @@ import { useEffect } from "react";
 import { useYatirimContext } from "./store/yatirimContext";
 
 const YImain = () => {
-  const { error, message, setError, setMessage, setPortfoyler } =
-    useYatirimContext();
-  const { sendRequest } = useHttp();
-
-  useEffect(() => {
-    const transformData = (fetchData) => {
-      setPortfoyler(fetchData);
-    };
-
-    sendRequest(
-      {
-        method: "get",
-        url: `portfoy-sorgula`,
-      },
-      transformData
-    );
-  }, []);
+  const { error, message, setError, setMessage } = useYatirimContext();
 
   useEffect(() => {
     if (error) {

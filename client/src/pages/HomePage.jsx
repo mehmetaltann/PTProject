@@ -1,11 +1,7 @@
-import React from 'react'
+import HomeMain from "../components/anasayfa/HomeMain";
 
 const HomePage = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <HomeMain />;
+};
 
-export default HomePage
+export default HomePage;

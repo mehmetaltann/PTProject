@@ -10,6 +10,7 @@ import { materialDateInput } from "../../../../utils/help-functions";
 import { useMemo, Fragment } from "react";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { useYatirimContext } from "../../store/yatirimContext";
+import { useGlobalContext } from "../../../../store/globalContext";
 import {
   Button,
   IconButton,
@@ -32,10 +33,10 @@ const YIalisModal = () => {
   const {
     setOpenAlis,
     selectedPortfoy,
-    portfoyler,
     setSelectedPortfoy,
     yatirimKalemiAlisEkle,
   } = useYatirimContext();
+  const { portfoyler } = useGlobalContext();
 
   const submitHandler = async (values) => {
     let portfoy_ismi = values.portfoy;

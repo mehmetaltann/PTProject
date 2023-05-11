@@ -4,7 +4,6 @@ import useHttp from "../../../hooks/use-http";
 export const YatirimContext = createContext();
 
 export const YatirimProvider = ({ children }) => {
-  const [portfoyler, setPortfoyler] = useState([]);
   const [message, setMessage] = useState(null);
   const [selectedDate, setSelectedDate] = useState(2);
   const [openAlis, setOpenAlis] = useState(false);
@@ -65,7 +64,6 @@ export const YatirimProvider = ({ children }) => {
         message,
         openAlis,
         openSatis,
-        portfoyler,
         selectedDate,
         selectedPortfoy,
 
@@ -73,7 +71,6 @@ export const YatirimProvider = ({ children }) => {
         setMessage,
         setOpenAlis,
         setOpenSatis,
-        setPortfoyler,
         setSelectedDate,
         setSelectedPortfoy,
 

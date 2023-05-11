@@ -9,15 +9,16 @@ import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
 import { Button, Typography, MenuItem } from "@mui/material";
 import { useYatirimContext } from "../../store/yatirimContext";
+import { useGlobalContext } from "../../../../store/globalContext";
 
 const YIsatisModal = () => {
   const {
     yatirimKalemiSatisEkle,
     selectedPortfoy,
     setSelectedPortfoy,
-    portfoyler,
     setOpenSatis,
   } = useYatirimContext();
+  const { portfoyler } = useGlobalContext();
 
   const submitHandler = async (values) => {
     const yeniKayitListesi = {

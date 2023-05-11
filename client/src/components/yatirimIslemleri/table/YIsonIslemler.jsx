@@ -6,15 +6,16 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { MenuItem, Typography, Paper, Box } from "@mui/material";
 import { tarihSecim } from "../../../utils/localData";
 import { useYatirimContext } from "../store/yatirimContext";
+import { useGlobalContext } from "../../../store/globalContext";
 
 const YIsonIslemler = () => {
   const {
     setSelectedDate,
     setSelectedPortfoy,
     selectedPortfoy,
-    portfoyler,
     selectedDate,
   } = useYatirimContext();
+  const { portfoyler } = useGlobalContext();
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
