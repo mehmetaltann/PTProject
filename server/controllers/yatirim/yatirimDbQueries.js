@@ -1,4 +1,5 @@
 const Islem = require("../../models/YatirimIslemlerModel");
+const GuncelData = require("../../models/YatirimGuncelDataModal");
 
 exports.acikPoziyonIslemSorgu = async (kod) => {
   const queryObject = {

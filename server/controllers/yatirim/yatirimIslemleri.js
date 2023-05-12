@@ -1,6 +1,8 @@
 const Islem = require("../../models/YatirimIslemlerModel");
+const GuncelData = require("../../models/YatirimGuncelDataModal");
 const { dbDeleteOne, dbInsertMany, dbFind } = require("../dbTransections");
 const { gecmisIslemEkle } = require("./yatirimGecmisIslemler");
+const { guncelDataEkle } = require("./yatirimGuncelDeger");
 const {
   acikPoziyonIslemSorgu,
   acikPoziyonIslemUpdate,
@@ -89,7 +91,21 @@ exports.yatirimIslemiSil = async (req, res) => {
 };
 
 exports.yatirimAlisIslemiEkle = async (req, res) => {
-  dbInsertMany(Islem, req.body, "Yatırım İşlemleri Eklendi", res);
+  const islemList = req.body;
+  dbInsertMany(Islem, islemList, "Yatırım İşlemleri Eklendi", res);
+  const kodList = islemList.map(({ kod }) => kod);
+  const findcodes = await GuncelData.find({
+    kod: {
+      $in: kodList,
+    },
+  });
+  const guncelDataEklenecekler = islemList.filter(
+    ({ kod }) => !findcodes.map(({ kod }) => kod).includes(kod)
+  );
+  let gunceleEkle = guncelDataEklenecekler !== 0;
+  if (gunceleEkle) {
+    guncelDataEkle(guncelDataEklenecekler);
+  }
 };
 
 exports.yatirimSatisIslemiEkle = async (req, res) => {

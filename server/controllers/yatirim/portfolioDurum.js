@@ -1,7 +1,7 @@
 const Islem = require("../../models/YatirimIslemlerModel");
-const { dbFindAggregate } = require("../dbTransections");
+const { dbFindAggregate} = require("../dbTransections");
 
-exports.portfolioDurumQuery = [
+const portfolioDurumQuery = [
   {
     $match: {
       $or: [{ durum: "Açık" }, { durum: "Güncellendi" }],
@@ -9,7 +9,7 @@ exports.portfolioDurumQuery = [
   },
   {
     $group: {
-      _id: "$kod",
+      _id: { k: "$kod", p: "$portfoy_ismi" },
       toplam_maliyet: {
         $sum: {
           $multiply: ["$fiyat", "$adet"],
@@ -22,13 +22,14 @@ exports.portfolioDurumQuery = [
   },
   {
     $project: {
+      kod: "$_id.k",
+      portfoy_ismi: "$_id.p",
+      _id: 0,
       adet: "$toplam_adet",
-      kod: "$kod",
       ortalama_fiyat: {
         $divide: ["$toplam_maliyet", "$toplam_adet"],
       },
       toplam_maliyet: { $round: ["$toplam_maliyet", 3] },
-      portfoy_ismi: "$portfoy_ismi",
     },
   },
 ];
@@ -36,3 +37,4 @@ exports.portfolioDurumQuery = [
 exports.portfolioDurum = async (req, res) => {
   dbFindAggregate(Islem, portfolioDurumQuery, res);
 };
+

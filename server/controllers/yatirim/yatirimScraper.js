@@ -10,12 +10,11 @@ const extractWithCheerio = ($, kod) => {
 };
 
 exports.scraper = async (kod) => {
-  let body = await request({
+  const body = await request({
     url: `https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=${kod}`,
     method: "GET",
   });
-  let $ = cheerio.load(body);
-  let result = extractWithCheerio($, kod);
+  const $ = cheerio.load(body);
+  const result = extractWithCheerio($, kod);
   return result;
 };
-

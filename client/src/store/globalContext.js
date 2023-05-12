@@ -21,6 +21,8 @@ export const GlobalProvider = ({ children }) => {
     );
   }, []);
 
+  
+
   return (
     <GlobalContext.Provider value={{ portfoyler, portfoyleriGetir }}>
       {children}
