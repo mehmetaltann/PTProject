@@ -20,6 +20,16 @@ const GuncelData = new mongoose.Schema(
       maxLength: 20,
       default: 0,
     },
+    title: {
+      type: String,
+      trim: true,
+      maxLength: 250,
+    },
+    category: {
+      type: String,
+      trim: true,
+      maxLength: 150,
+    },
   },
   { timestamps: true }
 );

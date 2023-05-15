@@ -2,9 +2,7 @@ const router = require("express").Router();
 
 //Portfolio Durum
 const {portfolioDurum} = require("../controllers/yatirim/portfolioDurum");
-const {yatirimScrap} = require("../controllers/yatirim/yatirimGuncelDeger");
 router.get("/portfolio-durum", portfolioDurum);
-router.get("/scrap", yatirimScrap);
 
 //Bütçe Rotaları
 const {

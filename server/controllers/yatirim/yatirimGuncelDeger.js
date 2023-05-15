@@ -1,16 +1,50 @@
 const GuncelData = require("../../models/YatirimGuncelDataModal");
-const { scraper } = require("./yatirimScraper");
+const { fonScraper, moneyScraper } = require("./yatirimScraper");
 
-exports.guncelDataEkle = async (dataList) => {
-  const scrap = await scraper("AFT");
-  const data = dataList.map(({ portfoy_ismi, kod }) => {
-    return { portfoy: portfoy_ismi, kod: kod, fiyat: parseFloat(scrap.price) };
-  });
-
-  await GuncelData.insertMany(data);
+const fonScrapFunc = async (kod, portfoy_ismi) => {
+  const response = await fonScraper(kod);
+  return {
+    title: response.title,
+    fiyat: parseFloat(response.price.replace(/,/, ".")),
+    category: response.category,
+    kod: kod,
+    portfoy: portfoy_ismi,
+  };
 };
 
-exports.yatirimScrap = async (req, res) => {
-  data = await scraper("AFT");
-  res.status(200).json(data);
+const guncelDataDbSend = async (data) => {
+  try {
+    await GuncelData.insertMany(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.guncelDataEkle = async (dataList) => {
+  Promise.all(
+    dataList.map(({ portfoy_ismi, kod }) => {
+      if (
+        portfoy_ismi === "Bireysel Emeklilik Fonları" ||
+        portfoy_ismi === "Yatırım Fonları"
+      ) {
+        return fonScrapFunc(kod, portfoy_ismi).then((res) => res);
+      } else if (portfoy_ismi === "Döviz" || portfoy_ismi === "Altın") {
+        return moneyScraper(kod, portfoy_ismi).then((res) => res);
+      }
+    })
+  )
+    .then((data) => {
+      guncelDataDbSend(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.guncelDataSil = async (kod) => {
+  try {
+    await GuncelData.findOneAndDelete({ kod: kod });
+  } catch (error) {
+    condole.log(error);
+  }
 };

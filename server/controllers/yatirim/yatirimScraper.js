@@ -9,7 +9,7 @@ const extractWithCheerio = ($, kod) => {
   return data;
 };
 
-exports.scraper = async (kod) => {
+exports.fonScraper = async (kod) => {
   const body = await request({
     url: `https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=${kod}`,
     method: "GET",
@@ -17,4 +17,39 @@ exports.scraper = async (kod) => {
   const $ = cheerio.load(body);
   const result = extractWithCheerio($, kod);
   return result;
+};
+
+exports.moneyScraper = async (kod, portfoy_ismi) => {
+  const body = await request({
+    url: `https://api.genelpara.com/embed/para-birimleri.json`,
+    method: "GET",
+  });
+  data = JSON.parse(body);
+  let parameter = "";
+  let title = "";
+  let category = "";
+  if (kod === "ALT") {
+    parameter = "GA";
+    title = "Altın";
+    category = "Altın";
+  } else if (kod === "USD") {
+    parameter = "USD";
+    title = "Dolar";
+    category = "Döviz";
+  } else if (kod === "EUR") {
+    parameter = "EUR";
+    title = "Euro";
+    category = "Döviz";
+  } else if (kod === "BTC") {
+    parameter = "BTC";
+    title = "Bitcoin";
+    category = "Bitcoin";
+  }
+  return {
+    title: title,
+    fiyat: data[parameter]["alis"],
+    category: category,
+    kod: kod,
+    portfoy: portfoy_ismi,
+  };
 };

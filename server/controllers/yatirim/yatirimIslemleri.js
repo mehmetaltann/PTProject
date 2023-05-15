@@ -2,11 +2,12 @@ const Islem = require("../../models/YatirimIslemlerModel");
 const GuncelData = require("../../models/YatirimGuncelDataModal");
 const { dbDeleteOne, dbInsertMany, dbFind } = require("../dbTransections");
 const { gecmisIslemEkle } = require("./yatirimGecmisIslemler");
-const { guncelDataEkle } = require("./yatirimGuncelDeger");
+const { guncelDataEkle, guncelDataSil } = require("./yatirimGuncelDeger");
 const {
   acikPoziyonIslemSorgu,
   acikPoziyonIslemUpdate,
 } = require("./yatirimDbQueries");
+const { moneyScraper } = require("./yatirimScraper");
 const {
   thisMonthFirstDay,
   prevThreeMonthFirstDay,
@@ -93,17 +94,20 @@ exports.yatirimIslemiSil = async (req, res) => {
 exports.yatirimAlisIslemiEkle = async (req, res) => {
   const islemList = req.body;
   dbInsertMany(Islem, islemList, "Yatırım İşlemleri Eklendi", res);
-  const kodList = islemList.map(({ kod }) => kod);
+  const kodList = islemList
+    .map(({ kod }) => kod)
+    .filter((value, index, array) => array.indexOf(value) === index);
   const findcodes = await GuncelData.find({
     kod: {
       $in: kodList,
     },
   });
-  const guncelDataEklenecekler = islemList.filter(
-    ({ kod }) => !findcodes.map(({ kod }) => kod).includes(kod)
-  );
-  let gunceleEkle = guncelDataEklenecekler !== 0;
+  const findcodesList = findcodes.map(({ kod }) => kod);
+  let gunceleEkle = findcodesList.length < kodList.length;
   if (gunceleEkle) {
+    const guncelDataEklenecekler = islemList.filter(
+      ({ kod }) => !findcodes.map(({ kod }) => kod).includes(kod)
+    );
     guncelDataEkle(guncelDataEklenecekler);
   }
 };
@@ -120,9 +124,13 @@ exports.yatirimSatisIslemiEkle = async (req, res) => {
     portfoy_ismi,
   });
 
-  const alim_list = await acikPoziyonIslemSorgu(kod); //duurumu açık veya güncellendi olan alışlar
+  const alim_list = await acikPoziyonIslemSorgu(kod); //durumu açık veya güncellendi olan alışlar
   const toplam_adet = calculateSum(alim_list, "adet");
   const satilanAdet = Number(Number(adet).toFixed(8));
+
+  if (toplam_adet === satilanAdet) {
+    await guncelDataSil(kod);
+  }
 
   if (alim_list.length === 0) {
     res.status(200).json({ message: `Portföyde "${kod}" Bulunmamaktadır.` });
