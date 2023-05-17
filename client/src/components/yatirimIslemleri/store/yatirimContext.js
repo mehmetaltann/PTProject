@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from "react";
+import { useGlobalContext } from "../../../store/globalContext";
 import useHttp from "../../../hooks/use-http";
 
 export const YatirimContext = createContext();
@@ -12,6 +13,7 @@ export const YatirimProvider = ({ children }) => {
     "Bireysel Emeklilik Fonları"
   );
   const { error, setError, sendRequest } = useHttp();
+  const { yatirimIslemleriniGetir } = useGlobalContext();
 
   const yatirimKalemiAlisEkle = async (postData) => {
     const getMessage = (fetchData) => {
@@ -26,6 +28,7 @@ export const YatirimProvider = ({ children }) => {
       },
       getMessage
     );
+    yatirimIslemleriniGetir();
   };
 
   const yatirimKalemiSatisEkle = async (postData) => {
@@ -41,6 +44,7 @@ export const YatirimProvider = ({ children }) => {
       },
       getMessage
     );
+    yatirimIslemleriniGetir();
   };
 
   const yatirimKalemiSil = async (id) => {
@@ -55,6 +59,7 @@ export const YatirimProvider = ({ children }) => {
       },
       getMessage
     );
+    yatirimIslemleriniGetir();
   };
 
   return (

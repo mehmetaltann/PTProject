@@ -5,10 +5,11 @@ import { useGlobalContext } from "./store/globalContext";
 import { useEffect } from "react";
 
 function App() {
-  const { portfoyleriGetir } = useGlobalContext();
+  const { portfoyleriGetir, guncelDegerleriGetir } = useGlobalContext();
 
   useEffect(() => {
     portfoyleriGetir();
+    guncelDegerleriGetir();
   }, []);
 
   return (

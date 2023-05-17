@@ -9,14 +9,20 @@ const extractWithCheerio = ($, kod) => {
   return data;
 };
 
-exports.fonScraper = async (kod) => {
+exports.fonScraper = async (kod, portfoy_ismi) => {
   const body = await request({
     url: `https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=${kod}`,
     method: "GET",
   });
   const $ = cheerio.load(body);
   const result = extractWithCheerio($, kod);
-  return result;
+  return {
+    title: result.title,
+    price: parseFloat(result.price.replace(/,/, ".")),
+    category: result.category,
+    kod: kod,
+    portfoy: portfoy_ismi,
+  };
 };
 
 exports.moneyScraper = async (kod, portfoy_ismi) => {
@@ -47,7 +53,7 @@ exports.moneyScraper = async (kod, portfoy_ismi) => {
   }
   return {
     title: title,
-    fiyat: data[parameter]["alis"],
+    price: data[parameter]["alis"],
     category: category,
     kod: kod,
     portfoy: portfoy_ismi,

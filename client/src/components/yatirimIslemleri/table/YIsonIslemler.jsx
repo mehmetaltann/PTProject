@@ -9,13 +9,8 @@ import { useYatirimContext } from "../store/yatirimContext";
 import { useGlobalContext } from "../../../store/globalContext";
 
 const YIsonIslemler = () => {
-  const {
-    setSelectedDate,
-    setSelectedPortfoy,
-    selectedPortfoy,
-    selectedDate,
-  } = useYatirimContext();
-  const { portfoyler } = useGlobalContext();
+  const { setSelectedPortfoy, selectedPortfoy } = useYatirimContext();
+  const { portfoyler, setSelectedDate, selectedDate } = useGlobalContext();
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>

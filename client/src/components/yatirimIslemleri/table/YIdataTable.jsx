@@ -1,51 +1,32 @@
 import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import DeleteIcon from "@mui/icons-material/Delete";
-import useHttp from "../../../hooks/use-http";
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useEffect } from "react";
 import { dateFormat } from "../../../utils/help-functions";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import { Badge, IconButton, Stack, Typography } from "@mui/material";
 import { useYatirimContext } from "../store/yatirimContext";
+import { useGlobalContext } from "../../../store/globalContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getYatirimIslemleri } from "../../../redux/yatirimSlice";
 
 const YIdataTable = () => {
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [data, setData] = useState([]);
-  const { sendRequest } = useHttp();
-  const {
-    selectedPortfoy,
-    selectedDate,
-    yatirimKalemiSil,
-    yatirimKalemiAlisEkle,
-    yatirimKalemiSatisEkle,
-  } = useYatirimContext();
+  const { yatirimIslemleri } = useSelector((state) => state.yatirim);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const transformData = (fetchData) => {
-      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
-        id,
-        ...rest,
-      }));
+    dispatch(getYatirimIslemleri());
+  }, [dispatch]);
 
-      setData(filteredData);
-    };
+  const { selectedPortfoy, yatirimKalemiSil } = useYatirimContext();
 
-    sendRequest(
-      {
-        method: "get",
-        url: `yatirim-islem-sorgula/${selectedDate}`,
-      },
-      transformData
-    );
-  }, [
-    selectedDate,
-    yatirimKalemiSil,
-    yatirimKalemiAlisEkle,
-    yatirimKalemiSatisEkle,
-  ]);
-
-  const filteredData = data.filter(
-    (item) => item.portfoy_ismi === selectedPortfoy
-  );
+  const filteredData = yatirimIslemleri
+    .map(({ _id: id, ...rest }) => ({
+      id,
+      ...rest,
+    }))
+    .filter((item) => item.portfoy_ismi === selectedPortfoy);
+  console.log(yatirimIslemleri);
+  console.log(filteredData);
 
   const COLUMNS = [
     {
@@ -142,6 +123,15 @@ const YIdataTable = () => {
     },
     {
       flex: 1,
+      field: "",
+      headerName: "Güncel Değer",
+      type: "number",
+      valueFormatter: ({ value }) => `${value} TL`,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      flex: 1,
       field: "actions",
       headerName: "İşlem",
       renderCell: (params, index) => {
@@ -178,7 +168,7 @@ const YIdataTable = () => {
         },
       }}
       initialState={{
-        ...data.initialState,
+        ...filteredData.initialState,
         pagination: { paginationModel: { pageSize: 10 } },
       }}
       slots={{

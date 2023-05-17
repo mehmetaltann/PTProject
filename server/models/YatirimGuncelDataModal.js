@@ -14,7 +14,7 @@ const GuncelData = new mongoose.Schema(
       trim: true,
       maxLength: 7,
     },
-    fiyat: {
+    price: {
       type: Number,
       trim: true,
       maxLength: 20,
