@@ -1,18 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { GlobalProvider } from "./context/globalContext";
-import { YatirimProvider } from "./context/yatirimContext";
 import { GlobalStyle } from "./styles/GlobalStyle";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <GlobalProvider>
-      <YatirimProvider>
-        <GlobalStyle />
-        <App />
-      </YatirimProvider>
-    </GlobalProvider>
+    <Provider store={store}>
+      <GlobalStyle />
+      <App />
+    </Provider>
   </React.StrictMode>
 );

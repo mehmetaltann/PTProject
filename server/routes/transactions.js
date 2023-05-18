@@ -1,5 +1,15 @@
 const router = require("express").Router();
 
+//Portfolio Durum
+const { portfolioDurum } = require("../controllers/yatirim/portfolioDurum");
+router.get("/portfolio-durum", portfolioDurum);
+
+//Güncel Değerler
+const {
+  guncelDataSorgula,
+} = require("../controllers/yatirim/yatirimGuncelDeger");
+router.get("/guncel-deger-sorgula", guncelDataSorgula);
+
 //Bütçe Rotaları
 const {
   butceIslemSorgula,
@@ -11,22 +21,33 @@ router.delete("/butce-veri-sil/:id", butceIslemSil);
 router.get("/butce-sorgula/:date", butceIslemSorgula);
 
 //Yatırım İşlemleri Rotaları
-const { islemEkle, islemSil } = require("../controllers/yatirim/islemler");
-const { islemSorgula } = require("../controllers/yatirim/queries");
-router.post("/yatirim-islem", islemEkle);
-router.delete("/yatirim-islem-sil/:id", islemSil);
-router.get("/yatirim-islem-sorgula", islemSorgula);
+const {
+  yatirimIslemiSil,
+  yatirimIslemiSorgula,
+  yatirimAlisIslemiEkle,
+  yatirimSatisIslemiEkle,
+} = require("../controllers/yatirim/yatirimIslemleri");
+router.post("/yatirim-alis-ekle", yatirimAlisIslemiEkle);
+router.post("/yatirim-satis-ekle", yatirimSatisIslemiEkle);
+router.delete("/yatirim-islem-sil/:id", yatirimIslemiSil);
+router.get("/yatirim-islem-sorgula/:date", yatirimIslemiSorgula);
 
 //Geçmiş Yatırım İşlemleri Rotaları
-const { gecmisIslemSorgula } = require("../controllers/yatirim/gecmisIslemler");
-router.get("/gecmis-islem-sorgula", gecmisIslemSorgula);
+const {
+  gecmisIslemSorgula,
+  gecmisIslemEkle,
+  gecmisIslemSil,
+} = require("../controllers/yatirim/yatirimGecmisIslemler");
+router.get("/gecmis-islem-sorgula/:date", gecmisIslemSorgula);
+router.delete("/gecmis-islem-sil/:id", gecmisIslemSil);
+router.post("/gecmis-islem-ekle", gecmisIslemEkle);
 
 //Portfoy İşlemleri Rotaları
 const {
   portfoyEkle,
   portfoySil,
   portfoySorgula,
-} = require("../controllers/portfoy/prtfyIslemleri");
+} = require("../controllers/yatirim/yatirimPrtfyIslemleri");
 router.post("/portfoy-ekle", portfoyEkle);
 router.delete("/portfoy-sil/:id", portfoySil);
 router.get("/portfoy-sorgula", portfoySorgula);

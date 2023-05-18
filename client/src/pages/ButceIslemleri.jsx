@@ -1,13 +1,13 @@
 import PageTitle from "../components/UI/PageTitle";
-import YIform from "../components/yatirimIslemleri/form/YIform";
-import YIsonIslemler from "../components/yatirimIslemleri/table/YIsonIslemler";
-import { Stack, Box } from "@mui/material";
+import BIform from "../components/butceIslemleri/form/BIform";
+import BIsonIslemler from "../components/butceIslemleri/table/BIsonIslemler";
 import { useEffect } from "react";
+import { Stack, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/yatirimSlice";
+import { setMessage } from "../redux/butcesSlice";
 
-const YatirimIslemleri = () => {
-  const { message } = useSelector((state) => state.yatirim);
+const ButceIslemleri = () => {
+  const { message } = useSelector((state) => state.butce);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,13 +19,13 @@ const YatirimIslemleri = () => {
   return (
     <Stack spacing={2}>
       <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>
-        <PageTitle title="Yatırım İşlemleri" />
-        <YIform />
+        <PageTitle title="Bütçe İşlemleri" />
+        <BIform />
       </Stack>
       {message && <Box>{message.message}</Box>}
-      <YIsonIslemler />
+      <BIsonIslemler />
     </Stack>
   );
 };
 
-export default YatirimIslemleri;
+export default ButceIslemleri;

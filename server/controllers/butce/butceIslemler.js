@@ -1,4 +1,5 @@
 const ButceSchema = require("../../models/ButceDataModel");
+const { dbDeleteOne, dbInsertMany, dbFind } = require("../dbTransections");
 const {
   thisMonthLastDay,
   thisMonthFirstDay,
@@ -10,66 +11,30 @@ const {
 
 exports.butceIslemSorgula = async (req, res) => {
   const activeDate = req.params.date;
-  const dateQuery = (first, second) => {
-    return {
-      date: {
-        $gte: first,
-        $lt: second,
-      },
-    };
+  const sortQuery = { date: -1 };
+  const dataQuery = (query = null) => {
+    dbFind(ButceSchema, query, sortQuery, res);
   };
 
-  try {
-    if (activeDate == 1) {
-      await ButceSchema.find(dateQuery(thisMonthFirstDay, thisMonthLastDay))
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    } else if (activeDate == 2) {
-      await ButceSchema.find(
-        dateQuery(prevThreeMonthFirstDay, thisMonthLastDay)
-      )
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    } else if (activeDate == 3) {
-      await ButceSchema.find(dateQuery(prevSixMonthFirstDay, thisMonthLastDay))
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    } else if (activeDate == 4) {
-      await ButceSchema.find(dateQuery(prevYearFirstDay, thisMonthLastDay))
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    } else if (activeDate == 5) {
-      await ButceSchema.find(dateQuery(prevThreeYearFirstDay, thisMonthLastDay))
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    } else if (activeDate == 0) {
-      await ButceSchema.find()
-        .sort({ date: -1 })
-        .then((butceKalemi) => res.status(200).json(butceKalemi));
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Server Bağlantı Hatası" });
+  if (activeDate == 1) {
+    dataQuery({ date: { $gte: thisMonthFirstDay } });
+  } else if (activeDate == 2) {
+    dataQuery({ date: { $gte: prevThreeMonthFirstDay } });
+  } else if (activeDate == 3) {
+    dataQuery({ date: { $gte: prevSixMonthFirstDay } });
+  } else if (activeDate == 4) {
+    dataQuery({ date: { $gte: prevYearFirstDay } });
+  } else if (activeDate == 5) {
+    dataQuery({ date: { $gte: prevThreeYearFirstDay } });
+  } else if (activeDate == 0) {
+    dataQuery();
   }
 };
 
 exports.butceIslemSil = async (req, res) => {
-  const { id } = req.params;
-  ButceSchema.findByIdAndDelete(id)
-    .then((data) => {
-      res.status(200).json({ message: "Bütçe Kalemi Silindi" });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Server Bağlantı Hatası" });
-    });
+  dbDeleteOne(ButceSchema, req.params.id, "Bütçe Kalemi Silindi", res);
 };
 
 exports.butceIslemEkle = async (req, res) => {
-  console.log(req.body);
-  await ButceSchema.insertMany(req.body)
-    .then((data) => {
-      res.status(200).json({ message: "Bütçe İşlemleri Eklendi" });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Server Bağlantı Hatası" });
-    });
+  dbInsertMany(ButceSchema, req.body, "Bütçe İşlemleri Eklendi", res);
 };

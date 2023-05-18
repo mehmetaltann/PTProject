@@ -1,11 +1,8 @@
 const Category = require("../../models/ButceCategoryModel");
+const { dbDeleteOne, dbSaveOne, dbFind } = require("../dbTransections");
 
 exports.categorySorgula = async (req, res) => {
-  try {
-    await Category.find().then((kayit) => res.status(200).json(kayit));
-  } catch (error) {
-    res.status(500).json({ message: "Bağlantı Hatası, Kategoriler Alınamadı" });
-  }
+  dbFind(Category, undefined, undefined, res);
 };
 
 exports.categoryEkle = async (req, res) => {
@@ -15,22 +12,9 @@ exports.categoryEkle = async (req, res) => {
     categoryA,
     categoryB,
   });
-
-  try {
-    await category.save();
-    res.status(200).json({ message: "Kategori Eklendi" });
-  } catch (error) {
-    res.status(500).json({ message: "Server Bağlantı Hatası" });
-  }
+  dbSaveOne(category, "Kategori Eklendi", res);
 };
 
 exports.categorySil = async (req, res) => {
-  const { id } = req.params;
-  Category.findByIdAndDelete(id)
-    .then((data) => {
-      res.status(200).json({ message: "Kategori Silindi" });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Server Bağlantı Hatası" });
-    });
+  dbDeleteOne(Category, req.params.id, "Kategori Silindi", res);
 };

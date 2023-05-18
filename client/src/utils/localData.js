@@ -36,6 +36,8 @@ import {
   incomes,
 } from "./icons";
 
+export const BASE_URL = "http://localhost:1623"
+
 export const butceCategoryData = [
   {
     id: 1,

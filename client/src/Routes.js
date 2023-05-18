@@ -4,11 +4,12 @@ import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
-import Butce from "./pages/Butce";
+import ButceIslemleri from "./pages/ButceIslemleri";
+import LoginPage from "./pages/LoginPage";
 
 const routes = [
   {
-    path: "/",
+    path: "/homepage",
     component: HomePage,
   },
   {
@@ -21,7 +22,7 @@ const routes = [
   },
   {
     path: "/butce-kayit",
-    component: Butce,
+    component: ButceIslemleri,
   },
 ];
 
@@ -44,4 +45,4 @@ export const Rotalar = () => {
       </Box>
     </Router>
   );
-};
+};  
