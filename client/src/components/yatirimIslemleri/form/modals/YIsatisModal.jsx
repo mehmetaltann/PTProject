@@ -8,17 +8,13 @@ import { materialDateInput } from "../../../../utils/help-functions";
 import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
 import { Button, Typography, MenuItem } from "@mui/material";
-import { useYatirimContext } from "../../store/yatirimContext";
-import { useGlobalContext } from "../../../../store/globalContext";
+import { useSelector, useDispatch } from "react-redux";
+import { portfoySec } from "../../../../redux/portfoysSlice.js";
+import { postYatirimIslemleriSatis } from "../../../../redux/yatirimSlice";
 
-const YIsatisModal = () => {
-  const {
-    yatirimKalemiSatisEkle,
-    selectedPortfoy,
-    setSelectedPortfoy,
-    setOpenSatis,
-  } = useYatirimContext();
-  const { portfoyler } = useGlobalContext();
+const YIsatisModal = ({ setOpenSatis }) => {
+  const { portfoys, selectedPortfoy } = useSelector((state) => state.portfoy);
+  const dispatch = useDispatch();
 
   const submitHandler = async (values) => {
     const yeniKayitListesi = {
@@ -30,8 +26,8 @@ const YIsatisModal = () => {
       komisyon: values.komisyon,
       portfoy_ismi: values.portfoy,
     };
-    yatirimKalemiSatisEkle(yeniKayitListesi);
-    setSelectedPortfoy(values.portfoy);
+    dispatch(postYatirimIslemleriSatis(yeniKayitListesi));
+    dispatch(portfoySec(values.portfoy));
     setOpenSatis(false);
   };
 
@@ -84,7 +80,7 @@ const YIsatisModal = () => {
                   label="Portföy"
                   minW={200}
                 >
-                  {portfoyler.map((item) => (
+                  {portfoys.map((item) => (
                     <MenuItem value={item.isim} key={item._id}>
                       {item.isim}
                     </MenuItem>

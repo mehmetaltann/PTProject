@@ -1,35 +1,24 @@
 import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import DeleteIcon from "@mui/icons-material/Delete";
-import useHttp from "../../../hooks/use-http";
 import { dateFormat } from "../../../utils/help-functions";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import { IconButton } from "@mui/material";
-import { useYGContext } from "../store/ygContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getHistoryIslemleri,
+  deleteHistoryIslemleri,
+} from "../../../redux/historiesSlice";
 
 const YGdataTable = () => {
-  const [data, setData] = useState([]);
-  const { gecmisIslemSil, selectedDate } = useYGContext();
-  const { sendRequest } = useHttp();
+  const { historyIslemleri, tarihAraligi, degisim } = useSelector(
+    (state) => state.history
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const transformData = (fetchData) => {
-      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
-        id,
-        ...rest,
-      }));
-
-      setData(filteredData);
-    };
-
-    sendRequest(
-      {
-        method: "get",
-        url: `gecmis-islem-sorgula/${selectedDate}`,
-      },
-      transformData
-    );
-  }, [selectedDate, gecmisIslemSil]);
+    dispatch(getHistoryIslemleri());
+  }, [tarihAraligi, degisim, dispatch]);
 
   const COLUMNS = [
     {
@@ -99,7 +88,7 @@ const YGdataTable = () => {
             size="small"
             color="error"
             onClick={() => {
-              gecmisIslemSil(params.row.id);
+              dispatch(deleteHistoryIslemleri(params.row.id));
             }}
           >
             <DeleteIcon />
@@ -116,10 +105,11 @@ const YGdataTable = () => {
   return (
     <DataGrid
       columns={columns}
-      rows={data}
+      rows={historyIslemleri}
+      density="compact"
       localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
       initialState={{
-        ...data.initialState,
+        ...historyIslemleri.initialState,
         pagination: { paginationModel: { pageSize: 10 } },
       }}
       pageSizeOptions={[10, 25, 50]}

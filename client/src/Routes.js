@@ -5,10 +5,11 @@ import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
 import ButceIslemleri from "./pages/ButceIslemleri";
+import LoginPage from "./pages/LoginPage";
 
 const routes = [
   {
-    path: "/",
+    path: "/homepage",
     component: HomePage,
   },
   {
@@ -44,4 +45,4 @@ export const Rotalar = () => {
       </Box>
     </Router>
   );
-};
+};  

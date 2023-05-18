@@ -1,12 +1,14 @@
 import BIdataTable from "./BIdataTable";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import FilterTableSelect from "../../UI/table/FilterTableSelect";
 import { MenuItem, Typography, TextField, Paper, Box } from "@mui/material";
 import { tarihSecim } from "../../../utils/localData";
-import { useButceContext } from "../store/butceContext";
+import { useSelector } from "react-redux";
+import { tarihAraligiSec } from "../../../redux/butcesSlice";
 
 const BIsonIslemler = () => {
-  const { setSelectedDate } = useButceContext();
+  const { tarihAraligi } = useSelector((state) => state.butce);
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
@@ -15,39 +17,20 @@ const BIsonIslemler = () => {
           <Grid xs={12} sm={3}>
             <Typography variant="h5">İşlemler</Typography>
           </Grid>
-          <Grid
-            container
-            spacing={1}
-            xs={12}
-            sm={9}
-            justifyContent={{ xs: "flex-start", sm: "flex-end" }}
+          <FilterTableSelect
+            val={tarihAraligi}
+            Icon={CalendarMonthIcon}
+            setSelect={tarihAraligiSec}
+            defaultvalue={2}
+            minWidth={200}
+            title="Dönem :"
           >
-            <Grid>
-              <Typography variant="h6">Dönem :</Typography>
-            </Grid>
-
-            <Grid>
-              <CalendarMonthIcon
-                sx={{ color: "action.active", mr: 1, my: 0.5 }}
-              />
-            </Grid>
-            <Grid>
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue={2}
-                sx={{ minWidth: 200 }}
-                variant="standard"
-                onChange={(e) => setSelectedDate(e.target.value)}
-              >
-                {tarihSecim.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
+            {tarihSecim.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </FilterTableSelect>
         </Grid>
         <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
           <Box sx={{ height: "100%", width: "auto" }}>

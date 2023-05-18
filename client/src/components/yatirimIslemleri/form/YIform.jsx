@@ -2,11 +2,11 @@ import SendIcon from "@mui/icons-material/Send";
 import YIalisModal from "./modals/YIalisModal";
 import YIsatisModal from "./modals/YIsatisModal";
 import { Button, Stack, Modal, Box } from "@mui/material";
-import { useYatirimContext } from "../store/yatirimContext";
+import { useState } from "react";
 
 const YIform = () => {
-  const { openAlis, setOpenAlis, openSatis, setOpenSatis } =
-    useYatirimContext();
+  const [openAlis, setOpenAlis] = useState(false);
+  const [openSatis, setOpenSatis] = useState(false);
 
   return (
     <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
@@ -42,7 +42,7 @@ const YIform = () => {
             p: 2,
           }}
         >
-          <YIalisModal />
+          <YIalisModal setOpenAlis={setOpenAlis} />
         </Box>
       </Modal>
       <Button
@@ -77,7 +77,7 @@ const YIform = () => {
             p: 2,
           }}
         >
-          <YIsatisModal />
+          <YIsatisModal setOpenSatis={setOpenSatis} />
         </Box>
       </Modal>
     </Stack>

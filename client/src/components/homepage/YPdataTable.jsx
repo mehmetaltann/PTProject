@@ -1,10 +1,8 @@
-import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
-import useHttp from "../../../hooks/use-http";
+import CustomNoRowsOverlay from "../UI/table/CustomNoRowsOverlay";
 import { useState, useMemo } from "react";
 
 const YPdataTable = ({ selectedPortfoy }) => {
   const [data, setData] = useState([]);
-  const { sendRequest } = useHttp();
 
   const filteredData = data.filter(
     (item) => item.portfoy_ismi === selectedPortfoy

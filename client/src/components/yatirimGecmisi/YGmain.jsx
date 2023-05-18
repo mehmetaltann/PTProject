@@ -1,20 +1,19 @@
 import PageTitle from "../UI/PageTitle";
 import YGsonIslemler from "./table/YGsonIslemler";
-import { useYGContext } from "./store/ygContext";
 import { Stack, Box } from "@mui/material";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessage } from "../../redux/historiesSlice";
 
 const YGmain = () => {
-  const { error, message, setError, setMessage } = useYGContext();
+  const { message } = useSelector((state) => state.history);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error) {
-      setTimeout(() => setError(null), 1000);
-    }
     if (message) {
-      setTimeout(() => setMessage(null), 1000);
+      setTimeout(() => dispatch(setMessage(null)), 1000);
     }
-  }, [error, message]);
+  }, [message]);
 
   return (
     <Stack spacing={2}>
@@ -22,7 +21,6 @@ const YGmain = () => {
         <PageTitle title="Geçmiş Yatırım İşlemleri" />
       </Stack>
       {message && <Box>{message}</Box>}
-      {error && <Box>{error}</Box>}
       <YGsonIslemler />
     </Stack>
   );

@@ -1,36 +1,27 @@
 import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import BIdataTableFooter from "./BIdataTableFooter";
 import DeleteIcon from "@mui/icons-material/Delete";
-import useHttp from "../../../hooks/use-http";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../../utils/help-functions";
 import { Badge, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
-import { useButceContext } from "../store/butceContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getButceIslemleri,
+  deleteButceIslemi,
+} from "../../../redux/butcesSlice";
 
 const BIdataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [data, setData] = useState([]);
-  const { butceKalemiSil, selectedDate, butceKalemiEkle } = useButceContext();
-  const { sendRequest } = useHttp();
+  const { butceIslemleri, tarihAraligi, degisim } = useSelector(
+    (state) => state.butce
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const transformData = (fetchData) => {
-      let filteredData = fetchData.map(({ _id: id, ...rest }) => ({
-        id,
-        ...rest,
-      }));
-      setData(filteredData);
-    };
-
-    sendRequest(
-      {
-        method: "get",
-        url: `butce-sorgula/${selectedDate}`,
-      },
-      transformData
-    );
-  }, [selectedDate, butceKalemiEkle, butceKalemiSil]);
+    dispatch(getButceIslemleri());
+  }, [tarihAraligi, degisim, dispatch]);
 
   const COLUMNS = [
     {
@@ -78,7 +69,7 @@ const BIdataTable = () => {
             size="small"
             color="error"
             onClick={() => {
-              butceKalemiSil(params.row.id);
+              dispatch(deleteButceIslemi(params.row.id));
             }}
           >
             <DeleteIcon />
@@ -94,7 +85,7 @@ const BIdataTable = () => {
   return (
     <DataGrid
       columns={columns}
-      rows={data}
+      rows={butceIslemleri}
       localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
       slots={{
         toolbar: GridToolbar,
@@ -102,7 +93,7 @@ const BIdataTable = () => {
         footer: BIdataTableFooter,
       }}
       slotProps={{
-        footer: { data, rowSelectionModel },
+        footer: { butceIslemleri, rowSelectionModel },
         toolbar: {
           showQuickFilter: true,
           quickFilterProps: { debounceMs: 500 },
@@ -118,7 +109,7 @@ const BIdataTable = () => {
         setRowSelectionModel(newRowSelectionModel);
       }}
       initialState={{
-        ...data.initialState,
+        ...butceIslemleri.initialState,
         pagination: { paginationModel: { pageSize: 10 } },
       }}
       pageSizeOptions={[10, 25, 50]}

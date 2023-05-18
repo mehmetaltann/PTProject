@@ -4,29 +4,26 @@ import { useMemo, useEffect } from "react";
 import { dateFormat } from "../../../utils/help-functions";
 import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import { Badge, IconButton, Stack, Typography } from "@mui/material";
-import { useYatirimContext } from "../store/yatirimContext";
-import { useGlobalContext } from "../../../store/globalContext";
 import { useDispatch, useSelector } from "react-redux";
-import { getYatirimIslemleri } from "../../../redux/yatirimSlice";
+import {
+  getYatirimIslemleri,
+  deleteYatirimIslemleri,
+} from "../../../redux/yatirimSlice";
 
 const YIdataTable = () => {
-  const { yatirimIslemleri } = useSelector((state) => state.yatirim);
+  const { yatirimIslemleri, tarihAraligi, degisim } = useSelector(
+    (state) => state.yatirim
+  );
+  const { selectedPortfoy } = useSelector((state) => state.portfoy);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getYatirimIslemleri());
-  }, [dispatch]);
+  }, [tarihAraligi, degisim]);
 
-  const { selectedPortfoy, yatirimKalemiSil } = useYatirimContext();
-
-  const filteredData = yatirimIslemleri
-    .map(({ _id: id, ...rest }) => ({
-      id,
-      ...rest,
-    }))
-    .filter((item) => item.portfoy_ismi === selectedPortfoy);
-  console.log(yatirimIslemleri);
-  console.log(filteredData);
+  const filteredData = yatirimIslemleri.filter(
+    (item) => item.portfoy_ismi === selectedPortfoy
+  );
 
   const COLUMNS = [
     {
@@ -140,7 +137,7 @@ const YIdataTable = () => {
             key={index}
             size="small"
             color="error"
-            onClick={() => yatirimKalemiSil(params.row.id)}
+            onClick={() => dispatch(deleteYatirimIslemleri(params.row.id))}
           >
             <DeleteIcon />
           </IconButton>

@@ -1,15 +1,15 @@
-import { Fragment, useState } from "react";
+import React,{ Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const data = [
-  { title: "Anasayfa", link: "" },
+  { title: "Anasayfa", link: "homepage" },
   { title: "Yatırım İşlemleri", link: "yatirim-islemleri" },
   { title: "Yatırım Geçmişi", link: "yatirim-gecmisi" },
   { title: "Bütçe İşlemleri", link: "butce-kayit" },
 ];
 
-const NavBar = () => {
+const NavBar = React.memo(() => {
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
@@ -38,7 +38,7 @@ const NavBar = () => {
       </NavbarStyled>
     </Fragment>
   );
-};
+});
 
 export const NavbarStyled = styled.nav`
   background-color: var(--theme-fourth);

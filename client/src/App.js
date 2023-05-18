@@ -1,16 +1,18 @@
 import { Rotalar } from "./Routes";
 import { ThemeProvider } from "@mui/material";
 import { GlobalTheme } from "./styles/GlobalTheme";
-import { useGlobalContext } from "./store/globalContext";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getPortfoys } from "./redux/portfoysSlice";
+import { getGuncelDegerler } from "./redux/guncelDegerlerSlice";
 
 function App() {
-  const { portfoyleriGetir, guncelDegerleriGetir } = useGlobalContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    portfoyleriGetir();
-    guncelDegerleriGetir();
-  }, []);
+    dispatch(getPortfoys());
+    dispatch(getGuncelDegerler());
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={GlobalTheme}>

@@ -9,8 +9,9 @@ import * as Yup from "yup";
 import { materialDateInput } from "../../../../utils/help-functions";
 import { useMemo, Fragment } from "react";
 import { Form, Formik, FieldArray, Field } from "formik";
-import { useYatirimContext } from "../../store/yatirimContext";
-import { useGlobalContext } from "../../../../store/globalContext";
+import { useSelector, useDispatch } from "react-redux";
+import { portfoySec } from "../../../../redux/portfoysSlice.js";
+import { postYatirimIslemleriAlis } from "../../../../redux/yatirimSlice";
 import {
   Button,
   IconButton,
@@ -28,15 +29,10 @@ const initialFonInfo = {
   komisyon: 0,
 };
 
-const YIalisModal = () => {
+const YIalisModal = ({ setOpenAlis }) => {
   const initialFonInfoMemo = useMemo(() => initialFonInfo, []);
-  const {
-    setOpenAlis,
-    selectedPortfoy,
-    setSelectedPortfoy,
-    yatirimKalemiAlisEkle,
-  } = useYatirimContext();
-  const { portfoyler } = useGlobalContext();
+  const { portfoys, selectedPortfoy } = useSelector((state) => state.portfoy);
+  const dispatch = useDispatch();
 
   const submitHandler = async (values) => {
     let portfoy_ismi = values.portfoy;
@@ -51,8 +47,8 @@ const YIalisModal = () => {
         portfoy_ismi: portfoy_ismi,
       };
     });
-    yatirimKalemiAlisEkle(yeniKayitListesi);
-    setSelectedPortfoy(portfoy_ismi);
+    dispatch(postYatirimIslemleriAlis(yeniKayitListesi));
+    dispatch(portfoySec(portfoy_ismi));
     setOpenAlis(false);
   };
 
@@ -108,7 +104,7 @@ const YIalisModal = () => {
                   label="Portföy"
                   minW={{ xs: 120, md: 200 }}
                 >
-                  {portfoyler.map((item) => (
+                  {portfoys.map((item) => (
                     <MenuItem value={item.isim} key={item._id}>
                       {item.isim}
                     </MenuItem>

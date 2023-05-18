@@ -6,12 +6,13 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BIformSelect from "./form ui/BIformSelect";
 import FormTextField from "../../UI/formElements/FormTextField";
 import FormDatePicker from "../../UI/formElements/FormDatePicker";
-import useHttp from "../../../hooks/use-http";
-import React, { useState, useMemo, useEffect, Fragment } from "react";
-import { useButceContext } from "../store/butceContext";
+import { useState, useMemo, useEffect, Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { uniqListFunc } from "../../../utils/help-functions";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../../utils/help-functions";
+import { getCategories } from "../../../redux/categoriesSlice";
+import { postButceIslemi } from "../../../redux/butcesSlice";
 import {
   Typography,
   MenuItem,
@@ -38,23 +39,13 @@ const style = {
 
 const BIform = () => {
   const [open, setOpen] = useState({ durum: false, type: "Gelir" });
-  const [category, setCategory] = useState([]);
-  const { sendRequest } = useHttp();
-  const { butceKalemEkle } = useButceContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const transformData = (fetchData) => {
-      setCategory(fetchData);
-    };
-
-    sendRequest(
-      {
-        method: "get",
-        url: `category-sorgula`,
-      },
-      transformData
-    );
+    dispatch(getCategories());
   }, []);
+
+  const { categories } = useSelector((state) => state.category);
 
   const handleGelirOpen = () => setOpen({ durum: true, type: "Gelir" });
   const handleGiderOpen = () => setOpen({ durum: true, type: "Gider" });
@@ -82,7 +73,7 @@ const BIform = () => {
         description: info.description,
       };
     });
-    butceKalemEkle(yeniKayitListesi);
+    dispatch(postButceIslemi(yeniKayitListesi));
     handleClose();
   };
 
@@ -157,7 +148,7 @@ const BIform = () => {
                       minW={200}
                     >
                       {uniqListFunc(
-                        category.filter((cat) => cat.type === open.type),
+                        categories.filter((cat) => cat.type === open.type),
                         "categoryA"
                       ).map((catA, index) => (
                         <MenuItem value={catA.categoryA} key={index}>
@@ -205,7 +196,7 @@ const BIform = () => {
                                     name2={`infos.${index}.title`}
                                     minW={150}
                                   >
-                                    {category
+                                    {categories
                                       .filter((cat) => cat.type === open.type)
                                       .filter(
                                         (cat) =>

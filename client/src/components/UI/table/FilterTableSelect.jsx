@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Typography, TextField } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 const FilterTableSelect = ({
   children,
@@ -10,6 +11,8 @@ const FilterTableSelect = ({
   title,
   val,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <Grid
       container
@@ -31,7 +34,7 @@ const FilterTableSelect = ({
           defaultValue={defaultvalue}
           sx={{ minWidth: minWidth }}
           variant={"standard"}
-          onChange={(e) => setSelect(e.target.value)}
+          onChange={(e) => dispatch(setSelect(e.target.value))}
         >
           {children}
         </TextField>

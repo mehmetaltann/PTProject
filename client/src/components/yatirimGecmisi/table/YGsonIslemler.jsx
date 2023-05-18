@@ -4,10 +4,12 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import FilterTableSelect from "../../UI/table/FilterTableSelect";
 import { tarihSecim } from "../../../utils/localData";
 import { MenuItem, Typography, Paper, Box } from "@mui/material";
-import { useYGContext } from "../store/ygContext";
+import { useSelector } from "react-redux";
+import { tarihAraligiSec } from "../../../redux/historiesSlice";
 
 const YGsonIslemler = () => {
-  const { setSelectedDate } = useYGContext();
+  const { tarihAraligi } = useSelector((state) => state.history);
+
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
       <Grid container spacing={2} sx={{ p: 1, height: "100%" }}>
@@ -22,8 +24,9 @@ const YGsonIslemler = () => {
             <Typography variant="h5">İşlemler</Typography>
           </Grid>
           <FilterTableSelect
+            val={tarihAraligi}
             Icon={CalendarMonthIcon}
-            setSelect={setSelectedDate}
+            setSelect={tarihAraligiSec}
             defaultvalue={2}
             minWidth={200}
             title="Dönem :"

@@ -5,12 +5,13 @@ import FilterTableSelect from "../../UI/table/FilterTableSelect";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { MenuItem, Typography, Paper, Box } from "@mui/material";
 import { tarihSecim } from "../../../utils/localData";
-import { useYatirimContext } from "../store/yatirimContext";
-import { useGlobalContext } from "../../../store/globalContext";
+import { useSelector } from "react-redux";
+import { tarihAraligiSec } from "../../../redux/yatirimSlice";
+import { portfoySec } from "../../../redux/portfoysSlice";
 
 const YIsonIslemler = () => {
-  const { setSelectedPortfoy, selectedPortfoy } = useYatirimContext();
-  const { portfoyler, setSelectedDate, selectedDate } = useGlobalContext();
+  const { tarihAraligi } = useSelector((state) => state.yatirim);
+  const { portfoys, selectedPortfoy } = useSelector((state) => state.portfoy);
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
@@ -27,9 +28,9 @@ const YIsonIslemler = () => {
           </Grid>
 
           <FilterTableSelect
-            val={selectedDate}
+            val={tarihAraligi}
             Icon={CalendarMonthIcon}
-            setSelect={setSelectedDate}
+            setSelect={tarihAraligiSec}
             defaultvalue={2}
             minWidth={200}
             title="Dönem :"
@@ -44,12 +45,12 @@ const YIsonIslemler = () => {
           <FilterTableSelect
             val={selectedPortfoy}
             Icon={FolderSpecialIcon}
-            setSelect={setSelectedPortfoy}
+            setSelect={portfoySec}
             defaultvalue=""
             minWidth={200}
             title="Portföy :"
           >
-            {portfoyler.map((portfoy) => (
+            {portfoys.map((portfoy) => (
               <MenuItem key={portfoy._id} value={portfoy.isim}>
                 {portfoy.isim}
               </MenuItem>

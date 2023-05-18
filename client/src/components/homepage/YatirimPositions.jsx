@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import YPdataTable from "./YPdataTable";
 import { useState } from "react";
-import { useGlobalContext } from "../../../store/globalContext";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Paper,
   Typography,
@@ -13,8 +13,8 @@ import {
 import InfoWindows from "./InfoWindows";
 
 const YatirimPositions = () => {
-  const [selectedPortfoy, setSelectedPortfoy] = useState("Tümü");
-  const { portfoyler } = useGlobalContext();
+  const [selectedPortfoy, setSelectedPortfoy] = useState(second);
+  const { portfoys } = useSelector((state) => state.portfoy);
 
   return (
     <Paper variant="outlined" sx={{ mt: 2, p: 6, height: "100%" }}>
@@ -43,7 +43,7 @@ const YatirimPositions = () => {
               onChange={(e) => setSelectedPortfoy(e.target.value)}
             >
               <MenuItem value="Tümü">Tümü</MenuItem>
-              {portfoyler.map((option) => (
+              {portfoys.map((option) => (
                 <MenuItem key={option._id} value={option.isim}>
                   {option.isim}
                 </MenuItem>

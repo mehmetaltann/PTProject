@@ -14,7 +14,8 @@ import {
   AccordionDetails,
 } from "@mui/material";
 
-const BIdataTableFooter = ({ data, rowSelectionModel }) => {
+const BIdataTableFooter = ({ butceIslemleri, rowSelectionModel }) => {
+  const data = butceIslemleri;
   const [toplamGelirModalOpen, setToplamGelirModalOpen] = useState(false);
   const [toplamGiderModalOpen, setToplamGiderModalOpen] = useState(false);
   const [secilenIslemModalOpen, setSecilenIslemModalOpen] = useState(false);
