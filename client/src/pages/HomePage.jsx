@@ -1,10 +1,14 @@
-import HomeMain from "../components/anasayfa/HomeMain";
+import { Stack, Box, Container } from "@mui/material";
 
 const HomePage = () => {
   return (
-    <Stack spacing={2} sx={{ mt: 2 }}>
-      denememe
-    </Stack>
+    <Box sx={{ height: "100vh", overflow: "auto" }}>
+      <Container>
+        <Stack spacing={2} sx={{ mt: 2 }}>
+          denememe
+        </Stack>
+      </Container>
+    </Box>
   );
 };
 

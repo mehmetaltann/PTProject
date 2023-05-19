@@ -1,15 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 import { Box, Container } from "@mui/material";
 import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
 import ButceIslemleri from "./pages/ButceIslemleri";
-import LoginPage from "./pages/LoginPage";
+import UserGiris from "./pages/UserGiris";
+import UserKayit from "./pages/UserKayit";
 
 const routes = [
   {
-    path: "/homepage",
+    path: "/",
     component: HomePage,
   },
   {
@@ -27,12 +34,25 @@ const routes = [
 ];
 
 export const Rotalar = () => {
+  const user = localStorage.getItem("token");
   return (
-    <Router>
-      <NavBar />
-      <Box sx={{ height: "100vh", overflow: "auto" }}>
-        <Container>
-          <Routes>
+    <BrowserRouter>
+      <Routes>
+        {!user ? (
+          <>
+            <Route path="/" element={<Navigate replace to="/login" />} />
+            <Route path="/login" element={<UserGiris />} />
+            <Route path="/sivefa" element={<UserKayit />} />
+          </>
+        ) : (
+          <Route
+            element={
+              <>
+                <NavBar />
+                <Outlet />
+              </>
+            }
+          >
             {routes.map((route, index) => (
               <Route
                 key={index}
@@ -40,9 +60,9 @@ export const Rotalar = () => {
                 element={<route.component />}
               />
             ))}
-          </Routes>
-        </Container>
-      </Box>
-    </Router>
+          </Route>
+        )}
+      </Routes>
+    </BrowserRouter>
   );
-};  
+};

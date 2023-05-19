@@ -70,4 +70,9 @@ const {
 router.post("/dbupdate", mongoUpdate);
 router.get("/dbsorgu", mongoSorgu);
 
+//User ve Auth İşlemleri
+const { postUser, authUser } = require("../controllers/user/userIslemleri");
+router.post("/postUser", postUser);
+router.post("/authUser", authUser);
+
 module.exports = router;
