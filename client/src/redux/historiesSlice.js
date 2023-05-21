@@ -24,7 +24,7 @@ export const getHistoryIslemleri = createAsyncThunk(
 export const deleteHistoryIslemleri = createAsyncThunk(
   "history/deleteHistoryIslemleri",
   async (id, { rejectWithValue }) => {
-    await dataServices.deleteData(id, "gecmis-islem-sil", rejectWithValue);
+    return await dataServices.deleteData(id, "gecmis-islem-sil", rejectWithValue);
   }
 );
 

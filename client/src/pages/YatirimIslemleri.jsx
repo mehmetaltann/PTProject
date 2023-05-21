@@ -1,7 +1,7 @@
 import PageTitle from "../components/UI/PageTitle";
 import YIform from "../components/yatirimIslemleri/form/YIform";
 import YIsonIslemler from "../components/yatirimIslemleri/table/YIsonIslemler";
-import { Stack, Box, Container } from "@mui/material";
+import { Stack, Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../redux/yatirimSlice";
@@ -24,7 +24,11 @@ const YatirimIslemleri = () => {
             <PageTitle title="Yatırım İşlemleri" />
             <YIform />
           </Stack>
-          {message && <Box>{message.message}</Box>}
+          {message && (
+            <Typography variant="h6" gutterBottom>
+              {message.message}
+            </Typography>
+          )}
           <YIsonIslemler />
         </Stack>
       </Container>

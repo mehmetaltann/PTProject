@@ -8,6 +8,7 @@ const initialState = {
   message: null,
   error: null,
   degisim: null,
+  islemTipi: "Alış",
 };
 
 export const getYatirimIslemleri = createAsyncThunk(
@@ -24,7 +25,7 @@ export const getYatirimIslemleri = createAsyncThunk(
 export const postYatirimIslemleriAlis = createAsyncThunk(
   "yatirimIslemleri/postYatirimIslemleriAlis",
   async (initialPost, { rejectWithValue }) => {
-    await dataServices.postData(
+    return await dataServices.postData(
       initialPost,
       "yatirim-alis-ekle",
       rejectWithValue
@@ -35,7 +36,7 @@ export const postYatirimIslemleriAlis = createAsyncThunk(
 export const postYatirimIslemleriSatis = createAsyncThunk(
   "yatirimIslemleri/postYatirimIslemleriSatis",
   async (initialPost, { rejectWithValue }) => {
-    await dataServices.postData(
+    return await dataServices.postData(
       initialPost,
       "yatirim-satis-ekle",
       rejectWithValue
@@ -46,7 +47,11 @@ export const postYatirimIslemleriSatis = createAsyncThunk(
 export const deleteYatirimIslemleri = createAsyncThunk(
   "yatirimIslemleri/deleteYatirimIslemleri",
   async (id, { rejectWithValue }) => {
-    await dataServices.deleteData(id, "yatirim-islem-sil", rejectWithValue);
+    return await dataServices.deleteData(
+      id,
+      "yatirim-islem-sil",
+      rejectWithValue
+    );
   }
 );
 
@@ -59,6 +64,9 @@ export const yatirimSlice = createSlice({
     },
     setMessage: (state, action) => {
       state.message = action.payload;
+    },
+    islemTipiSec: (state, action) => {
+      state.islemTipi = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -106,4 +114,5 @@ export const yatirimSlice = createSlice({
 });
 
 export default yatirimSlice.reducer;
-export const { tarihAraligiSec, setMessage } = yatirimSlice.actions;
+export const { tarihAraligiSec, setMessage, islemTipiSec } =
+  yatirimSlice.actions;

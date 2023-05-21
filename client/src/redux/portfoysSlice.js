@@ -18,14 +18,14 @@ export const getPortfoys = createAsyncThunk(
 export const postPortfoys = createAsyncThunk(
   "portfoy/postPortfoys",
   async (initialPost, { rejectWithValue }) => {
-    await dataServices.postData(initialPost, "portfoy-ekle", rejectWithValue);
+    return await dataServices.postData(initialPost, "portfoy-ekle", rejectWithValue);
   }
 );
 
 export const deletePortfoys = createAsyncThunk(
   "portfoy/deletePortfoys",
   async (id, { rejectWithValue }) => {
-    await dataServices.deleteData(id, "portfoy-sil", rejectWithValue);
+    return await dataServices.deleteData(id, "portfoy-sil", rejectWithValue);
   }
 );
 

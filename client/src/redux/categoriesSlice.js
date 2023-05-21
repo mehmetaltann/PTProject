@@ -18,14 +18,14 @@ export const getCategories = createAsyncThunk(
 export const postCategories = createAsyncThunk(
   "category/postCategories",
   async (initialPost, { rejectWithValue }) => {
-    await dataServices.postData(initialPost, "exlink", rejectWithValue);
+    return await dataServices.postData(initialPost, "exlink", rejectWithValue);
   }
 );
 
 export const deleteCategories = createAsyncThunk(
   "category/deleteCategories",
   async (id, { rejectWithValue }) => {
-    await dataServices.deleteData(id, "category-sil", rejectWithValue);
+    return await dataServices.deleteData(id, "category-sil", rejectWithValue);
   }
 );
 

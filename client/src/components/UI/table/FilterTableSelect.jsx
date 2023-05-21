@@ -18,7 +18,7 @@ const FilterTableSelect = ({
       container
       spacing={1}
       xs={12}
-      sm={5}
+      sm={4}
       justifyContent={{ xs: "flex-start", sm: "flex-end" }}
     >
       <Grid>

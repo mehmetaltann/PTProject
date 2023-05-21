@@ -3,15 +3,23 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FolderSpecialIcon from "@mui/icons-material/FolderSpecial";
 import FilterTableSelect from "../../UI/table/FilterTableSelect";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { MenuItem, Typography, Paper, Box } from "@mui/material";
 import { tarihSecim } from "../../../utils/localData";
-import { useSelector } from "react-redux";
-import { tarihAraligiSec } from "../../../redux/yatirimSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { tarihAraligiSec, islemTipiSec } from "../../../redux/yatirimSlice";
 import { portfoySec } from "../../../redux/portfoysSlice";
+import {
+  MenuItem,
+  Typography,
+  Paper,
+  Box,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 
 const YIsonIslemler = () => {
-  const { tarihAraligi } = useSelector((state) => state.yatirim);
+  const { tarihAraligi, islemTipi } = useSelector((state) => state.yatirim);
   const { portfoys, selectedPortfoy } = useSelector((state) => state.portfoy);
+  const dispatch = useDispatch();
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
@@ -21,10 +29,26 @@ const YIsonIslemler = () => {
           xs={12}
           justifyContent={"space-between"}
           alignItems={"center"}
-          spacing={{ xs: 2, sm: 1 }}
+          spacing={{ xs: 3, sm: 2, md: 1 }}
         >
-          <Grid xs={12} sm={2}>
+          <Grid xs={12} sm={1.5}>
             <Typography variant="h5">İşlemler</Typography>
+          </Grid>
+
+          <Grid xs={12} sm={2.5}>
+            <ToggleButtonGroup
+              value={islemTipi}
+              exclusive
+              onChange={(e) => dispatch(islemTipiSec(e.target.value))}
+              aria-label="Platform"
+            >
+              <ToggleButton color="success" value="Alış">
+                Alış
+              </ToggleButton>
+              <ToggleButton color="error" value="Satış">
+                Satış
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Grid>
 
           <FilterTableSelect

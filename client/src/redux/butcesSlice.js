@@ -24,7 +24,7 @@ export const getButceIslemleri = createAsyncThunk(
 export const postButceIslemi = createAsyncThunk(
   "butce/postButceIslemi",
   async (initialPost, { rejectWithValue }) => {
-    await dataServices.postData(
+    return await dataServices.postData(
       initialPost,
       "butce-veri-ekle",
       rejectWithValue
@@ -35,7 +35,7 @@ export const postButceIslemi = createAsyncThunk(
 export const deleteButceIslemi = createAsyncThunk(
   "butce/deleteButceIslemi",
   async (id, { rejectWithValue }) => {
-    await dataServices.deleteData(id, "butce-veri-sil", rejectWithValue);
+    return await dataServices.deleteData(id, "butce-veri-sil", rejectWithValue);
   }
 );
 
