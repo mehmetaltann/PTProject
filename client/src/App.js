@@ -1,5 +1,5 @@
 import { Rotalar } from "./Routes";
-import { ThemeProvider, Box, Container } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { GlobalTheme } from "./styles/GlobalTheme";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";

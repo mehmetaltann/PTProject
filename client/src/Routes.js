@@ -5,7 +5,6 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import { Box, Container } from "@mui/material";
 import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";

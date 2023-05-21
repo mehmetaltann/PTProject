@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { BASE_URL } from "../utils/localData";
-import axios from "axios";
+import dataServices from "../services/data-services";
 
 const initialState = {
   yatirimIslemleri: [],
@@ -14,57 +13,40 @@ const initialState = {
 export const getYatirimIslemleri = createAsyncThunk(
   "yatirimIslemleri/getYatirimIslemleri",
   async (args, { rejectWithValue, getState }) => {
-    try {
-      const state = getState();
-      const res = await axios.get(
-        `${BASE_URL}/yatirim-islem-sorgula/${state.yatirim.tarihAraligi}`
-      );
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    const state = getState();
+    return await dataServices.getData(
+      `yatirim-islem-sorgula/${state.yatirim.tarihAraligi}`,
+      rejectWithValue
+    );
   }
 );
 
 export const postYatirimIslemleriAlis = createAsyncThunk(
   "yatirimIslemleri/postYatirimIslemleriAlis",
   async (initialPost, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(
-        `${BASE_URL}/yatirim-alis-ekle`,
-        initialPost
-      );
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    await dataServices.postData(
+      initialPost,
+      "yatirim-alis-ekle",
+      rejectWithValue
+    );
   }
 );
 
 export const postYatirimIslemleriSatis = createAsyncThunk(
   "yatirimIslemleri/postYatirimIslemleriSatis",
   async (initialPost, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(
-        `${BASE_URL}/yatirim-satis-ekle`,
-        initialPost
-      );
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    await dataServices.postData(
+      initialPost,
+      "yatirim-satis-ekle",
+      rejectWithValue
+    );
   }
 );
 
 export const deleteYatirimIslemleri = createAsyncThunk(
   "yatirimIslemleri/deleteYatirimIslemleri",
   async (id, { rejectWithValue }) => {
-    try {
-      const res = await axios.delete(`${BASE_URL}/yatirim-islem-sil/${id}`);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    await dataServices.deleteData(id, "yatirim-islem-sil", rejectWithValue);
   }
 );
 
@@ -110,7 +92,7 @@ export const yatirimSlice = createSlice({
       })
       .addCase(postYatirimIslemleriSatis.rejected, (state, action) => {
         state.status = "failed";
-        state.message= action.error.message;
+        state.message = action.error.message;
       })
       .addCase(deleteYatirimIslemleri.fulfilled, (state, action) => {
         state.message = action.payload;

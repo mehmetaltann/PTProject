@@ -14,7 +14,7 @@ const YatirimIslemleri = () => {
     if (message) {
       setTimeout(() => dispatch(setMessage(null)), 1000);
     }
-  }, [message]);
+  }, [message, dispatch]);
 
   return (
     <Box sx={{ height: "100vh", overflow: "auto" }}>
