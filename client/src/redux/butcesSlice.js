@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {BASE_URL} from "../utils/localData"
-import axios from "axios";
+import dataServices from "../services/data-services";
 
 const initialState = {
   butceIslemleri: [],
@@ -14,39 +13,29 @@ const initialState = {
 export const getButceIslemleri = createAsyncThunk(
   "butce/getButceIslemleri",
   async (args, { rejectWithValue, getState }) => {
-    try {
-      const state = getState();
-      const res = await axios.get(
-        `${BASE_URL}/butce-sorgula/${state.butce.tarihAraligi}`
-      );
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    const state = getState();
+    return await dataServices.getData(
+      `butce-sorgula/${state.butce.tarihAraligi}`,
+      rejectWithValue
+    );
   }
 );
 
 export const postButceIslemi = createAsyncThunk(
   "butce/postButceIslemi",
   async (initialPost, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(`${BASE_URL}/butce-veri-ekle`, initialPost);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    return await dataServices.postData(
+      initialPost,
+      "butce-veri-ekle",
+      rejectWithValue
+    );
   }
 );
 
 export const deleteButceIslemi = createAsyncThunk(
   "butce/deleteButceIslemi",
   async (id, { rejectWithValue }) => {
-    try {
-      const res = await axios.delete(`${BASE_URL}/butce-veri-sil/${id}`);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    return await dataServices.deleteData(id, "butce-veri-sil", rejectWithValue);
   }
 );
 

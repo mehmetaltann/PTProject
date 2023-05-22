@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {BASE_URL} from "../utils/localData"
-import axios from "axios";
+import dataServices from "../services/data-services";
 
 const initialState = {
   historyIslemleri: [],
@@ -14,27 +13,18 @@ const initialState = {
 export const getHistoryIslemleri = createAsyncThunk(
   "history/getHistoryIslemleri",
   async (args, { rejectWithValue, getState }) => {
-    try {
-      const state = getState();
-      const res = await axios.get(
-        `${BASE_URL}/gecmis-islem-sorgula/${state.history.tarihAraligi}`
-      );
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    const state = getState();
+    return await dataServices.getData(
+      `gecmis-islem-sorgula/${state.history.tarihAraligi}`,
+      rejectWithValue
+    );
   }
 );
 
 export const deleteHistoryIslemleri = createAsyncThunk(
   "history/deleteHistoryIslemleri",
   async (id, { rejectWithValue }) => {
-    try {
-      const res = await axios.delete(`${BASE_URL}/gecmis-islem-sil/${id}`);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    return await dataServices.deleteData(id, "gecmis-islem-sil", rejectWithValue);
   }
 );
 

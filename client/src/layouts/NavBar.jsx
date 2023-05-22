@@ -1,9 +1,9 @@
-import React,{ Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const data = [
-  { title: "Anasayfa", link: "homepage" },
+  { title: "Anasayfa", link: "" },
   { title: "Yatırım İşlemleri", link: "yatirim-islemleri" },
   { title: "Yatırım Geçmişi", link: "yatirim-gecmisi" },
   { title: "Bütçe İşlemleri", link: "butce-kayit" },
@@ -11,8 +11,14 @@ const data = [
 
 const NavBar = React.memo(() => {
   const [click, setClick] = useState(false);
-
   const handleClick = () => setClick(!click);
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+    window.location.reload();
+  };
 
   return (
     <Fragment>
@@ -30,6 +36,11 @@ const NavBar = React.memo(() => {
                 </Link>
               </li>
             ))}
+            <li className="items">
+              <Link to={`/`} className="links logout" onClick={handleLogOut}>
+                Çıkış Yap
+              </Link>
+            </li>
           </ul>
           <div className="icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
@@ -74,7 +85,6 @@ export const NavbarStyled = styled.nav`
     display: flex;
     list-style: none;
     text-align: center;
-    margin-right: 2rem;
 
     @media screen and (max-width: 960px) {
       flex-direction: column;
@@ -109,6 +119,11 @@ export const NavbarStyled = styled.nav`
       width: 100%;
       display: table;
     }
+  }
+
+  .logout {
+    margin-right: 0;
+    padding-right: 0;
   }
 
   .items {

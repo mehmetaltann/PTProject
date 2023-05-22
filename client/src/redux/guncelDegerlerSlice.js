@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { BASE_URL } from "../utils/localData";
-import axios from "axios";
+import dataServices from "../services/data-services";
 
 const initialState = {
   guncelDegerler: [],
@@ -12,12 +11,7 @@ const initialState = {
 export const getGuncelDegerler = createAsyncThunk(
   "history/getHistoryIslemleri",
   async (args, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${BASE_URL}/guncel-deger-sorgula`);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue({ error: err.message });
-    }
+    return await dataServices.getData("guncel-deger-sorgula", rejectWithValue);
   }
 );
 
