@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import YPdataTable from "./YPdataTable";
+import YPdataTable from "../YPdataTable";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
