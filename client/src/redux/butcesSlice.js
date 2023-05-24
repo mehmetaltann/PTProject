@@ -8,6 +8,7 @@ const initialState = {
   message: null,
   error: null,
   degisim: null,
+  butceIslemTipi: "Tümü",
 };
 
 export const getButceIslemleri = createAsyncThunk(
@@ -49,6 +50,9 @@ export const butceSlice = createSlice({
     setMessage: (state, action) => {
       state.message = action.payload;
     },
+    butceIslemTipiSec: (state, action) => {
+      state.butceIslemTipi = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -87,4 +91,5 @@ export const butceSlice = createSlice({
 });
 
 export default butceSlice.reducer;
-export const { tarihAraligiSec, setMessage } = butceSlice.actions;
+export const { tarihAraligiSec, setMessage, butceIslemTipiSec } =
+  butceSlice.actions;

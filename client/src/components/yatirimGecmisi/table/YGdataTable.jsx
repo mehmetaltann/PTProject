@@ -1,10 +1,11 @@
-import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DataTableFrame from "../../UI/table/DataTableFrame";
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
 import { dateFormat } from "../../../utils/help-functions";
-import { useMemo, useEffect } from "react";
-import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
-import { IconButton } from "@mui/material";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { IconButton, Stack, Typography } from "@mui/material";
 import {
   getHistoryIslemleri,
   deleteHistoryIslemleri,
@@ -24,62 +25,141 @@ const YGdataTable = () => {
     {
       field: "portfoy",
       headerName: "Portföy",
-      flex: 1.2,
+      headerAlign: "left",
+      align: "left",
+      width: 215,
     },
     {
       field: "kod",
       headerName: "Kod",
-      flex: 0.6,
+      headerAlign: "left",
+      align: "left",
+      width: 40,
     },
     {
       field: "adet",
       headerName: "Adet",
-      width: 80,
+      type: "number",
       filterable: false,
-      flex: 1,
+      headerAlign: "left",
+      align: "left",
+      width: 70,
     },
     {
       field: "alis_tarihi",
       headerName: "Alış Tarihi",
+      headerAlign: "left",
+      align: "left",
+      type: "date",
       width: 100,
       valueFormatter: (params) => dateFormat(params.value),
-      flex: 1,
     },
     {
       field: "alis_fiyat",
       headerName: "Alış Fiyatı",
-      width: 100,
-      flex: 1,
+      headerAlign: "left",
+      type: "number",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      align: "left",
+      width: 110,
     },
     {
       field: "satis_tarihi",
       headerName: "Satış Tarihi",
+      headerAlign: "left",
+      align: "left",
+      type: "date",
+      width: 100,
       valueFormatter: (params) => dateFormat(params.value),
-      flex: 1,
     },
     {
       field: "satis_fiyat",
+      type: "number",
       headerName: "Satış Fiyatı",
-      flex: 1,
+      headerAlign: "left",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      align: "left",
+      width: 110,
     },
     {
       field: "kar_zarar",
-      headerName: "Kar/Zarar Tutarı",
-      flex: 1,
+      headerName: "Kar/Zarar",
+      type: "number",
+      width: 110,
+      renderCell: (params) =>
+        params.row.kar_zarar >= 0 ? (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "success.main" }}
+            >{`${params.row.kar_zarar.toFixed(2)} TL`}</Typography>
+          </Stack>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "error.main" }}
+            >{`${params.row.kar_zarar.toFixed(2)} TL`}</Typography>
+          </Stack>
+        ),
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "kar_zarar_orani",
-      headerName: "Kar/Zarar Oranı",
-      flex: 1,
+      headerName: "Yüzde",
+      type: "number",
+      width: 110,
+      renderCell: (params) =>
+        params.row.kar_zarar_orani >= 0 ? (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "success.main" }}
+            >{`% ${params.row.kar_zarar_orani.toFixed(2)}`}</Typography>
+          </Stack>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "error.main" }}
+            >{`% ${params.row.kar_zarar_orani.toFixed(2)}`}</Typography>
+          </Stack>
+        ),
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "gun_farki",
       headerName: "Gün Sayısı",
-      flex: 1,
+      type: "number",
+      filterable: false,
+      headerAlign: "center",
+      align: "center",
+      width: 60,
     },
     {
       field: "actions",
-      flex: 1,
       headerName: "İşlem",
       renderCell: (params, index) => {
         return (
@@ -97,44 +177,15 @@ const YGdataTable = () => {
       },
       filterable: false,
       sortable: false,
+      headerAlign: "right",
+      align: "right",
+      width: 60,
     },
   ];
 
   const columns = useMemo(() => COLUMNS, []);
 
-  return (
-    <DataGrid
-      columns={columns}
-      rows={historyIslemleri}
-      density="compact"
-      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
-      initialState={{
-        ...historyIslemleri.initialState,
-        pagination: { paginationModel: { pageSize: 10 } },
-      }}
-      pageSizeOptions={[10, 25, 50]}
-      disableRowSelectionOnClick
-      disableColumnSelector
-      disableColumnMenu
-      checkboxSelection
-      sx={{
-        boxShadow: 2,
-        "& .MuiDataGrid-cell:hover": {
-          color: "primary.main",
-        },
-      }}
-      slots={{
-        toolbar: GridToolbar,
-        noRowsOverlay: CustomNoRowsOverlay,
-      }}
-      slotProps={{
-        toolbar: {
-          showQuickFilter: true,
-          quickFilterProps: { debounceMs: 500 },
-        },
-      }}
-    />
-  );
+  return <DataTableFrame columns={columns} rows={historyIslemleri} />;
 };
 
 export default YGdataTable;

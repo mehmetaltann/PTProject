@@ -1,10 +1,9 @@
-import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
 import BIdataTableFooter from "./BIdataTableFooter";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DataTableFrame from "../../UI/table/DataTableFrame";
 import { useMemo, useState, useEffect } from "react";
 import { dateFormat } from "../../../utils/help-functions";
 import { Badge, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getButceIslemleri,
@@ -13,11 +12,16 @@ import {
 
 const BIdataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const { butceIslemleri, tarihAraligi, degisim } = useSelector(
+  const { butceIslemleri, tarihAraligi, degisim, butceIslemTipi } = useSelector(
     (state) => state.butce
   );
 
   const dispatch = useDispatch();
+
+  const filteredData =
+    butceIslemTipi !== "Tümü"
+      ? butceIslemleri.filter((item) => item.type === butceIslemTipi)
+      : butceIslemleri;
 
   useEffect(() => {
     dispatch(getButceIslemleri());
@@ -25,9 +29,11 @@ const BIdataTable = () => {
 
   const COLUMNS = [
     {
-      flex: 0.4,
-      field: "Tip",
-      align: "center",
+      field: ".",
+      headerAlign: "center",
+      align: "left",
+      filterable: false,
+      width: 10,
       renderCell: (params) =>
         params.row.type === "Gelir" ? (
           <Badge color="success" overlap="circular" badgeContent=" " />
@@ -35,32 +41,50 @@ const BIdataTable = () => {
           <Badge color="error" overlap="circular" badgeContent=" " />
         ),
     },
-    { flex: 1, field: "title", headerName: "Gider" },
-    { flex: 1, field: "categoryA", headerName: "Kategori A" },
-    { flex: 1, field: "categoryB", headerName: "Kategori B" },
     {
-      flex: 1,
+      field: "title",
+      headerAlign: "left",
+      width: 150,
+      align: "left",
+      headerName: "İslem",
+    },
+    {
+      field: "categoryA",
+      headerName: "Kategori A",
+      headerAlign: "left",
+      width: 150,
+      align: "left",
+    },
+    {
+      field: "categoryB",
+      headerName: "Kategori B",
+      headerAlign: "left",
+      width: 150,
+      align: "left",
+    },
+    {
       field: "date",
       headerName: "Tarih",
-
       type: "date",
+      headerAlign: "left",
+      width: 100,
+      align: "left",
       valueFormatter: (params) => dateFormat(params.value),
     },
     {
-      flex: 1,
       field: "amount",
       headerName: "Tutar",
       type: "number",
-
-      valueFormatter: (params) => `${params.value} TL`,
+      valueFormatter: (params) => `${params.value.toFixed(2)} TL`,
       headerAlign: "left",
+      width: 150,
       align: "left",
     },
-    { flex: 1, field: "description", headerName: "Açıklama" },
+    { field: "description", headerName: "Açıklama",headerAlign: "left",
+    width: 200,
+    align: "left", },
     {
-      flex: 0.4,
       field: "actions",
-
       headerName: "İşlem",
       renderCell: (params, index) => {
         return (
@@ -76,47 +100,30 @@ const BIdataTable = () => {
           </IconButton>
         );
       },
+      headerAlign: "right",
+      width: 40,
+      align: "right",
       filterable: false,
       sortable: false,
     },
   ];
+
   const columns = useMemo(() => COLUMNS, []);
 
   return (
-    <DataGrid
+    <DataTableFrame
       columns={columns}
-      rows={butceIslemleri}
-      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
-      slots={{
-        toolbar: GridToolbar,
-        noRowsOverlay: CustomNoRowsOverlay,
+      rows={filteredData}
+      slotsProps={{
         footer: BIdataTableFooter,
       }}
-      slotProps={{
+      slotSPropProps={{
         footer: { butceIslemleri, rowSelectionModel },
-        toolbar: {
-          showQuickFilter: true,
-          quickFilterProps: { debounceMs: 500 },
-        },
-      }}
-      sx={{
-        boxShadow: 2,
-        "& .MuiDataGrid-cell:hover": {
-          color: "primary.main",
-        },
       }}
       onRowSelectionModelChange={(newRowSelectionModel) => {
         setRowSelectionModel(newRowSelectionModel);
       }}
-      initialState={{
-        ...butceIslemleri.initialState,
-        pagination: { paginationModel: { pageSize: 10 } },
-      }}
-      pageSizeOptions={[10, 25, 50]}
       rowSelectionModel={rowSelectionModel}
-      disableRowSelectionOnClick
-      disableColumnSelector
-      disableColumnMenu
       checkboxSelection
     />
   );

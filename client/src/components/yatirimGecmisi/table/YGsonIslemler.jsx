@@ -1,14 +1,13 @@
 import YGdataTable from "./YGdataTable";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import FilterTableSelect from "../../UI/table/FilterTableSelect";
 import { tarihSecim } from "../../../utils/localData";
-import { MenuItem, Typography, Paper, Box } from "@mui/material";
-import { useSelector } from "react-redux";
+import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
 import { tarihAraligiSec } from "../../../redux/historiesSlice";
 
 const YGsonIslemler = () => {
   const { tarihAraligi } = useSelector((state) => state.history);
+  const dispatch = useDispatch();
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
@@ -23,20 +22,32 @@ const YGsonIslemler = () => {
           <Grid xs={12} sm={2}>
             <Typography variant="h5">İşlemler</Typography>
           </Grid>
-          <FilterTableSelect
-            val={tarihAraligi}
-            Icon={CalendarMonthIcon}
-            setSelect={tarihAraligiSec}
-            defaultvalue={2}
-            minWidth={200}
-            title="Dönem :"
+          <Grid
+            container
+            xs={12}
+            md={8}
+            spacing={{ xs: 0, md: 1 }}
+            justifyContent={{ md: "flex-end", xs: "flex-start" }}
           >
-            {tarihSecim.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </FilterTableSelect>
+            <TextField
+              select
+              id="tarih"
+              variant="standard"
+              defaultValue={2}
+              value={tarihAraligi}
+              size="small"
+              onChange={(e) => {
+                dispatch(tarihAraligiSec(e.target.value));
+              }}
+              sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
+            >
+              {tarihSecim.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
         </Grid>
         <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
           <Box sx={{ height: "100%", width: "100%" }}>

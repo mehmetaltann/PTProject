@@ -61,7 +61,10 @@ const YIsatisModal = ({ setOpenSatis }) => {
       <Formik
         initialValues={{
           date: materialDateInput,
-          portfoy: selectedPortfoy,
+          portfoy:
+            selectedPortfoy === "Tümü"
+              ? "Bireysel Emeklilik Fonları"
+              : selectedPortfoy,
           kod: "",
           adet: 0,
           fiyat: 0,

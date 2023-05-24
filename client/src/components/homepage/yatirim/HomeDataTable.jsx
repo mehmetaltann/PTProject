@@ -1,12 +1,18 @@
-import CustomNoRowsOverlay from "../../UI/table/CustomNoRowsOverlay";
-import { useMemo, useEffect } from "react";
-import { DataGrid, GridToolbar, trTR } from "@mui/x-data-grid";
-import { useDispatch, useSelector } from "react-redux";
-import { Badge, IconButton, Stack, Typography } from "@mui/material";
+import DataTableFrame from "../../UI/table/DataTableFrame";
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { Stack, Typography } from "@mui/material";
 
 const HomeDataTable = () => {
   const { guncelDurum } = useSelector((state) => state.guncelDurum);
   const { selectedPortfoy } = useSelector((state) => state.portfoy);
+
+  const filteredData =
+    selectedPortfoy !== "Tümü"
+      ? guncelDurum.filter((item) => item.portfoy === selectedPortfoy)
+      : guncelDurum;
 
   const COLUMNS = [
     {
@@ -14,7 +20,7 @@ const HomeDataTable = () => {
       headerName: "Kod",
       headerAlign: "left",
       align: "left",
-      width: 60,
+      width: 40,
       sortable: false,
       filterable: false,
     },
@@ -26,16 +32,12 @@ const HomeDataTable = () => {
       width: 250,
       sortable: false,
       filterable: false,
-      valueGetter: (params) =>
-        params.value
-          ? params.value.toString().slice(0, 20) +
-            (params.value.toString().length > 20 ? "..." : " ")
-          : params.value,
       cellClassName: "fon_adi",
     },
     {
       field: "adet",
       type: "number",
+      width: 60,
       headerName: "Adet",
       headerAlign: "left",
       align: "left",
@@ -44,6 +46,7 @@ const HomeDataTable = () => {
       field: "ort_fiyat",
       headerName: "Ort. Fiyat",
       type: "number",
+      width: 110,
       valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
       align: "left",
@@ -52,52 +55,110 @@ const HomeDataTable = () => {
       field: "gnc_fiyat",
       headerName: "Güncel Fiyat",
       type: "number",
+      width: 110,
       valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
       align: "left",
     },
     {
       field: "toplam_maliyet",
-      headerName: "Toplam Maliyet",
+      headerName: "Top. Maliyet",
       type: "number",
+      width: 110,
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "toplam_tutar",
-      headerName: "Toplam Değer",
+      headerName: "Top. Değer",
       type: "number",
+      width: 110,
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "center",
-      align: "center",
+      headerAlign: "left",
+      align: "left",
+    },
+    {
+      field: "toplam_kar",
+      headerName: "Kar/Zarar",
+      type: "number",
+      width: 110,
+      renderCell: (params) =>
+        params.row.toplam_kar >= 0 ? (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "success.main" }}
+            >{`${params.row.toplam_kar.toFixed(2)} TL`}</Typography>
+          </Stack>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "error.main" }}
+            >{`${params.row.toplam_kar.toFixed(2)} TL`}</Typography>
+          </Stack>
+        ),
+      headerAlign: "left",
+      align: "left",
     },
     {
       field: "kar_yuzdesi",
       headerName: "Yüzde",
       type: "number",
-      valueFormatter: ({ value }) => `% ${value.toFixed(2)}`,
-      headerAlign: "center",
-      align: "center",
+      width: 80,
+      renderCell: (params) =>
+        params.row.kar_yuzdesi >= 0 ? (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "success.main" }}
+            >{`% ${params.row.kar_yuzdesi.toFixed(2)}`}</Typography>
+          </Stack>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+          >
+            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <Typography
+              variant="body2"
+              sx={{ color: "error.main" }}
+            >{`% ${params.row.kar_yuzdesi.toFixed(2)}`}</Typography>
+          </Stack>
+        ),
+      headerAlign: "left",
+      align: "left",
     },
   ];
 
   const columns = useMemo(() => COLUMNS, []);
 
   return (
-    <DataGrid
+    <DataTableFrame
       columns={columns}
-      rows={guncelDurum}
-      localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
-      density="compact"
-      disableRowSelectionOnClick
-      disableColumnSelector
-      disableColumnMenu
-      sx={{
+      rows={filteredData}
+      density="standard"
+      sxProps={{
         "& .fon_adi": {
-          overflow: "visible",
-          lineHeight: "1.43rem",
-          whiteSpace: "normal",
+          whiteSpace: "normal !important",
+          lineHeight: "normal !important",
         },
       }}
     />

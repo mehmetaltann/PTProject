@@ -1,13 +1,16 @@
 const Islem = require("../../models/YatirimIslemlerModel");
 const GuncelData = require("../../models/YatirimGuncelDataModal");
-const { dbDeleteOne, dbInsertMany, dbFind } = require("../dbTransections");
+const {
+  dbDeleteOne,
+  dbInsertMany,
+  dbFindAggregate,
+} = require("../dbTransections");
 const { gecmisIslemEkle } = require("./yatirimGecmisIslemler");
 const { guncelDataEkle, guncelDataSil } = require("./yatirimGuncelDeger");
 const {
   acikPoziyonIslemSorgu,
   acikPoziyonIslemUpdate,
 } = require("./yatirimDbQueries");
-const { moneyScraper } = require("./yatirimScraper");
 const {
   thisMonthFirstDay,
   prevThreeMonthFirstDay,
@@ -15,7 +18,132 @@ const {
   prevYearFirstDay,
   prevThreeYearFirstDay,
   calculateSum,
+  birthday,
 } = require("../../utils/helpFunctions");
+
+const aggQuery = (creatDate) => {
+  const islemQuery = [
+    {
+      $match: {
+        createdAt: {
+          $gte: creatDate,
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "gunceldatas",
+        localField: "kod",
+        foreignField: "kod",
+        as: "guncel",
+      },
+    },
+    {
+      $unwind: "$guncel",
+    },
+    {
+      $project: {
+        _id: 1,
+        action: 1,
+        kod: 1,
+        adet: 1,
+        fiyat: 1,
+        guncelFiyat: "$guncel.price",
+        komisyon: 1,
+        date: 1,
+        portfoy_ismi: 1,
+        durum: 1,
+        islemMaliyeti: {
+          $sum: [{ $multiply: ["$adet", "$fiyat"] }, "$komisyon"],
+        },
+        islemGuncelDegeri: { $multiply: ["$guncel.price", "$adet"] },
+        islemKarZarar: {
+          $subtract: [
+            { $multiply: ["$guncel.price", "$adet"] },
+            {
+              $sum: [{ $multiply: ["$adet", "$fiyat"] }, "$komisyon"],
+            },
+          ],
+        },
+        islemKarZararYuzdesi: {
+          $multiply: [
+            {
+              $divide: [
+                {
+                  $subtract: [
+                    { $multiply: ["$guncel.price", "$adet"] },
+                    {
+                      $sum: [{ $multiply: ["$adet", "$fiyat"] }, "$komisyon"],
+                    },
+                  ],
+                },
+                {
+                  $sum: [{ $multiply: ["$adet", "$fiyat"] }, "$komisyon"],
+                },
+              ],
+            },
+            100,
+          ],
+        },
+        gun_farki: {
+          $dateDiff: {
+            startDate: "$date",
+            endDate: new Date(),
+            unit: "day",
+          },
+        },
+      },
+    },
+  ];
+  return islemQuery;
+};
+
+exports.yatirimIslemiSorgula = async (req, res) => {
+  const activeDate = req.params.date;
+
+  const dataQuery = (zaman) => {
+    dbFindAggregate(Islem, aggQuery(zaman), res);
+  };
+
+  if (activeDate == 1) {
+    dataQuery(thisMonthFirstDay);
+  } else if (activeDate == 2) {
+    dataQuery(prevThreeMonthFirstDay);
+  } else if (activeDate == 3) {
+    dataQuery(prevSixMonthFirstDay);
+  } else if (activeDate == 4) {
+    dataQuery(prevYearFirstDay);
+  } else if (activeDate == 5) {
+    dataQuery(prevThreeYearFirstDay);
+  } else if (activeDate == 0) {
+    dataQuery(birthday);
+  }
+};
+
+exports.yatirimIslemiSil = async (req, res) => {
+  dbDeleteOne(Islem, req.params.id, "Yatırım Kalemi Silindi", res);
+};
+
+exports.yatirimAlisIslemiEkle = async (req, res) => {
+  const islemList = req.body;
+  dbInsertMany(Islem, islemList, "Yatırım İşlemleri Eklendi", res);
+  const kodList = islemList
+    .map(({ kod }) => kod)
+    .filter((value, index, array) => array.indexOf(value) === index);
+  const findcodes = await GuncelData.find({
+    kod: {
+      $in: kodList,
+    },
+  });
+  const findcodesList = findcodes.map(({ kod }) => kod);
+  let gunceleEkle = findcodesList.length < kodList.length;
+  if (gunceleEkle) {
+    const guncelDataEklenecekler = islemList.filter(
+      ({ kod }) => !findcodes.map(({ kod }) => kod).includes(kod)
+    );
+    guncelDataEkle(guncelDataEklenecekler);
+  }
+};
 
 const yatirimFifoIslemi = async (satis_id, satilanAdet, alim_list) => {
   while (satilanAdet > 0) {
@@ -62,53 +190,6 @@ const yatirimFifoIslemi = async (satis_id, satilanAdet, alim_list) => {
       alim_list.splice(0, 1);
       await Islem.findByIdAndDelete(secilenAlim.id);
     }
-  }
-};
-
-exports.yatirimIslemiSorgula = async (req, res) => {
-  const activeDate = req.params.date;
-  const sortQuery = { date: -1 };
-  const dataQuery = (query = null) => {
-    dbFind(Islem, query, sortQuery, res);
-  };
-
-  if (activeDate == 1) {
-    dataQuery({ date: { $gte: thisMonthFirstDay } });
-  } else if (activeDate == 2) {
-    dataQuery({ date: { $gte: prevThreeMonthFirstDay } });
-  } else if (activeDate == 3) {
-    dataQuery({ date: { $gte: prevSixMonthFirstDay } });
-  } else if (activeDate == 4) {
-    dataQuery({ date: { $gte: prevYearFirstDay } });
-  } else if (activeDate == 5) {
-    dataQuery({ date: { $gte: prevThreeYearFirstDay } });
-  } else if (activeDate == 0) {
-    dataQuery();
-  }
-};
-
-exports.yatirimIslemiSil = async (req, res) => {
-  dbDeleteOne(Islem, req.params.id, "Yatırım Kalemi Silindi", res);
-};
-
-exports.yatirimAlisIslemiEkle = async (req, res) => {
-  const islemList = req.body;
-  dbInsertMany(Islem, islemList, "Yatırım İşlemleri Eklendi", res);
-  const kodList = islemList
-    .map(({ kod }) => kod)
-    .filter((value, index, array) => array.indexOf(value) === index);
-  const findcodes = await GuncelData.find({
-    kod: {
-      $in: kodList,
-    },
-  });
-  const findcodesList = findcodes.map(({ kod }) => kod);
-  let gunceleEkle = findcodesList.length < kodList.length;
-  if (gunceleEkle) {
-    const guncelDataEklenecekler = islemList.filter(
-      ({ kod }) => !findcodes.map(({ kod }) => kod).includes(kod)
-    );
-    guncelDataEkle(guncelDataEklenecekler);
   }
 };
 

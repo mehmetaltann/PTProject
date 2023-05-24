@@ -85,7 +85,10 @@ const YIalisModal = ({ setOpenAlis }) => {
       </Typography>
       <Formik
         initialValues={{
-          portfoy: selectedPortfoy,
+          portfoy:
+            selectedPortfoy === "Tümü"
+              ? "Bireysel Emeklilik Fonları"
+              : selectedPortfoy,
           fons: [initialFonInfoMemo],
         }}
         onSubmit={submitHandler}
