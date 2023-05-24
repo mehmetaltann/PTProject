@@ -3,7 +3,7 @@ import dataServices from "../services/data-services";
 
 const initialState = {
   portfoys: [],
-  selectedPortfoy: "Bireysel Emeklilik Fonları",
+  selectedPortfoy: "Tümü",
   status: "idle",
   error: null,
 };

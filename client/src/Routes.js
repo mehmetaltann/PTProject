@@ -12,6 +12,7 @@ import NavBar from "./layouts/NavBar";
 import ButceIslemleri from "./pages/ButceIslemleri";
 import UserGiris from "./pages/UserGiris";
 import UserKayit from "./pages/UserKayit";
+import Footer from "./layouts/Footer";
 
 const routes = [
   {
@@ -62,6 +63,7 @@ export const Rotalar = () => {
           </Route>
         )}
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };

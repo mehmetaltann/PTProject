@@ -11,11 +11,10 @@ import {
 } from "../../../redux/yatirimSlice";
 
 const YIdataTable = () => {
-  const { guncelDegerler } = useSelector((state) => state.guncelDeger);
+  const { guncelDurum } = useSelector((state) => state.guncelDurum);
   const { yatirimIslemleri, tarihAraligi, degisim, islemTipi } = useSelector(
     (state) => state.yatirim
   );
-  
 
   const { selectedPortfoy } = useSelector((state) => state.portfoy);
   const dispatch = useDispatch();
@@ -24,9 +23,13 @@ const YIdataTable = () => {
     dispatch(getYatirimIslemleri());
   }, [tarihAraligi, degisim, dispatch]);
 
-  const filteredData = yatirimIslemleri.filter(
-    (item) => item.portfoy_ismi === selectedPortfoy && item.action === islemTipi
-  );
+  const filteredData =
+    selectedPortfoy !== "Tümü"
+      ? yatirimIslemleri.filter(
+          (item) =>
+            item.portfoy_ismi === selectedPortfoy && item.action === islemTipi
+        )
+      : yatirimIslemleri.filter((item) => item.action === islemTipi);
 
   const COLUMNS = [
     {

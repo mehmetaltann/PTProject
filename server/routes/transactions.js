@@ -1,8 +1,10 @@
 const router = require("express").Router();
 
 //Portfolio Durum
-const { portfolioDurum } = require("../controllers/yatirim/portfolioDurum");
-router.get("/portfolio-durum", portfolioDurum);
+const {
+  guncelDurum,
+} = require("../controllers/yatirim/yatirimGuncelDurumOzet");
+router.get("/guncel-durum", guncelDurum);
 
 //Güncel Değerler
 const {

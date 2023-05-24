@@ -16,7 +16,7 @@ const YatirimGecmisi = () => {
   }, [message, dispatch]);
 
   return (
-    <Box sx={{ height: "100vh", overflow: "auto" }}>
+    <Box sx={{ height: "85vh", overflow: "auto" }}>
       <Container>
         <Stack spacing={2}>
           <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>

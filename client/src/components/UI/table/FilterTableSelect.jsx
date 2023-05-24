@@ -10,6 +10,7 @@ const FilterTableSelect = ({
   minWidth,
   title,
   val,
+  gridSM = 4,
 }) => {
   const dispatch = useDispatch();
 
@@ -18,7 +19,7 @@ const FilterTableSelect = ({
       container
       spacing={1}
       xs={12}
-      sm={4}
+      sm={gridSM}
       justifyContent={{ xs: "flex-start", sm: "flex-end" }}
     >
       <Grid>
