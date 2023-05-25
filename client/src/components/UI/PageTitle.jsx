@@ -3,10 +3,17 @@ import React from "react";
 
 const PageTitle = React.memo(({ title }) => {
   return (
-    <Typography variant="h4" sx={{ textAlign: "center", mt: 2, mb: 1 }}>
+    <Typography
+      variant="h6"
+      sx={{
+        color: "info.main",
+        p: 1,
+        textAlign: "center",
+        mt: 2,
+      }}
+    >
       {title}
     </Typography>
-     
   );
 });
 

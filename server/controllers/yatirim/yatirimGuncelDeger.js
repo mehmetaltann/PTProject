@@ -38,3 +38,52 @@ exports.guncelDataSil = async (kod) => {
     condole.log(error);
   }
 };
+
+const dbFindAndUpdate = async (kod, newPrice) => {
+  const filter = { kod: kod };
+  const update = { price: newPrice };
+  return await GuncelData.findOneAndUpdate(filter, update);
+};
+
+exports.guncelDataSorGuncelle = async () => {
+  const guncelDataQuery = [
+    {
+      $project: {
+        _id: 0,
+        kod: 1,
+        portfoy: 1,
+      },
+    },
+  ];
+
+  const guncelData = await GuncelData.aggregate(guncelDataQuery);
+
+  Promise.all(
+    guncelData.map(({ portfoy, kod }) => {
+      if (
+        portfoy === "Bireysel Emeklilik Fonları" ||
+        portfoy === "Yatırım Fonları"
+      ) {
+        return fonScraper(kod, portfoy).then((res) => res);
+      } else if (portfoy === "Döviz" || portfoy === "Altın") {
+        return moneyScraper(kod, portfoy).then((res) => res);
+      }
+    })
+  )
+    .then(async (data) => {
+      Promise.all(
+        data.map(({ price, kod }) => {
+          dbFindAndUpdate(kod, price);
+        })
+      )
+        .then((data2) => {
+          console.log("Başarılı");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

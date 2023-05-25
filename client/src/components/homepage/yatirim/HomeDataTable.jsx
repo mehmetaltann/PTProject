@@ -116,7 +116,7 @@ const HomeDataTable = () => {
       field: "kar_yuzdesi",
       headerName: "Yüzde",
       type: "number",
-      width: 80,
+      width: 110,
       renderCell: (params) =>
         params.row.kar_yuzdesi >= 0 ? (
           <Stack

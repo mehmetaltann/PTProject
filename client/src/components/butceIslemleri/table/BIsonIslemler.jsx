@@ -19,8 +19,8 @@ const BIsonIslemler = () => {
   const dispatch = useDispatch();
 
   return (
-    <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>
-      <Grid container spacing={2} sx={{ p: 1, height: "100%" }}>
+    <Paper variant="outlined" sx={{ p: 3 }}>
+      <Grid container spacing={2} sx={{ p: 1 }}>
         <Grid
           container
           xs={12}
@@ -92,7 +92,7 @@ const BIsonIslemler = () => {
             </TextField>
           </Grid>
         </Grid>
-        <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
+        <Grid container xs={12} sx={{ height: "60vh", mt: 1 }}>
           <Box sx={{ height: "100%", width: "auto" }}>
             <BIdataTable />
           </Box>

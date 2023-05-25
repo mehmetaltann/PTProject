@@ -1,5 +1,4 @@
 const Islem = require("../../models/YatirimIslemlerModel");
-const { dbFindAggregate } = require("../dbTransections");
 
 const guncelDurumQuery = [
   {
@@ -70,8 +69,10 @@ const guncelDurumQuery = [
   },
 ];
 
-exports.guncelDurum = async (req, res) => {
-  dbFindAggregate(Islem, guncelDurumQuery, res);
+const guncelDurumArkaPlan = async () => {
+  try {
+    return await Islem.aggregate(guncelDurumQuery);
+  } catch (error) {
+    return console.log(error);
+  }
 };
-
-

@@ -8,8 +8,8 @@ const YatirimWindow = () => {
     <Paper>
       <HomeDataTableHead />
       <Divider />
-      <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
-        <Box sx={{ height: "100%", width: "100%", p:1 }}>
+      <Grid container xs={12} sx={{ height: "60vh", mt: 1, p: 1 }}>
+        <Box sx={{ height: "100%", width: "100%", p: 2 }}>
           <HomeDataTable />
         </Box>
       </Grid>

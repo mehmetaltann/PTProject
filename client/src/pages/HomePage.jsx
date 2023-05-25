@@ -7,7 +7,7 @@ import { Box, Container } from "@mui/material";
 const HomePage = () => {
   return (
     <Box sx={{ height: "85vh", overflow: "auto" }}>
-      <Container sx={{ mt: 2 }}  maxWidth="xl">
+      <Container sx={{ mt: 2 }} maxWidth="xl">
         <Grid container spacing={2}>
           <Grid xs={12}></Grid>
           <Grid xs={12} md={9}>

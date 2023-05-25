@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
 import YatirimGecmisi from "./pages/YatirimGecmisi";
 import NavBar from "./layouts/NavBar";
+import NavBar2 from "./layouts/Navbar2.jsx";
 import ButceIslemleri from "./pages/ButceIslemleri";
 import UserGiris from "./pages/UserGiris";
 import UserKayit from "./pages/UserKayit";
@@ -48,7 +49,7 @@ export const Rotalar = () => {
           <Route
             element={
               <>
-                <NavBar />
+                <NavBar2 />
                 <Outlet />
               </>
             }
@@ -63,7 +64,7 @@ export const Rotalar = () => {
           </Route>
         )}
       </Routes>
-      <Footer />
+
     </BrowserRouter>
   );
 };

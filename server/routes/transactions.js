@@ -8,9 +8,10 @@ router.get("/guncel-durum", guncelDurum);
 
 //Güncel Değerler
 const {
-  guncelDataSorgula,
+  guncelDataSorgula,guncelDataSorGuncelle
 } = require("../controllers/yatirim/yatirimGuncelDeger");
 router.get("/guncel-deger-sorgula", guncelDataSorgula);
+router.get("/gunceldatasor", guncelDataSorGuncelle);
 
 //Bütçe Rotaları
 const {

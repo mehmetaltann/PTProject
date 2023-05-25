@@ -49,7 +49,7 @@ const YGsonIslemler = () => {
             </TextField>
           </Grid>
         </Grid>
-        <Grid container xs={12} sx={{ height: 500, mt: 1 }}>
+        <Grid container xs={12} sx={{ height: "60vh", mt: 1 }}>
           <Box sx={{ height: "100%", width: "100%" }}>
             <YGdataTable />
           </Box>

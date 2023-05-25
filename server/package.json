@@ -12,6 +12,7 @@
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
     "mongoose": "^7.0.1",
+    "node-cron": "^3.0.2",
     "nodemon": "^2.0.21",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
