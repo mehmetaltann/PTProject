@@ -1,3 +1,10 @@
+import Home from "./pages/Home";
+import Investments from "./pages/Investments.jsx";
+import InvRecords from "./pages/InvRecords";
+import NavBar from "./layouts/Navbar.jsx";
+import Budget from "./pages/Budget";
+import UserLogin from "./pages/UserLogin";
+import UserRegister from "./pages/UserRegister";
 import {
   BrowserRouter,
   Routes,
@@ -5,32 +12,23 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
-import YatirimGecmisi from "./pages/YatirimGecmisi";
-import NavBar from "./layouts/NavBar";
-import NavBar2 from "./layouts/Navbar2.jsx";
-import ButceIslemleri from "./pages/ButceIslemleri";
-import UserGiris from "./pages/UserGiris";
-import UserKayit from "./pages/UserKayit";
-import Footer from "./layouts/Footer";
 
 const routes = [
   {
     path: "/",
-    component: HomePage,
+    component: Home,
   },
   {
     path: "/yatirim-islemleri",
-    component: YatirimIslemleri,
+    component: Investments,
   },
   {
     path: "/yatirim-gecmisi",
-    component: YatirimGecmisi,
+    component: InvRecords,
   },
   {
     path: "/butce-kayit",
-    component: ButceIslemleri,
+    component: Budget,
   },
 ];
 
@@ -42,14 +40,14 @@ export const Rotalar = () => {
         {!user ? (
           <>
             <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route path="/login" element={<UserGiris />} />
-            <Route path="/sivefa" element={<UserKayit />} />
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/sivefa" element={<UserRegister />} />
           </>
         ) : (
           <Route
             element={
               <>
-                <NavBar2 />
+                <NavBar />
                 <Outlet />
               </>
             }
@@ -64,7 +62,6 @@ export const Rotalar = () => {
           </Route>
         )}
       </Routes>
-
     </BrowserRouter>
   );
 };

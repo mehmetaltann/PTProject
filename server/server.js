@@ -5,8 +5,8 @@ const cron = require("node-cron");
 const { db } = require("./db/DB.JS");
 const { readdirSync } = require("fs");
 const {
-  guncelDataSorGuncelle,
-} = require("./controllers/yatirim/yatirimGuncelDeger");
+  presentValueQueryAndUpdate,
+} = require("./controllers/investments/presentValue");
 
 const app = express();
 const PORT = process.env.PORT;

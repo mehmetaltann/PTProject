@@ -8,7 +8,6 @@ const initialState = {
   message: null,
   error: null,
   degisim: null,
-  islemTipi: "Alış",
 };
 
 export const getYatirimIslemleri = createAsyncThunk(
@@ -65,9 +64,6 @@ export const yatirimSlice = createSlice({
     setMessage: (state, action) => {
       state.message = action.payload;
     },
-    islemTipiSec: (state, action) => {
-      state.islemTipi = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -114,5 +110,4 @@ export const yatirimSlice = createSlice({
 });
 
 export default yatirimSlice.reducer;
-export const { tarihAraligiSec, setMessage, islemTipiSec } =
-  yatirimSlice.actions;
+export const { tarihAraligiSec, setMessage } = yatirimSlice.actions;

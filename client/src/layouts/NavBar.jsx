@@ -1,18 +1,51 @@
-import React, { Fragment, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import MenuIcon from "@mui/icons-material/Menu";
+import ArchitectureIcon from "@mui/icons-material/Architecture";
+import profile from "../assets/img/profile.jpg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Menu,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  MenuItem,
+} from "@mui/material";
 
-const data = [
+const pages = [
   { title: "Anasayfa", link: "" },
   { title: "Yatırım İşlemleri", link: "yatirim-islemleri" },
   { title: "Yatırım Geçmişi", link: "yatirim-gecmisi" },
   { title: "Bütçe İşlemleri", link: "butce-kayit" },
 ];
 
-const NavBar = React.memo(() => {
-  const [click, setClick] = useState(false);
-  const handleClick = () => setClick(!click);
+const Navbar = () => {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleRoutes = (path) => {
+    navigate(path);
+  };
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
@@ -21,144 +54,149 @@ const NavBar = React.memo(() => {
   };
 
   return (
-    <Fragment>
-      <NavbarStyled>
-        <div className="container">
-          <Link to="/" className="logo">
-            Mehmet Altan
-          </Link>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <ArchitectureIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            Altan
+          </Typography>
 
-          <ul className={click ? "menu menu--active" : "menu"}>
-            {data.map(({ link, title }, index) => (
-              <li className="items" key={index}>
-                <Link to={`/${link}`} className="links" onClick={handleClick}>
-                  {title}
-                </Link>
-              </li>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              {pages.map(({ title, link }) => (
+                <MenuItem
+                  key={title}
+                  onClick={() => {
+                    handleRoutes(`/${link}`);
+                    handleCloseNavMenu();
+                  }}
+                >
+                  <Typography textAlign="center">{title}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          <ArchitectureIcon
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: "flex", md: "none" },
+              flexGrow: 1,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            Altan
+          </Typography>
+
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
+              gap: "1rem",
+              marginRight: "8rem",
+            }}
+          >
+            {pages.map(({ title, link }) => (
+              <Button
+                key={title}
+                onClick={() => handleRoutes(`/${link}`)}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontSize: "1rem",
+                }}
+              >
+                {title}
+              </Button>
             ))}
-            <li className="items">
-              <Link to={`/`} className="links logout" onClick={handleLogOut}>
-                Çıkış Yap
-              </Link>
-            </li>
-          </ul>
-          <div className="icon" onClick={handleClick}>
-            <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
-          </div>
-        </div>
-      </NavbarStyled>
-    </Fragment>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="Mehmet Altan" src={profile} />
+            </IconButton>
+
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleLogOut}>
+                <Typography textAlign="center">Çıkış Yap</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
-});
-
-export const NavbarStyled = styled.nav`
-  background-color: var(--theme-fourth);
-  height: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  top: 0;
-  z-index: 20;
-  position: relative;
-
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    max-width: 1500px;
-  }
-
-  .logo {
-    color: var(--theme-primary);
-    align-items: center;
-    margin-left: 20px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2rem;
-    flex-grow: 1;
-  }
-
-  .menu {
-    display: flex;
-    list-style: none;
-    text-align: center;
-
-    @media screen and (max-width: 960px) {
-      flex-direction: column;
-      width: 100%;
-      border-top: 1px solid var(--theme-primary);
-      position: absolute;
-      top: 5rem;
-      left: -110%;
-      opacity: 0;
-      transition: all 0.5s ease;
-    }
-  }
-
-  .menu--active {
-    @media screen and (max-width: 960px) {
-      background-color: var(--theme-fourth);
-      left: 0px;
-      opacity: 1;
-      transition: all 0.5s ease;
-      z-index: 1;
-    }
-  }
-
-  .links {
-    color: var(--theme-primary);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    height: 100%;
-    border-bottom: 3px solid transparent;
-
-    @media screen and (max-width: 960px) {
-      width: 100%;
-      display: table;
-    }
-  }
-
-  .logout {
-    margin-right: 0;
-    padding-right: 0;
-  }
-
-  .items {
-    line-height: 2.5rem;
-    margin-right: 1rem;
-  }
-
-  .items::after {
-    content: "";
-    display: block;
-    height: 3px;
-    width: 0;
-    background: transparent;
-    transition: width 0.7s ease, background-color 0.5s ease;
-  }
-
-  .items:hover::after {
-    width: 100%;
-    background-color: var(--theme-third);
-  }
-
-  .icon {
-    display: none;
-
-    @media screen and (max-width: 960px) {
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(-100%, 60%);
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--theme-primary);
-    }
-  }
-`;
-
-export default NavBar;
+};
+export default Navbar;

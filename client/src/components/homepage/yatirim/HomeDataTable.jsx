@@ -7,11 +7,11 @@ import { Stack, Typography } from "@mui/material";
 
 const HomeDataTable = () => {
   const { guncelDurum } = useSelector((state) => state.guncelDurum);
-  const { selectedPortfoy } = useSelector((state) => state.portfoy);
+  const { selectedPortfolio } = useSelector((state) => state.portfolio);
 
   const filteredData =
-    selectedPortfoy !== "Tümü"
-      ? guncelDurum.filter((item) => item.portfoy === selectedPortfoy)
+    selectedPortfolio !== "Tümü"
+      ? guncelDurum.filter((item) => item.portfoy === selectedPortfolio)
       : guncelDurum;
 
   const COLUMNS = [

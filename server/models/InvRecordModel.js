@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const InvestmentSchema = new mongoose.Schema(
+const InvRecordSchema = new mongoose.Schema(
   {
     code: {
       type: String,
@@ -8,42 +8,47 @@ const InvestmentSchema = new mongoose.Schema(
       trim: true,
       maxLength: 7,
     },
-    number: {
-      type: Number,
-      required: true,
-      trim: true,
-      maxLength: 20,
-    },
-    price: {
-      type: Number,
-      required: true,
-      trim: true,
-      maxLength: 20,
-    },
-    commission: {
-      type: Number,
-      trim: true,
-      maxLength: 20,
-    },
-    date: {
-      type: Date,
-      required: true,
-      trim: true,
-    },
     portfolio: {
       type: String,
       trim: true,
       required: true,
       maxLength: 40,
     },
-    state: {
-      type: String,
+    number: {
+      type: Number,
+      required: true,
       trim: true,
-      default: "Açık",
-      maxLength: 7,
+      maxLength: 20,
+    },
+    purchasePrice: {
+      type: Number,
+      required: true,
+      trim: true,
+      maxLength: 20,
+    },
+    purchaseDate: {
+      type: Date,
+      required: true,
+      trim: true,
+    },
+    salePrice: {
+      type: Number,
+      required: true,
+      trim: true,
+      maxLength: 20,
+    },
+    saleDate: {
+      type: Date,
+      required: true,
+      trim: true,
+    },
+    saleCommission: {
+      type: Date,
+      required: true,
+      trim: true,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("investment", InvestmentSchema);
+module.exports = mongoose.model("record", InvRecordSchema);

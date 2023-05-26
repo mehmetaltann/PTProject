@@ -1,5 +1,5 @@
 const { User } = require("../../models/UserModel");
-const { dbSaveOne } = require("../dbTransections");
+const { dbSave } = require("../dbQueries");
 const bcrypt = require("bcrypt");
 
 exports.postUser = async (req, res) => {
@@ -11,15 +11,22 @@ exports.postUser = async (req, res) => {
         .status(409)
         .send({ message: "Bu Kullanıcı Adı Kullanılmaktadır" });
     }
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashPassword = await bcrypt.hash(password, salt);
-
-    const newUser = User({
-      username,
-      password: hashPassword,
-    });
-
-    dbSaveOne(newUser, "Kullanıcı Başarıyla Oluşturuldu", res);
+    try {
+      const salt = await bcrypt.genSalt(Number(process.env.SALT));
+      try {
+        const hashPassword = await bcrypt.hash(password, salt);
+        const newUser = User({
+          username,
+          password: hashPassword,
+        });
+        dbSave(newUser);
+        res.status(200).json({ message: "Kullanıcı Başarıyla Oluşturuldu" });
+      } catch (e) {
+        console.error(e);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   } catch (error) {
     res.status(500).send({ message: "Server Bağlantı Hatası" });
   }
@@ -33,6 +40,7 @@ exports.authUser = async (req, res) => {
       return res
         .status(401)
         .send({ message: "Yanlış Kullanıcı Adı veya Şifre" });
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res
