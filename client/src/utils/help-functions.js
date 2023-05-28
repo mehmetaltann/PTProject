@@ -1,6 +1,20 @@
 import moment from "moment";
 
-export const today = moment()
+export const today = moment();
+export const thisMonth = moment().month() + 1;
+export const thisYear = moment().year();
+
+export const generateArrayOfYears = () => {
+  var max = thisYear;
+  var fark = thisYear - 2013;
+  var min = max - fark;
+  var years = [];
+
+  for (var i = max; i >= min; i--) {
+    years.push(i);
+  }
+  return years;
+};
 
 export const dateFormat = (date) => {
   return moment(date).format("DD.MM.YYYY");
@@ -35,7 +49,6 @@ export const twoDecimalRound = (num) => {
 export const fourDecimalRound = (num) => {
   return +(Math.round(num + "e+4") + "e-4");
 };
-
 
 const dateNow = new Date(); // Creating a new date object with the current date and time
 const year = dateNow.getFullYear(); // Getting current year from the created Date object

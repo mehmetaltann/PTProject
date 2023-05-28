@@ -1,3 +1,10 @@
+import Home from "./pages/Home";
+import Investments from "./pages/Investments.jsx";
+import InvestmentRecords from "./pages/InvestmentRecords";
+import Budget from "./pages/Budget";
+import UserLogin from "./pages/UserLogin";
+import UserRegister from "./pages/UserRegister";
+import Navbar from "./layouts/Navbar";
 import {
   BrowserRouter,
   Routes,
@@ -5,30 +12,23 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import YatirimIslemleri from "./pages/YatirimIslemleri.jsx";
-import YatirimGecmisi from "./pages/YatirimGecmisi";
-import NavBar from "./layouts/NavBar";
-import ButceIslemleri from "./pages/ButceIslemleri";
-import UserGiris from "./pages/UserGiris";
-import UserKayit from "./pages/UserKayit";
 
 const routes = [
   {
     path: "/",
-    component: HomePage,
+    component: Home,
   },
   {
     path: "/yatirim-islemleri",
-    component: YatirimIslemleri,
+    component: Investments,
   },
   {
     path: "/yatirim-gecmisi",
-    component: YatirimGecmisi,
+    component: InvestmentRecords,
   },
   {
     path: "/butce-kayit",
-    component: ButceIslemleri,
+    component: Budget,
   },
 ];
 
@@ -40,14 +40,14 @@ export const Rotalar = () => {
         {!user ? (
           <>
             <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route path="/login" element={<UserGiris />} />
-            <Route path="/sivefa" element={<UserKayit />} />
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/sivefa" element={<UserRegister />} />
           </>
         ) : (
           <Route
             element={
               <>
-                <NavBar />
+                <Navbar />
                 <Outlet />
               </>
             }

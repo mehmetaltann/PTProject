@@ -1,78 +1,76 @@
 const router = require("express").Router();
 
-//Portfolio Durum
-const { portfolioDurum } = require("../controllers/yatirim/portfolioDurum");
-router.get("/portfolio-durum", portfolioDurum);
-
-//Güncel Değerler
+//Budget
 const {
-  guncelDataSorgula,
-} = require("../controllers/yatirim/yatirimGuncelDeger");
-router.get("/guncel-deger-sorgula", guncelDataSorgula);
+  budgetItemQuery,
+  budgetItemDelete,
+  budgetItemsAdd,
+} = require("../controllers/budgets/budgetItem");
+router.post("/butce-veri-ekle", budgetItemsAdd);
+router.delete("/butce-veri-sil/:id", budgetItemDelete);
+router.get("/butce-sorgula/:date", budgetItemQuery);
 
-//Bütçe Rotaları
+//Budget Category
 const {
-  butceIslemSorgula,
-  butceIslemSil,
-  butceIslemEkle,
-} = require("../controllers/butce/butceIslemler");
-router.post("/butce-veri-ekle", butceIslemEkle);
-router.delete("/butce-veri-sil/:id", butceIslemSil);
-router.get("/butce-sorgula/:date", butceIslemSorgula);
+  budgetItemCategoryAdd,
+  budgetItemCategoryDelete,
+  budgetItemCategoryQuery,
+} = require("../controllers/budgets/budgetItemCategories");
+router.post("/category-ekle", budgetItemCategoryAdd);
+router.delete("/category-sil/:id", budgetItemCategoryDelete);
+router.get("/category-sorgula", budgetItemCategoryQuery);
 
-//Yatırım İşlemleri Rotaları
+//Investments
 const {
-  yatirimIslemiSil,
-  yatirimIslemiSorgula,
-  yatirimAlisIslemiEkle,
-  yatirimSatisIslemiEkle,
-} = require("../controllers/yatirim/yatirimIslemleri");
-router.post("/yatirim-alis-ekle", yatirimAlisIslemiEkle);
-router.post("/yatirim-satis-ekle", yatirimSatisIslemiEkle);
-router.delete("/yatirim-islem-sil/:id", yatirimIslemiSil);
-router.get("/yatirim-islem-sorgula/:date", yatirimIslemiSorgula);
+  investmentQuery,
+  investmentPurchase,
+  investmentSell,
+  investmentDelete,
+} = require("../controllers/investments/investment");
+router.post("/yatirim-alis-ekle", investmentPurchase);
+router.post("/yatirim-satis-ekle", investmentSell);
+router.delete("/yatirim-islem-sil/:id", investmentDelete);
+router.get("/yatirim-islem-sorgula/:date", investmentQuery);
 
-//Geçmiş Yatırım İşlemleri Rotaları
+//Investments Records
 const {
-  gecmisIslemSorgula,
-  gecmisIslemEkle,
-  gecmisIslemSil,
-} = require("../controllers/yatirim/yatirimGecmisIslemler");
-router.get("/gecmis-islem-sorgula/:date", gecmisIslemSorgula);
-router.delete("/gecmis-islem-sil/:id", gecmisIslemSil);
-router.post("/gecmis-islem-ekle", gecmisIslemEkle);
+  recordQuery,
+  recordDelete,
+} = require("../controllers/investments/record");
+router.get("/gecmis-islem-sorgula/:date", recordQuery);
+router.delete("/gecmis-islem-sil/:id", recordDelete);
 
-//Portfoy İşlemleri Rotaları
+//Investments Portfolio
 const {
-  portfoyEkle,
-  portfoySil,
-  portfoySorgula,
-} = require("../controllers/yatirim/yatirimPrtfyIslemleri");
-router.post("/portfoy-ekle", portfoyEkle);
-router.delete("/portfoy-sil/:id", portfoySil);
-router.get("/portfoy-sorgula", portfoySorgula);
+  portfolioQuery,
+  portfolioAdd,
+  portfolioDelete,
+} = require("../controllers/investments/portfolio");
+router.post("/portfoy-ekle", portfolioAdd);
+router.delete("/portfoy-sil/:id", portfolioDelete);
+router.get("/portfoy-sorgula", portfolioQuery);
 
-//Kategori İşlemleri Rotaları
+//Investement Summary
+const { presentPositions } = require("../controllers/investments/summary");
+router.get("/guncel-durum", presentPositions);
+
+//Investment Present Values
 const {
-  categorySorgula,
-  categoryEkle,
-  categorySil,
-} = require("../controllers/butce/butcectgryIslemleri");
-router.post("/category-ekle", categoryEkle);
-router.delete("/category-sil/:id", categorySil);
-router.get("/category-sorgula", categorySorgula);
+  presentValueQuery,
+} = require("../controllers/investments/presentValue");
+router.get("/guncel-deger-sorgula", presentValueQuery);
 
-//MongoDb Sorgu Rotaları
-const {
-  mongoSorgu,
-  mongoUpdate,
-} = require("../controllers/dbSorgu/mongoSorgu");
-router.post("/dbupdate", mongoUpdate);
-router.get("/dbsorgu", mongoSorgu);
-
-//User ve Auth İşlemleri
+//User ve Auth const { postUser, authUser } = require("../controllers/user/userIslemleri");
 const { postUser, authUser } = require("../controllers/user/userIslemleri");
 router.post("/postUser", postUser);
 router.post("/authUser", authUser);
+
+//MongoDb Queries
+const {
+  mongoQuery,
+  mongoUpdate,
+} = require("../controllers/mongoQuery/mongoQueries");
+router.post("/dbupdate", mongoUpdate);
+router.get("/dbsorgu", mongoQuery);
 
 module.exports = router;

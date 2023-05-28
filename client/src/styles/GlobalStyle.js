@@ -9,21 +9,7 @@ export const GlobalStyle = createGlobalStyle`
       min-width: 0;
     }
 
-    html{
-      font-size: 100%;
 
-      @media only screen and (max-width: 1460px) {
-        font-size: 95%;
-        }
-
-      @media only screen and (max-width: 1350px) {
-        font-size: 92%;
-        }
-
-        @media only screen and (max-width: 1000px) {
-        font-size: 88%;
-        }
-    }
 
     :root{
       --theme-primary: #F9F7F7;
