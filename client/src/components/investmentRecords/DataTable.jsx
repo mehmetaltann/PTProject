@@ -4,11 +4,11 @@ import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import { dateFormat } from "../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../redux/slices/generalSlice";
+import { setMessage } from "../../redux/generalSlice";
 import {
   useGetRecordsQuery,
   useDeleteRecordMutation,
-} from "../../redux/api/investmentRecordApi";
+} from "../../redux/apis/investmentRecordApi";
 import {
   IconButton,
   Stack,

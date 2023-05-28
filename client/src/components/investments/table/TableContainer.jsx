@@ -2,9 +2,9 @@ import DataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
-import { pickDate, pickPortfolio } from "../../../redux/slices/generalSlice";
+import { pickDate, pickPortfolio } from "../../../redux/generalSlice";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
-import { useGetPortfoliosQuery } from "../../../redux/api/portfolioApi";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 
 const TableContainer = () => {
   const { selectedDate, selectedPortfolio } = useSelector(
@@ -91,13 +91,3 @@ const TableContainer = () => {
 };
 
 export default TableContainer;
-
-/*  
-
-{portfolios.map((option) => (
-                  <MenuItem key={option.code} value={option.title}>
-                    {option.title}
-                  </MenuItem>
-                ))}
-
-*/

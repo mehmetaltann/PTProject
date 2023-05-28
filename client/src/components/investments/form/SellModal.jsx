@@ -9,10 +9,9 @@ import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
 import { Button, Typography, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../redux/portfoliosSlice";
-import { useGetPortfoliosQuery } from "../../../redux/api/portfolioApi";
-import { useAddSellMutation } from "../../../redux/api/investmentApi";
-import { setMessage } from "../../../redux/slices/generalSlice";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import { useAddSellMutation } from "../../../redux/apis/investmentApi";
+import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
 
 const SellModal = ({ setOpenSatis }) => {
   const { selectedPortfolio } = useSelector((state) => state.general);

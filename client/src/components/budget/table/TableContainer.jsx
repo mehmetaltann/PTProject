@@ -2,7 +2,7 @@ import BudgetDataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
-import { pickDate, pickBudgetType } from "../../../redux/slices/generalSlice";
+import { pickDate, pickBudgetType } from "../../../redux/generalSlice";
 import {
   MenuItem,
   Typography,

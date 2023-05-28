@@ -7,13 +7,13 @@ import FormSelect from "./FormSelect";
 import FormTextField from "../../UI/formElements/FormTextField";
 import FormDatePicker from "../../UI/formElements/FormDatePicker";
 import { useState, useMemo, Fragment } from "react";
-import { useGetCategoriesQuery } from "../../../redux/api/categoryApi";
+import { useGetCategoriesQuery } from "../../../redux/apis/categoryApi";
 import { uniqListFunc } from "../../../utils/help-functions";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../../utils/help-functions";
 import { useDispatch } from "react-redux";
-import { useAddBudgetItemMutation } from "../../../redux/api/budgetApi";
-import { setMessage } from "../../../redux/slices/generalSlice";
+import { useAddBudgetItemMutation } from "../../../redux/apis/budgetApi";
+import { setMessage } from "../../../redux/generalSlice";
 import {
   Typography,
   MenuItem,

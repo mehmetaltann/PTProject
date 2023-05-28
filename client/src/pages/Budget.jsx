@@ -4,7 +4,7 @@ import TableContainer from "../components/budget/table/TableContainer";
 import { useEffect } from "react";
 import { Stack, Box, Container, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/slices/generalSlice";
+import { setMessage } from "../redux/generalSlice";
 
 const Budget = () => {
   const { messageData } = useSelector((state) => state.general);

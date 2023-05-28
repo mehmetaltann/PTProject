@@ -3,7 +3,7 @@ import TableContainer from "../components/investmentRecords/TableContainer";
 import { Stack, Box,Typography, Container } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/slices/generalSlice";
+import { setMessage } from "../redux/generalSlice";
 
 const InvestmentRecords = () => {
   const { messageData } = useSelector((state) => state.general);

@@ -21,7 +21,6 @@ exports.presentValueQuery = async (req, res) => {
 exports.presentValueAdd = async (dataList) => {
   Promise.all(
     dataList.map(({ portfolio, code }) => {
-      console.log(portfolio + code);
       if (
         portfolio === "Bireysel Emeklilik Fonları" ||
         portfolio === "Yatırım Fonları"

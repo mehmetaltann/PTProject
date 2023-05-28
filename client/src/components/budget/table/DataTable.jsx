@@ -5,11 +5,11 @@ import { useState } from "react";
 import { dateFormat } from "../../../utils/help-functions";
 import { Badge, IconButton, CircularProgress, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../../redux/slices/generalSlice";
+import { setMessage } from "../../../redux/generalSlice";
 import {
   useGetBudgetItemsQuery,
   useDeleteBudgetItemMutation,
-} from "../../../redux/api/budgetApi";
+} from "../../../redux/apis/budgetApi";
 
 const DataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);

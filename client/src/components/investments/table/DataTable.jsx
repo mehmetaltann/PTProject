@@ -1,14 +1,14 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import DataTableFrame from "../../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
+import DataTableFrame from "../../UI/table/DataTableFrame";
 import { dateFormat } from "../../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../../redux/slices/generalSlice";
+import { setMessage } from "../../../redux/generalSlice";
 import {
   useGetInvestmentsQuery,
   useDeleteInvestmentMutation,
-} from "../../../redux/api/investmentApi";
+} from "../../../redux/apis/investmentApi";
 import {
   IconButton,
   Stack,

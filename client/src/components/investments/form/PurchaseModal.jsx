@@ -10,10 +10,9 @@ import { materialDateInput } from "../../../utils/help-functions";
 import { useMemo, Fragment } from "react";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../redux/portfoliosSlice";
-import { useGetPortfoliosQuery } from "../../../redux/api/portfolioApi";
-import { useAddPurchasesMutation } from "../../../redux/api/investmentApi";
-import { setMessage } from "../../../redux/slices/generalSlice";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
+import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
 import {
   Button,
   IconButton,
