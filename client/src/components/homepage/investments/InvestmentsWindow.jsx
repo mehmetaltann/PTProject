@@ -8,7 +8,7 @@ const InvestmentsWindow = () => {
     <Paper>
       <TableContainer />
       <Divider />
-      <Grid container xs={12} sx={{ height: "60vh", mt: 1, p: 1 }}>
+      <Grid container xs={12} sx={{ height: "70vh", mt: 1, p: 1 }}>
         <Box sx={{ height: "100%", width: "100%", p: 2 }}>
           <DataTable />
         </Box>

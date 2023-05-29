@@ -2,12 +2,20 @@ import DataTableFrame from "../../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import { useSelector } from "react-redux";
+import { useCallback } from "react";
 import { Stack, Typography, CircularProgress, Box } from "@mui/material";
 import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
 
 const DataTable = () => {
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
+
+  const getRowSpacing = useCallback((params) => {
+    return {
+      top: params.isFirstVisible ? 0 : 2,
+      bottom: params.isLastVisible ? 0 : 4,
+    };
+  }, []);
 
   if (isLoading && isFetching)
     return (
@@ -19,7 +27,7 @@ const DataTable = () => {
   const filteredData =
     selectedPortfolio !== "Tümü"
       ? summaryData.filter((item) => item.portfolio === selectedPortfolio)
-      : summaryData;
+      : summaryData 
 
   const columns = [
     {
@@ -36,7 +44,7 @@ const DataTable = () => {
       headerName: "Fon Adı",
       headerAlign: "left",
       align: "left",
-      width: 250,
+      width: 300,
       sortable: false,
       filterable: false,
       cellClassName: "fon_adi",
@@ -53,7 +61,7 @@ const DataTable = () => {
       field: "averagePrice",
       headerName: "Ort. Fiyat",
       type: "number",
-      width: 110,
+      width: 95,
       valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
       align: "left",
@@ -62,23 +70,26 @@ const DataTable = () => {
       field: "presentPrice",
       headerName: "Güncel Fiyat",
       type: "number",
-      width: 110,
+      width: 95,
       valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
       align: "left",
     },
     {
       field: "totalCost",
-      headerName: "Top. Maliyet",
+      headerName: "Maliyet",
       type: "number",
       width: 110,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      valueFormatter: ({ value }) =>
+        `${value
+          .toFixed(2)
+          .toLocaleString("en-US", { maximumFractionDigits: 2 })} TL`,
       headerAlign: "left",
       align: "left",
     },
     {
       field: "presentvalue",
-      headerName: "Top. Değer",
+      headerName: "Değer",
       type: "number",
       width: 110,
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
@@ -89,7 +100,7 @@ const DataTable = () => {
       field: "plStatus",
       headerName: "Kar/Zarar",
       type: "number",
-      width: 110,
+      width: 125,
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -159,12 +170,9 @@ const DataTable = () => {
     <DataTableFrame
       columns={columns}
       rows={filteredData}
-      sxProps={{
-        "& .fon_adi": {
-          whiteSpace: "normal !important",
-          lineHeight: "normal !important",
-        },
-      }}
+      getRowHeight={() => "auto"}
+      getEstimatedRowHeight={() => 200}
+      getRowSpacing={getRowSpacing}
     />
   );
 };
