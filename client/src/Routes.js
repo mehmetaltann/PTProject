@@ -1,10 +1,10 @@
 import Home from "./pages/Home";
 import Investments from "./pages/Investments.jsx";
-import InvRecords from "./pages/InvRecords";
-import NavBar from "./layouts/Navbar.jsx";
+import InvestmentRecords from "./pages/InvestmentRecords";
 import Budget from "./pages/Budget";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
+import NavBar from "./layouts/NavBar";
 import {
   BrowserRouter,
   Routes,
@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: "/yatirim-gecmisi",
-    component: InvRecords,
+    component: InvestmentRecords,
   },
   {
     path: "/butce-kayit",

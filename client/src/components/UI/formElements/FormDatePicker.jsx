@@ -2,7 +2,7 @@ import { useField } from "formik";
 import { TextField } from "@mui/material";
 
 const FormDatePicker = ({ name, ...otherProps }) => {
-  const [field, meta] = useField(name);
+  const [field] = useField(name);
 
   const configTextField = {
     type: "date",

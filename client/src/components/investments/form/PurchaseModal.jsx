@@ -1,17 +1,18 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import InvestmentFormSelect from "./InvestmentFormSelect";
-import FormTextField from "../../../UI/formElements/FormTextField";
-import FormDatePicker from "../../../UI/formElements/FormDatePicker";
+import FormTextField from "../../UI/formElements/FormTextField";
+import FormDatePicker from "../../UI/formElements/FormDatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import * as Yup from "yup";
-import { materialDateInput } from "../../../../utils/help-functions";
+import { materialDateInput } from "../../../utils/help-functions";
 import { useMemo, Fragment } from "react";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../../redux/portfoliosSlice";
-import { postYatirimIslemleriAlis } from "../../../../redux/yatirimSlice";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
+import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
 import {
   Button,
   IconButton,
@@ -29,18 +30,17 @@ const initialFonInfo = {
   commission: 0,
 };
 
-const InvestmentPurchaseModal = ({ setOpenAlis }) => {
+const PurchaseModal = ({ setOpenAlis }) => {
   const initialFonInfoMemo = useMemo(() => initialFonInfo, []);
-  const { portfolios, selectedPortfolio } = useSelector(
-    (state) => state.portfolio
-  );
+  const { selectedPortfolio } = useSelector((state) => state.general);
+  const [addPurchases] = useAddPurchasesMutation();
+  const { data: portfolios } = useGetPortfoliosQuery();
   const dispatch = useDispatch();
 
   const submitHandler = async (values) => {
     let portfolio = values.portfolio;
     const yeniKayitListesi = values.fons.map((fon) => {
       return {
-        action: "Alış",
         code: fon.code.toUpperCase().trim(),
         number: fon.number,
         price: fon.price,
@@ -49,9 +49,14 @@ const InvestmentPurchaseModal = ({ setOpenAlis }) => {
         portfolio: portfolio,
       };
     });
-    dispatch(postYatirimIslemleriAlis(yeniKayitListesi));
-    dispatch(pickPortfolio(portfolio));
-    setOpenAlis(false);
+    try {
+      const res = await addPurchases(yeniKayitListesi).unwrap();
+      dispatch(setMessage(res));
+      dispatch(pickPortfolio(portfolio));
+      setOpenAlis(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const validateSchema = Yup.object().shape({
@@ -109,9 +114,9 @@ const InvestmentPurchaseModal = ({ setOpenAlis }) => {
                   label="Portföy"
                   minW={{ xs: 120, md: 200 }}
                 >
-                  {portfolios.map((item) => (
-                    <MenuItem value={item.isim} key={item._id}>
-                      {item.isim}
+                  {portfolios?.map((item) => (
+                    <MenuItem value={item.title} key={item.id}>
+                      {item.title}
                     </MenuItem>
                   ))}
                 </Field>
@@ -148,7 +153,7 @@ const InvestmentPurchaseModal = ({ setOpenAlis }) => {
                             <FormTextField
                               sx={{ maxWidth: 100 }}
                               name={`fons.${index}.code`}
-                              label="code"
+                              label="Kod"
                               size="small"
                             />
                           </Grid>
@@ -211,4 +216,4 @@ const InvestmentPurchaseModal = ({ setOpenAlis }) => {
   );
 };
 
-export default InvestmentPurchaseModal;
+export default PurchaseModal;

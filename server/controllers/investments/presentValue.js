@@ -18,7 +18,7 @@ exports.presentValueQuery = async (req, res) => {
   }
 };
 
-exports.presentValueAdd = async (dataList) => {
+const presentValueAdd = async (dataList) => {
   Promise.all(
     dataList.map(({ portfolio, code }) => {
       if (
@@ -37,6 +37,33 @@ exports.presentValueAdd = async (dataList) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.sendPresentValues = async (dataList) => {
+  const codeList = dataList
+    .map(({ code }) => code)
+    .filter((value, index, array) => array.indexOf(value) === index);
+
+  try {
+    const findCodes = await dbFind(InvPresentValueSchema, {
+      code: {
+        $in: codeList,
+      },
+    });
+    const findCodesList =
+      findCodes.length > 0 ? findCodes.map(({ code }) => code) : [];
+
+    const isNewDataExist = findCodesList.length < codeList.length;
+
+    if (isNewDataExist) {
+      const presentValues = dataList.filter(
+        ({ code }) => !findCodes?.map(({ code }) => code).includes(code)
+      );
+      presentValueAdd(presentValues);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.presentValueDelete = (code) => {
@@ -91,3 +118,5 @@ exports.presentValueQueryAndUpdate = async () => {
     console.error(e);
   }
 };
+
+

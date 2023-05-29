@@ -1,20 +1,20 @@
 import PageTitle from "../components/UI/PageTitle";
 import BudgetForm from "../components/budget/form/BudgetForm";
-import BIsonIslemler from "../components/budget/table/BIsonIslemler";
+import TableContainer from "../components/budget/table/TableContainer";
 import { useEffect } from "react";
-import { Stack, Box, Container } from "@mui/material";
+import { Stack, Box, Container, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/butcesSlice";
+import { setMessage } from "../redux/generalSlice";
 
 const Budget = () => {
-  const { message } = useSelector((state) => state.butce);
+  const { messageData } = useSelector((state) => state.general);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message) {
+    if (messageData) {
       setTimeout(() => dispatch(setMessage(null)), 1000);
     }
-  }, [message, dispatch]);
+  }, [messageData, dispatch]);
 
   return (
     <Box sx={{ height: "90vh", overflow: "auto" }}>
@@ -24,8 +24,12 @@ const Budget = () => {
             <PageTitle title="Bütçe İşlemleri" />
             <BudgetForm />
           </Stack>
-          {message && <Box>{message.message}</Box>}
-          <BIsonIslemler />
+          {messageData && (
+            <Typography variant="h6" gutterBottom>
+              {messageData.message}
+            </Typography>
+          )}
+          <TableContainer />
         </Stack>
       </Container>
     </Box>

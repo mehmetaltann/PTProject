@@ -13,7 +13,6 @@ import {
   Container,
   Avatar,
   Button,
-  Tooltip,
   MenuItem,
 } from "@mui/material";
 
@@ -24,7 +23,7 @@ const pages = [
   { title: "Bütçe İşlemleri", link: "butce-kayit" },
 ];
 
-const Navbar = () => {
+const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
@@ -199,4 +198,4 @@ const Navbar = () => {
     </AppBar>
   );
 };
-export default Navbar;
+export default NavBar;

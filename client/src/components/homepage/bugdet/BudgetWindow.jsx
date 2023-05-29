@@ -1,16 +1,16 @@
-import ButceItem from "./ButceItem";
+import BudgetItem from "./BudgetItem";
 import { Paper, Divider } from "@mui/material";
 import { thisMonth, thisYear } from "../../../utils/help-functions";
 import { aylar } from "../../../utils/localData";
 
-const ButceWindow = () => {
+const BudgetWindow = () => {
   const thisAyYil = `${
     aylar.find((item) => item.value === thisMonth).label
   } - ${thisYear}`;
 
   return (
     <Paper>
-      <ButceItem
+      <BudgetItem
         title={"Bütçe"}
         value={thisAyYil}
         sx={{
@@ -19,25 +19,25 @@ const ButceWindow = () => {
         typVar="h6"
       />
       <Divider />
-      <ButceItem title={"Önceki Aydan Devir"} value={"- 2850 TL - "} />
+      <BudgetItem title={"Önceki Aydan Devir"} value={"- 2850 TL - "} />
       <Divider variant="inset" />
-      <ButceItem
+      <BudgetItem
         title={"Gelir"}
         value={"..... 2850 TL"}
         typColor="success.main"
       />
       <Divider variant="inset" />
-      <ButceItem
+      <BudgetItem
         title={"Gider"}
         value={"..... 2850 TL"}
         typColor="error.main"
       />
       <Divider variant="inset" />
-      <ButceItem title={"Banka"} value={"- 2850 TL -"} />
+      <BudgetItem title={"Banka"} value={"- 2850 TL -"} />
       <Divider />
-      <ButceItem title={"Yatırım"} value={"- 2850 TL - "} />
+      <BudgetItem title={"Yatırım"} value={"- 2850 TL - "} />
       <Divider />
-      <ButceItem
+      <BudgetItem
         sx={{
           color: "info.main",
         }}
@@ -49,4 +49,4 @@ const ButceWindow = () => {
   );
 };
 
-export default ButceWindow;
+export default BudgetWindow;

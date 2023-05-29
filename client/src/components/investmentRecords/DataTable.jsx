@@ -1,49 +1,53 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import DataTableFrame from "../../UI/table/DataTableFrame";
+import DataTableFrame from "../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
-import { useEffect } from "react";
-import { dateFormat } from "../../../utils/help-functions";
-import { IconButton, Stack, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { dateFormat } from "../../utils/help-functions";
+import { useSelector, useDispatch } from "react-redux";
+import { setMessage } from "../../redux/generalSlice";
 import {
-  getYatirimIslemleri,
-  deleteYatirimIslemleri,
-} from "../../../redux/yatirimSlice";
+  useGetRecordsQuery,
+  useDeleteRecordMutation,
+} from "../../redux/apis/investmentRecordApi";
+import {
+  IconButton,
+  Stack,
+  Typography,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 
-const InvestmentDataTable = () => {
-  const { yatirimIslemleri, tarihAraligi, degisim } = useSelector(
-    (state) => state.yatirim
-  );
-
-  const { selectedPortfolio } = useSelector((state) => state.portfolio);
+const DataTable = () => {
+  const [deleteRecord] = useDeleteRecordMutation();
+  const { selectedDate } = useSelector((state) => state.general);
+  const {
+    data: records,
+    isLoading,
+    isFetching,
+  } = useGetRecordsQuery(selectedDate);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getYatirimIslemleri());
-  }, [tarihAraligi, degisim, dispatch]);
-
-  const filteredData =
-    selectedPortfolio !== "Tümü"
-      ? yatirimIslemleri.filter((item) => item.portfolio === selectedPortfolio)
-      : yatirimIslemleri;
+  if (isLoading && isFetching)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
 
   const columns = [
+    {
+      field: "portfolio",
+      headerName: "Portföy",
+      headerAlign: "left",
+      align: "left",
+      width: 215,
+    },
     {
       field: "code",
       headerName: "Kod",
       headerAlign: "left",
       align: "left",
       width: 40,
-    },
-    {
-      field: "date",
-      headerName: "Tarih",
-      type: "date",
-      valueFormatter: (params) => dateFormat(params.value),
-      headerAlign: "left",
-      align: "left",
-      width: 100,
     },
     {
       field: "number",
@@ -55,40 +59,38 @@ const InvestmentDataTable = () => {
       width: 70,
     },
     {
-      field: "price",
-      headerName: "Br. Fiyat",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      field: "purchaseDate",
+      headerName: "Alış Tarihi",
       headerAlign: "left",
       align: "left",
-      width: 110,
-    },
-    {
-      field: "commission",
-      type: "number",
-      headerName: "Komisyon",
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
-      headerAlign: "left",
-      align: "left",
+      type: "date",
       width: 100,
+      valueFormatter: (params) => dateFormat(params.value),
     },
     {
-      field: "cost",
-      type: "number",
-      headerName: "Maliyet",
-      valueGetter: (params) =>
-        params.row.adet * params.row.fiyat + params.row.komisyon,
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
+      field: "purchasePrice",
+      headerName: "Alış Fiyatı",
       headerAlign: "left",
+      type: "number",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       align: "left",
       width: 110,
     },
     {
-      field: "presentvalue",
-      headerName: "Gün. Değer",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      field: "saleDate",
+      headerName: "Satış Tarihi",
       headerAlign: "left",
+      align: "left",
+      type: "date",
+      width: 100,
+      valueFormatter: (params) => dateFormat(params.value),
+    },
+    {
+      field: "salePrice",
+      type: "number",
+      headerName: "Satış Fiyatı",
+      headerAlign: "left",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       align: "left",
       width: 110,
     },
@@ -98,7 +100,7 @@ const InvestmentDataTable = () => {
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.islemKarZarar >= 0 ? (
+        params.row.plStatus >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -108,7 +110,7 @@ const InvestmentDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`${params.row.islemKarZarar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -120,7 +122,7 @@ const InvestmentDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`${params.row.islemKarZarar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
@@ -132,7 +134,7 @@ const InvestmentDataTable = () => {
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.islemKarZararYuzdesi >= 0 ? (
+        params.row.plPercentage >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -142,7 +144,7 @@ const InvestmentDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`% ${params.row.islemKarZararYuzdesi.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -154,15 +156,15 @@ const InvestmentDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`% ${params.row.islemKarZararYuzdesi.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "dayDiff",
-      headerName: "Gün",
+      field: "dateDiff",
+      headerName: "Gün Sayısı",
       type: "number",
       filterable: false,
       headerAlign: "center",
@@ -178,21 +180,28 @@ const InvestmentDataTable = () => {
             key={index}
             size="small"
             color="error"
-            onClick={() => dispatch(deleteYatirimIslemleri(params.row.id))}
+            onClick={async () => {
+              try {
+                const res = await deleteRecord(params.row.id).unwrap();
+                dispatch(setMessage(res));
+              } catch (error) {
+                console.log(error);
+              }
+            }}
           >
             <DeleteIcon />
           </IconButton>
         );
       },
-      width: 40,
       filterable: false,
       sortable: false,
       headerAlign: "right",
       align: "right",
+      width: 60,
     },
   ];
 
-  return <DataTableFrame columns={columns} rows={filteredData} />;
+  return <DataTableFrame columns={columns} rows={records} />;
 };
 
-export default InvestmentDataTable;
+export default DataTable;

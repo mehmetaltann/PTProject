@@ -1,4 +1,4 @@
-import BudgetDataTableChart from "./BudgetDataTableChart";
+import BudgetDataTableChart from "./DataTableChart";
 import CallMadeIcon from "@mui/icons-material/CallMade";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { GridFooterContainer, GridFooter } from "@mui/x-data-grid";
@@ -14,8 +14,7 @@ import {
   AccordionDetails,
 } from "@mui/material";
 
-const BudgetDataTableFooter = ({ butceIslemleri, rowSelectionModel }) => {
-  const data = butceIslemleri;
+const DataTableFooter = ({ filteredData: data, rowSelectionModel }) => {
   const [toplamGelirModalOpen, setToplamGelirModalOpen] = useState(false);
   const [toplamGiderModalOpen, setToplamGiderModalOpen] = useState(false);
   const [secilenIslemModalOpen, setSecilenIslemModalOpen] = useState(false);
@@ -193,4 +192,4 @@ const BudgetDataTableFooter = ({ butceIslemleri, rowSelectionModel }) => {
   );
 };
 
-export default BudgetDataTableFooter;
+export default DataTableFooter;

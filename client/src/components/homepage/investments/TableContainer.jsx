@@ -1,13 +1,27 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Typography, TextField, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../redux/portfoliosSlice";
+import { pickPortfolio } from "../../../redux/generalSlice";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import {
+  Typography,
+  TextField,
+  MenuItem,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 
-const HomeDataTableHead = () => {
-  const { portfolios, selectedPortfolio } = useSelector(
-    (state) => state.portfolio
-  );
+const TableContainer = () => {
+  const { selectedPortfolio } = useSelector((state) => state.general);
+  const { data: portfolios, isLoading, isFetching } = useGetPortfoliosQuery();
   const dispatch = useDispatch();
+
+  if (isLoading && isFetching)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
+
   return (
     <Grid
       container
@@ -43,9 +57,9 @@ const HomeDataTableHead = () => {
           sx={{ minWidth: "25ch", p: 1, borderColor: "primary.main" }}
         >
           <MenuItem value="Tümü">Tümü</MenuItem>
-          {portfolios.map((portfoy) => (
-            <MenuItem key={portfoy._id} value={portfoy.isim}>
-              {portfoy.isim}
+          {portfolios.map((item) => (
+            <MenuItem key={item.id} value={item.title}>
+              {item.title}
             </MenuItem>
           ))}
         </TextField>
@@ -54,4 +68,4 @@ const HomeDataTableHead = () => {
   );
 };
 
-export default HomeDataTableHead;
+export default TableContainer;

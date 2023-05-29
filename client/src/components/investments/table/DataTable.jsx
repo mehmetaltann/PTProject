@@ -1,40 +1,62 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import DataTableFrame from "../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
-import { dateFormat } from "../../utils/help-functions";
-import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { IconButton, Stack, Typography } from "@mui/material";
+import DataTableFrame from "../../UI/table/DataTableFrame";
+import { dateFormat } from "../../../utils/help-functions";
+import { useSelector, useDispatch } from "react-redux";
+import { setMessage } from "../../../redux/generalSlice";
 import {
-  getHistoryIslemleri,
-  deleteHistoryIslemleri,
-} from "../../redux/historiesSlice";
+  useGetInvestmentsQuery,
+  useDeleteInvestmentMutation,
+} from "../../../redux/apis/investmentApi";
+import {
+  IconButton,
+  Stack,
+  Typography,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 
-const YGdataTable = () => {
-  const { historyIslemleri, tarihAraligi, degisim } = useSelector(
-    (state) => state.history
+const DataTable = () => {
+  const { selectedDate, selectedPortfolio } = useSelector(
+    (state) => state.general
   );
+  const [deleteInvestment] = useDeleteInvestmentMutation();
+  const {
+    data: investments,
+    isLoading,
+    isFetching,
+  } = useGetInvestmentsQuery(selectedDate);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getHistoryIslemleri());
-  }, [tarihAraligi, degisim, dispatch]);
+  if (isLoading && isFetching)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
 
-  const COLUMNS = [
-    {
-      field: "portfolio",
-      headerName: "Portföy",
-      headerAlign: "left",
-      align: "left",
-      width: 215,
-    },
+  const filteredData =
+    selectedPortfolio !== "Tümü"
+      ? investments?.filter((item) => item.portfolio === selectedPortfolio)
+      : investments;
+
+  const columns = [
     {
       field: "code",
       headerName: "Kod",
       headerAlign: "left",
       align: "left",
       width: 40,
+    },
+    {
+      field: "date",
+      headerName: "Tarih",
+      type: "date",
+      valueFormatter: (params) => dateFormat(params.value),
+      headerAlign: "left",
+      align: "left",
+      width: 100,
     },
     {
       field: "number",
@@ -46,38 +68,40 @@ const YGdataTable = () => {
       width: 70,
     },
     {
-      field: "purchaseDate",
-      headerName: "Alış Tarihi",
-      headerAlign: "left",
-      align: "left",
-      type: "date",
-      width: 100,
-      valueFormatter: (params) => dateFormat(params.value),
-    },
-    {
-      field: "purchasePrice",
-      headerName: "Alış Fiyatı",
-      headerAlign: "left",
+      field: "price",
+      headerName: "Br. Fiyat",
       type: "number",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      headerAlign: "left",
       align: "left",
       width: 110,
     },
     {
-      field: "saleDate",
-      headerName: "Satış Tarihi",
+      field: "commission",
+      type: "number",
+      headerName: "Komisyon",
+      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
       align: "left",
-      type: "date",
       width: 100,
-      valueFormatter: (params) => dateFormat(params.value),
     },
     {
-      field: "salePrice",
+      field: "cost",
       type: "number",
-      headerName: "Satış Fiyatı",
+      headerName: "Maliyet",
+      valueGetter: (params) =>
+        params.row.number * params.row.cost + params.row.commission,
+      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
       headerAlign: "left",
+      align: "left",
+      width: 110,
+    },
+    {
+      field: "presentvalue",
+      headerName: "Gün. Değer",
+      type: "number",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      headerAlign: "left",
       align: "left",
       width: 110,
     },
@@ -87,7 +111,7 @@ const YGdataTable = () => {
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.kar_zarar >= 0 ? (
+        params.row.plStatus >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -97,7 +121,7 @@ const YGdataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`${params.row.kar_zarar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -109,7 +133,7 @@ const YGdataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`${params.row.kar_zarar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus} TL`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
@@ -121,7 +145,7 @@ const YGdataTable = () => {
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.kar_zarar_orani >= 0 ? (
+        params.row.plPercentage >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -131,7 +155,7 @@ const YGdataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`% ${params.row.kar_zarar_orani.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -143,15 +167,15 @@ const YGdataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`% ${params.row.kar_zarar_orani.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage}`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "dateDiff",
-      headerName: "Gün Sayısı",
+      field: "dayDiff",
+      headerName: "Gün",
       type: "number",
       filterable: false,
       headerAlign: "center",
@@ -167,25 +191,28 @@ const YGdataTable = () => {
             key={index}
             size="small"
             color="error"
-            onClick={() => {
-              dispatch(deleteHistoryIslemleri(params.row.id));
+            onClick={async () => {
+              try {
+                const res = await deleteInvestment(params.row.id).unwrap();
+                dispatch(setMessage(res));
+              } catch (error) {
+                console.log(error);
+              }
             }}
           >
             <DeleteIcon />
           </IconButton>
         );
       },
+      width: 40,
       filterable: false,
       sortable: false,
       headerAlign: "right",
       align: "right",
-      width: 60,
     },
   ];
 
-  const columns = useMemo(() => COLUMNS, []);
-
-  return <DataTableFrame columns={columns} rows={historyIslemleri} />;
+  return <DataTableFrame columns={columns} rows={filteredData} />;
 };
 
-export default YGdataTable;
+export default DataTable;

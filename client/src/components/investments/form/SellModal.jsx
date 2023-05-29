@@ -1,21 +1,23 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import InvestmentFormSelect from "./InvestmentFormSelect";
-import FormTextField from "../../../UI/formElements/FormTextField";
-import FormDatePicker from "../../../UI/formElements/FormDatePicker";
+import FormTextField from "../../UI/formElements/FormTextField";
+import FormDatePicker from "../../UI/formElements/FormDatePicker";
 import SendIcon from "@mui/icons-material/Send";
 import * as Yup from "yup";
-import { materialDateInput } from "../../../../utils/help-functions";
+import { materialDateInput } from "../../../utils/help-functions";
 import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
 import { Button, Typography, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../../redux/portfoliosSlice";
-import { postYatirimIslemleriSatis } from "../../../../redux/yatirimSlice";
+import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import { useAddSellMutation } from "../../../redux/apis/investmentApi";
+import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
 
-const InvestmentSellModal = ({ setOpenSatis }) => {
-  const { portfolios, selectedPortfolio } = useSelector(
-    (state) => state.portfolio
-  );
+const SellModal = ({ setOpenSatis }) => {
+  const { selectedPortfolio } = useSelector((state) => state.general);
+  const { data: portfolios } = useGetPortfoliosQuery();
+  const [addSell] = useAddSellMutation();
+
   const dispatch = useDispatch();
 
   const submitHandler = async (values) => {
@@ -27,9 +29,14 @@ const InvestmentSellModal = ({ setOpenSatis }) => {
       commission: values.commission,
       portfolio: values.portfolio,
     };
-    dispatch(postYatirimIslemleriSatis(yeniKayitListesi));
-    dispatch(pickPortfolio(values.portfolio));
-    setOpenSatis(false);
+    try {
+      const res = await addSell(yeniKayitListesi).unwrap();
+      dispatch(setMessage(res));
+      dispatch(pickPortfolio(values.portfolio));
+      setOpenSatis(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const validateSchema = Yup.object().shape({
@@ -84,9 +91,9 @@ const InvestmentSellModal = ({ setOpenSatis }) => {
                   label="Portföy"
                   minW={200}
                 >
-                  {portfolios.map((item) => (
-                    <MenuItem value={item.isim} key={item._id}>
-                      {item.isim}
+                  {portfolios?.map((item) => (
+                    <MenuItem value={item.title} key={item.id}>
+                      {item.title}
                     </MenuItem>
                   ))}
                 </Field>
@@ -149,4 +156,4 @@ const InvestmentSellModal = ({ setOpenSatis }) => {
   );
 };
 
-export default InvestmentSellModal;
+export default SellModal;

@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-const BudgetFormSelect = ({ children, minW, label, form, field, name2 }) => {
+const FormSelect = ({ children, minW, label, form, field, name2 }) => {
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -23,4 +23,4 @@ const BudgetFormSelect = ({ children, minW, label, form, field, name2 }) => {
   );
 };
 
-export default BudgetFormSelect;
+export default FormSelect;

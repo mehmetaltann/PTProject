@@ -1,8 +1,8 @@
-import BudgetDataTable from "./BudgetDataTable";
+import BudgetDataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
-import { tarihAraligiSec, butceIslemTipiSec } from "../../../redux/butcesSlice";
+import { pickDate, pickBudgetType } from "../../../redux/generalSlice";
 import {
   MenuItem,
   Typography,
@@ -14,8 +14,10 @@ import {
   TextField,
 } from "@mui/material";
 
-const BudgetTableHeader = () => {
-  const { tarihAraligi, butceIslemTipi } = useSelector((state) => state.butce);
+const TableContainer = () => {
+  const { selectedDate, selectedBudgetType } = useSelector(
+    (state) => state.general
+  );
   const dispatch = useDispatch();
 
   return (
@@ -33,9 +35,9 @@ const BudgetTableHeader = () => {
               <Typography variant="h5">İşlemler</Typography>
 
               <ToggleButtonGroup
-                value={butceIslemTipi}
+                value={selectedBudgetType}
                 exclusive
-                onChange={(e) => dispatch(butceIslemTipiSec(e.target.value))}
+                onChange={(e) => dispatch(pickBudgetType(e.target.value))}
                 aria-label="Platform"
               >
                 <ToggleButton
@@ -77,10 +79,10 @@ const BudgetTableHeader = () => {
               id="tarih"
               variant="standard"
               defaultValue={2}
-              value={tarihAraligi}
+              value={selectedDate}
               size="small"
               onChange={(e) => {
-                dispatch(tarihAraligiSec(e.target.value));
+                dispatch(pickDate(e.target.value));
               }}
               sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
             >
@@ -102,4 +104,4 @@ const BudgetTableHeader = () => {
   );
 };
 
-export default BudgetTableHeader;
+export default TableContainer;

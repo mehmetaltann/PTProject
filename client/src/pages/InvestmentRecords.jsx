@@ -1,19 +1,19 @@
 import PageTitle from "../components/UI/PageTitle";
-import YGsonIslemler from "../components/investmentRecords/table/YGsonIslemler";
-import { Stack, Box, Container } from "@mui/material";
+import TableContainer from "../components/investmentRecords/TableContainer";
+import { Stack, Box,Typography, Container } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/historiesSlice";
+import { setMessage } from "../redux/generalSlice";
 
-const InvRecords = () => {
-  const { message } = useSelector((state) => state.history);
+const InvestmentRecords = () => {
+  const { messageData } = useSelector((state) => state.general);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message) {
+    if (messageData) {
       setTimeout(() => dispatch(setMessage(null)), 1000);
     }
-  }, [message, dispatch]);
+  }, [messageData, dispatch]);
 
   return (
     <Box sx={{ height: "85vh", overflow: "auto" }}>
@@ -22,12 +22,16 @@ const InvRecords = () => {
           <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>
             <PageTitle title="Geçmiş Yatırım İşlemleri" />
           </Stack>
-          {message && <Box>{message.message}</Box>}
-          <YGsonIslemler />
+          {messageData && (
+            <Typography variant="h6" gutterBottom>
+              {messageData.message}
+            </Typography>
+          )}
+          <TableContainer />
         </Stack>
       </Container>
     </Box>
   );
 };
 
-export default InvRecords;
+export default InvestmentRecords;

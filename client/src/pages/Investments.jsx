@@ -1,20 +1,20 @@
 import PageTitle from "../components/UI/PageTitle";
 import InvestmentForm from "../components/investments/form/InvestmentForm";
-import InvestmentTableContainer from "../components/investments/table/InvestmentTableContainer";
+import TableContainer from "../components/investments/table/TableContainer";
 import { Stack, Box, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../redux/yatirimSlice";
+import { setMessage } from "../redux/generalSlice";
 
 const Investments = () => {
-  const { message } = useSelector((state) => state.yatirim);
+  const { messageData } = useSelector((state) => state.general);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message) {
+    if (messageData) {
       setTimeout(() => dispatch(setMessage(null)), 1000);
     }
-  }, [message, dispatch]);
+  }, [messageData, dispatch]);
 
   return (
     <Box sx={{ height: "85vh", overflow: "auto" }}>
@@ -24,12 +24,12 @@ const Investments = () => {
             <PageTitle title="Yatırım İşlemleri" />
             <InvestmentForm />
           </Stack>
-          {message && (
+          {messageData && (
             <Typography variant="h6" gutterBottom>
-              {message.message}
+              {messageData.message}
             </Typography>
           )}
-          <InvestmentTableContainer />
+          <TableContainer />
         </Stack>
       </Container>
     </Box>

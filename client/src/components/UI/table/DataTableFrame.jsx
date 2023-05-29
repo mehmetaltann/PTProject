@@ -11,7 +11,7 @@ const DataTableFrame = (props) => {
       localeText={trTR.components.MuiDataGrid.defaultProps.localeText}
       density="compact"
       initialState={{
-        ...rows.initialState,
+        ...rows?.initialState,
         pagination: { paginationModel: { pageSize: 15 } },
       }}
       pageSizeOptions={[15, 30, 80]}

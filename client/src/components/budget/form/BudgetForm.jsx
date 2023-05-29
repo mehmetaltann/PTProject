@@ -3,16 +3,17 @@ import Grid from "@mui/material/Unstable_Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import BudgetFormSelect from "./BudgetFormSelect";
+import FormSelect from "./FormSelect";
 import FormTextField from "../../UI/formElements/FormTextField";
 import FormDatePicker from "../../UI/formElements/FormDatePicker";
-import { useState, useMemo, useEffect, Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useMemo, Fragment } from "react";
+import { useGetCategoriesQuery } from "../../../redux/apis/categoryApi";
 import { uniqListFunc } from "../../../utils/help-functions";
 import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../../utils/help-functions";
-import { getCategories } from "../../../redux/categoriesSlice";
-import { postButceIslemi } from "../../../redux/butcesSlice";
+import { useDispatch } from "react-redux";
+import { useAddBudgetItemMutation } from "../../../redux/apis/budgetApi";
+import { setMessage } from "../../../redux/generalSlice";
 import {
   Typography,
   MenuItem,
@@ -38,18 +39,13 @@ const style = {
 };
 
 const BudgetForm = () => {
-  const [open, setOpen] = useState({ durum: false, type: "Gelir" });
+  const [open, setOpen] = useState({ state: false, type: "Gelir" });
+  const { data: categories } = useGetCategoriesQuery();
+  const [addBudgetItem] = useAddBudgetItemMutation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getCategories());
-  }, []);
-
-  const { categories } = useSelector((state) => state.category);
-
-  const handleGelirOpen = () => setOpen({ durum: true, type: "Gelir" });
-  const handleGiderOpen = () => setOpen({ durum: true, type: "Gider" });
-  const handleClose = () => setOpen({ durum: false, type: "Gelir" });
+  const handleGelirOpen = () => setOpen({ state: true, type: "Gelir" });
+  const handleGiderOpen = () => setOpen({ state: true, type: "Gider" });
+  const handleClose = () => setOpen({ state: false, type: "Gelir" });
 
   const initialButceData = {
     title: "",
@@ -73,8 +69,13 @@ const BudgetForm = () => {
         description: info.description,
       };
     });
-    dispatch(postButceIslemi(yeniKayitListesi));
-    handleClose();
+    try {
+      const res = await addBudgetItem(yeniKayitListesi).unwrap();
+      dispatch(setMessage(res));
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const validateSchema = Yup.object().shape({
@@ -113,7 +114,7 @@ const BudgetForm = () => {
         Gider Ekle
       </Button>
       <Modal
-        open={open.durum}
+        open={open.state}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -143,7 +144,7 @@ const BudgetForm = () => {
                   <Stack direction="row" spacing={2}>
                     <Field
                       name="categoryA"
-                      component={BudgetFormSelect}
+                      component={FormSelect}
                       label="Kategori A"
                       minW={200}
                     >
@@ -191,7 +192,7 @@ const BudgetForm = () => {
                                 {values.categoryA ? (
                                   <Field
                                     name={`infos.${index}.categoryB`}
-                                    component={BudgetFormSelect}
+                                    component={FormSelect}
                                     label="Kategori B"
                                     name2={`infos.${index}.title`}
                                     minW={150}
@@ -214,7 +215,7 @@ const BudgetForm = () => {
                                 ) : (
                                   <Field
                                     name={`infos.${index}.categoryB`}
-                                    component={BudgetFormSelect}
+                                    component={FormSelect}
                                     label="Kategori B"
                                     disabled
                                     minW={150}

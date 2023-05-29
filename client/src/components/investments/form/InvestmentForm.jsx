@@ -1,6 +1,6 @@
 import SendIcon from "@mui/icons-material/Send";
-import InvestmentPurchaseModal from "./modals/InvestmentPurchaseModal";
-import InvestmentSellModal from "./modals/InvestmentSellModal";
+import PurchaseModal from "./PurchaseModal";
+import SellModal from "./SellModal";
 import { Button, Stack, Modal, Box } from "@mui/material";
 import { useState } from "react";
 
@@ -42,7 +42,7 @@ const InvestmentForm = () => {
             p: 2,
           }}
         >
-          <InvestmentPurchaseModal setOpenAlis={setOpenAlis} />
+          <PurchaseModal setOpenAlis={setOpenAlis} />
         </Box>
       </Modal>
       <Button
@@ -77,7 +77,7 @@ const InvestmentForm = () => {
             p: 2,
           }}
         >
-          <InvestmentSellModal setOpenSatis={setOpenSatis} />
+          <SellModal setOpenSatis={setOpenSatis} />
         </Box>
       </Modal>
     </Stack>

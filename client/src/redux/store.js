@@ -1,22 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { portfolioApi } from "./api/portfolioApi";
-import yatirimSlice from "./yatirimSlice";
-import butcesSlice from "./butcesSlice";
-import portfoliosSlice from "./portfoliosSlice";
-import categoriesSlice from "./categoriesSlice";
-import historiesSlice from "./historiesSlice";
-import guncelDurumSlice from "./guncelDurumSlice";
+import { baseApi } from "./baseApi";
+import generalSlice from "./generalSlice";
 
 export const store = configureStore({
   reducer: {
-    yatirim: yatirimSlice,
-    butce: butcesSlice,
-    portfolio: portfoliosSlice,
-    category: categoriesSlice,
-    history: historiesSlice,
-    guncelDurum: guncelDurumSlice,
-    [portfolioApi.reducerPath]: portfolioApi.reducer,
+    general: generalSlice,
+    [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(portfolioApi.middleware),
+    getDefaultMiddleware().concat(baseApi.middleware),
 });

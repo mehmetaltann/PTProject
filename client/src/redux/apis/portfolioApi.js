@@ -1,9 +1,6 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "../baseApi";
 
-export const portfolioApi = createApi({
-  reducerPath: "portfolioApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1623/" }),
-  tagTypes: ["Portfolios"],
+export const portfolioApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPortfolios: builder.query({
       query: () => `portfoy-sorgula`,

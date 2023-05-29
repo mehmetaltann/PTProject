@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-const BudgetDataTableChart = ({ dataList, lab, color }) => {
+const DataTableChart = ({ dataList, lab, color }) => {
   const labels = dataList.map((_, i) => i + 1);
   const options = {
     responsive: true,
@@ -47,4 +47,4 @@ const BudgetDataTableChart = ({ dataList, lab, color }) => {
   return <Line options={options} data={data} />;
 };
 
-export default BudgetDataTableChart;
+export default DataTableChart;

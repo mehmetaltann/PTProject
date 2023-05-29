@@ -1,12 +1,12 @@
-import InvestmentRecordDataTable from "./InvestmentRecordDataTable";
+import DataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { tarihSecim } from "../../utils/localData";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { tarihAraligiSec } from "../../redux/historiesSlice";
+import { pickDate } from "../../redux/generalSlice";
 
-const YGsonIslemler = () => {
-  const { tarihAraligi } = useSelector((state) => state.history);
+const TableContainer = () => {
+  const { selectedDate } = useSelector((state) => state.general);
   const dispatch = useDispatch();
 
   return (
@@ -34,10 +34,10 @@ const YGsonIslemler = () => {
               id="tarih"
               variant="standard"
               defaultValue={2}
-              value={tarihAraligi}
+              value={selectedDate}
               size="small"
               onChange={(e) => {
-                dispatch(tarihAraligiSec(e.target.value));
+                dispatch(pickDate(e.target.value));
               }}
               sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
             >
@@ -51,7 +51,7 @@ const YGsonIslemler = () => {
         </Grid>
         <Grid container xs={12} sx={{ height: "60vh", mt: 1 }}>
           <Box sx={{ height: "100%", width: "100%" }}>
-            <InvestmentRecordDataTable />
+            <DataTable />
           </Box>
         </Grid>
       </Grid>
@@ -59,4 +59,4 @@ const YGsonIslemler = () => {
   );
 };
 
-export default YGsonIslemler;
+export default TableContainer;

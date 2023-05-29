@@ -1,22 +1,29 @@
 import DataTableFrame from "../../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
-import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, CircularProgress, Box } from "@mui/material";
+import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
 
-const HomeDataTable = () => {
-  const { guncelDurum } = useSelector((state) => state.guncelDurum);
-  const { selectedPortfolio } = useSelector((state) => state.portfolio);
+const DataTable = () => {
+  const { selectedPortfolio } = useSelector((state) => state.general);
+  const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
+
+  if (isLoading && isFetching)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
 
   const filteredData =
     selectedPortfolio !== "Tümü"
-      ? guncelDurum.filter((item) => item.portfoy === selectedPortfolio)
-      : guncelDurum;
+      ? summaryData.filter((item) => item.portfolio === selectedPortfolio)
+      : summaryData;
 
-  const COLUMNS = [
+  const columns = [
     {
-      field: "kod",
+      field: "code",
       headerName: "Kod",
       headerAlign: "left",
       align: "left",
@@ -35,7 +42,7 @@ const HomeDataTable = () => {
       cellClassName: "fon_adi",
     },
     {
-      field: "adet",
+      field: "totalNumber",
       type: "number",
       width: 60,
       headerName: "Adet",
@@ -43,7 +50,7 @@ const HomeDataTable = () => {
       align: "left",
     },
     {
-      field: "ort_fiyat",
+      field: "averagePrice",
       headerName: "Ort. Fiyat",
       type: "number",
       width: 110,
@@ -52,7 +59,7 @@ const HomeDataTable = () => {
       align: "left",
     },
     {
-      field: "gnc_fiyat",
+      field: "presentPrice",
       headerName: "Güncel Fiyat",
       type: "number",
       width: 110,
@@ -61,7 +68,7 @@ const HomeDataTable = () => {
       align: "left",
     },
     {
-      field: "toplam_maliyet",
+      field: "totalCost",
       headerName: "Top. Maliyet",
       type: "number",
       width: 110,
@@ -70,7 +77,7 @@ const HomeDataTable = () => {
       align: "left",
     },
     {
-      field: "toplam_tutar",
+      field: "presentvalue",
       headerName: "Top. Değer",
       type: "number",
       width: 110,
@@ -79,12 +86,12 @@ const HomeDataTable = () => {
       align: "left",
     },
     {
-      field: "toplam_kar",
+      field: "plStatus",
       headerName: "Kar/Zarar",
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.toplam_kar >= 0 ? (
+        params.row.plStatus >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -94,7 +101,7 @@ const HomeDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`${params.row.toplam_kar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -106,19 +113,19 @@ const HomeDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`${params.row.toplam_kar.toFixed(2)} TL`}</Typography>
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "kar_yuzdesi",
+      field: "plPercentage",
       headerName: "Yüzde",
       type: "number",
       width: 110,
       renderCell: (params) =>
-        params.row.kar_yuzdesi >= 0 ? (
+        params.row.plPercentage >= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -128,7 +135,7 @@ const HomeDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main" }}
-            >{`% ${params.row.kar_yuzdesi.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -140,7 +147,7 @@ const HomeDataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`% ${params.row.kar_yuzdesi.toFixed(2)}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
@@ -148,13 +155,10 @@ const HomeDataTable = () => {
     },
   ];
 
-  const columns = useMemo(() => COLUMNS, []);
-
   return (
     <DataTableFrame
       columns={columns}
       rows={filteredData}
-      density="standard"
       sxProps={{
         "& .fon_adi": {
           whiteSpace: "normal !important",
@@ -165,4 +169,4 @@ const HomeDataTable = () => {
   );
 };
 
-export default HomeDataTable;
+export default DataTable;

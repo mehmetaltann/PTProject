@@ -67,7 +67,7 @@ const query = [
 
 exports.presentPositions = async (req, res) => {
   try {
-    const data = dbFindAggregate(InvestmentSchema, query);
+    const data = await dbFindAggregate(InvestmentSchema, query);
     res.status(200).json(data);
   } catch (error) {
     res

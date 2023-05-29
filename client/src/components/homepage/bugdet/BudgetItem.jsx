@@ -1,6 +1,6 @@
 import { Typography, Stack } from "@mui/material";
 
-const ButceItem = ({
+const BudgetItem = ({
   title,
   value,
   sx = [],
@@ -22,4 +22,4 @@ const ButceItem = ({
   );
 };
 
-export default ButceItem;
+export default BudgetItem;

@@ -1,33 +1,42 @@
-import BudgetDataTableFooter from "./BudgetDataTableFooter";
+import BudgetDataTableFooter from "./DataTableFooter";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DataTableFrame from "../../UI/table/DataTableFrame";
-import { useMemo, useState, useEffect } from "react";
+import { useState } from "react";
 import { dateFormat } from "../../../utils/help-functions";
-import { Badge, IconButton } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { Badge, IconButton, CircularProgress, Box } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { setMessage } from "../../../redux/generalSlice";
 import {
-  getButceIslemleri,
-  deleteButceIslemi,
-} from "../../../redux/butcesSlice";
+  useGetBudgetItemsQuery,
+  useDeleteBudgetItemMutation,
+} from "../../../redux/apis/budgetApi";
 
-const BudgetDataTable = () => {
+const DataTable = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const { butceIslemleri, tarihAraligi, degisim, butceIslemTipi } = useSelector(
-    (state) => state.butce
+  const [deleteBudgetItem] = useDeleteBudgetItemMutation();
+  const { selectedDate, selectedBudgetType } = useSelector(
+    (state) => state.general
   );
-
+  const {
+    data: budgetItems,
+    isLoading,
+    isFetching,
+  } = useGetBudgetItemsQuery(selectedDate);
   const dispatch = useDispatch();
 
+  if (isLoading && isFetching)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
+
   const filteredData =
-    butceIslemTipi !== "Tümü"
-      ? butceIslemleri.filter((item) => item.type === butceIslemTipi)
-      : butceIslemleri;
+    selectedBudgetType !== "Tümü"
+      ? budgetItems.filter((item) => item.type === selectedBudgetType)
+      : budgetItems;
 
-  useEffect(() => {
-    dispatch(getButceIslemleri());
-  }, [tarihAraligi, degisim, dispatch]);
-
-  const COLUMNS = [
+  const columns = [
     {
       field: ".",
       headerAlign: "center",
@@ -80,9 +89,13 @@ const BudgetDataTable = () => {
       width: 150,
       align: "left",
     },
-    { field: "description", headerName: "Açıklama",headerAlign: "left",
-    width: 200,
-    align: "left", },
+    {
+      field: "description",
+      headerName: "Açıklama",
+      headerAlign: "left",
+      width: 200,
+      align: "left",
+    },
     {
       field: "actions",
       headerName: "İşlem",
@@ -92,8 +105,13 @@ const BudgetDataTable = () => {
             key={index}
             size="small"
             color="error"
-            onClick={() => {
-              dispatch(deleteButceIslemi(params.row.id));
+            onClick={async () => {
+              try {
+                const res = await deleteBudgetItem(params.row.id).unwrap();
+                dispatch(setMessage(res));
+              } catch (error) {
+                console.log(error);
+              }
             }}
           >
             <DeleteIcon />
@@ -108,8 +126,6 @@ const BudgetDataTable = () => {
     },
   ];
 
-  const columns = useMemo(() => COLUMNS, []);
-
   return (
     <DataTableFrame
       columns={columns}
@@ -118,7 +134,7 @@ const BudgetDataTable = () => {
         footer: BudgetDataTableFooter,
       }}
       slotSPropProps={{
-        footer: { butceIslemleri, rowSelectionModel },
+        footer: { filteredData, rowSelectionModel },
       }}
       onRowSelectionModelChange={(newRowSelectionModel) => {
         setRowSelectionModel(newRowSelectionModel);
@@ -129,4 +145,4 @@ const BudgetDataTable = () => {
   );
 };
 
-export default BudgetDataTable;
+export default DataTable;
