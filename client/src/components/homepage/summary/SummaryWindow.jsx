@@ -1,4 +1,5 @@
 import SummaryItem from "./SummaryItem";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { thisMonth, thisYear, thisDay } from "../../../utils/help-functions";
 import { aylar } from "../../../utils/localData";
 import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
@@ -10,6 +11,7 @@ import {
   Box,
   Typography,
   Stack,
+  IconButton,
 } from "@mui/material";
 
 const SummaryWindow = () => {
@@ -49,10 +51,16 @@ const SummaryWindow = () => {
         spacing={2}
         direction="row"
         justifyContent={"space-between"}
+        alignItems={"center"}
       >
-        <Typography variant="body1" fontWeight={700}>
-          Özet
-        </Typography>
+        <Stack direction="row" alignItems={"center"}>
+          <Typography variant="body1" fontWeight={700}>
+            Özet
+          </Typography>
+          <IconButton aria-label="delete">
+            <RefreshIcon fontSize="inherit" color="primary.main" />
+          </IconButton>
+        </Stack>
         <Typography variant="body1" fontWeight={700}>
           {thisAyYil}
         </Typography>
@@ -76,7 +84,7 @@ const SummaryWindow = () => {
                 }}
                 plColor={color}
               />
-              <Divider/>
+              <Divider />
             </Fragment>
           );
         }

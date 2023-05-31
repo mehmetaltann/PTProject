@@ -18,7 +18,7 @@ app.use(cors());
 
 //scheduled tasks
 cron.schedule(
-  "00 59 16 * * *",
+  "20 27 14 * * *",
   () => {
     presentValueQueryAndUpdate()
     console.log("değerler Güncellendi")

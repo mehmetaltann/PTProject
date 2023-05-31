@@ -57,8 +57,10 @@ router.get("/guncel-durum", presentPositions);
 //Investment Present Values
 const {
   presentValueQuery,
+  presentValueQueryAndUpdate,
 } = require("../controllers/investments/presentValue");
 router.get("/guncel-deger-sorgula", presentValueQuery);
+router.post("/guncel-deger-guncelle", presentValueQueryAndUpdate);
 
 //User ve Auth const { postUser, authUser } = require("../controllers/user/userIslemleri");
 const { postUser, authUser } = require("../controllers/user/userIslemleri");

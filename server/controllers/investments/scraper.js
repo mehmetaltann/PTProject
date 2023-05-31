@@ -58,7 +58,7 @@ exports.moneyScraper = async (code, portfolio) => {
     }
     return {
       title: title,
-      price: data[parameter]["alis"],
+      price: parseFloat(data[parameter]["alis"].replace(/,/, ".")),
       category: category,
       code,
       portfolio,

@@ -70,6 +70,29 @@ exports.presentValueDelete = (code) => {
   dbFindOneAndDelete(InvPresentValueSchema, { code: code });
 };
 
+const fetchScrapData = async (presentData) => {
+  const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+  const result = [];
+  for (const { code, portfolio } of presentData) {
+    try {
+      if (
+        portfolio === "Bireysel Emeklilik Fonları" ||
+        portfolio === "Yatırım Fonları"
+      ) {
+        await timer(2);
+        res = await fundScraper(code, portfolio);
+      } else if (portfolio === "Döviz" || portfolio === "Altın") {
+        await timer(2);
+        res = await moneyScraper(code, portfolio);
+      }
+      result.push(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return result;
+};
+
 exports.presentValueQueryAndUpdate = async () => {
   const query = [
     {
@@ -82,36 +105,26 @@ exports.presentValueQueryAndUpdate = async () => {
   ];
 
   const presentData = await InvPresentValueSchema.aggregate(query);
-  Promise.all(
-    presentData.map(({ portfolio, code }) => {
-      if (
-        portfolio === "Bireysel Emeklilik Fonları" ||
-        portfolio === "Yatırım Fonları"
-      ) {
-        return fundScraper(code, portfolio).then((res) => res);
-      } else if (portfolio === "Döviz" || portfolio === "Altın") {
-        return moneyScraper(code, portfolio).then((res) => res);
-      }
-    })
-  )
-    .then(async (data) => {
-      Promise.all(
-        data.map(({ price:newPrice, code }) => {
-          dbFindOneAndUpdate(
-            InvPresentValueSchema,
-            { code: code },
-            { price: newPrice }
-          );
-        })
-      )
-        .then((data2) => {
-          console.log("Success");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
+  const data = await fetchScrapData(presentData);
+
+  const updateOps = data
+    .filter((item) => item !== undefined)
+    .map((item) => {
+      let updateData = {
+        updateOne: {
+          filter: {
+            code: item.code,
+          },
+          update: {
+            price: item.price,
+          },
+        },
+      };
+      console.log(updateData);
+      return updateData;
     });
+
+  const res = await InvPresentValueSchema.bulkWrite(updateOps);
+
+  console.log(res);
 };
