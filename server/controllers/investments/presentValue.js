@@ -80,43 +80,38 @@ exports.presentValueQueryAndUpdate = async () => {
       },
     },
   ];
-  try {
-    const presentData = await InvPresentValueSchema.aggregate(query);
-    Promise.all(
-      presentData.map(({ portfolio, code }) => {
-        if (
-          portfolio === "Bireysel Emeklilik Fonları" ||
-          portfolio === "Yatırım Fonları"
-        ) {
-          return fundScraper(code, portfolio).then((res) => res);
-        } else if (portfolio === "Döviz" || portfolio === "Altın") {
-          return moneyScraper(code, portfolio).then((res) => res);
-        }
-      })
-    )
-      .then(async (data) => {
-        Promise.all(
-          data.map(({ price, code }) => {
-            dbFindOneAndUpdate(
-              InvPresentValueSchema,
-              { code: code },
-              { price: newPrice }
-            );
-          })
-        )
-          .then((data2) => {
-            console.log("Success");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } catch (e) {
-    console.error(e);
-  }
+
+  const presentData = await InvPresentValueSchema.aggregate(query);
+  Promise.all(
+    presentData.map(({ portfolio, code }) => {
+      if (
+        portfolio === "Bireysel Emeklilik Fonları" ||
+        portfolio === "Yatırım Fonları"
+      ) {
+        return fundScraper(code, portfolio).then((res) => res);
+      } else if (portfolio === "Döviz" || portfolio === "Altın") {
+        return moneyScraper(code, portfolio).then((res) => res);
+      }
+    })
+  )
+    .then(async (data) => {
+      Promise.all(
+        data.map(({ price:newPrice, code }) => {
+          dbFindOneAndUpdate(
+            InvPresentValueSchema,
+            { code: code },
+            { price: newPrice }
+          );
+        })
+      )
+        .then((data2) => {
+          console.log("Success");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
-
-

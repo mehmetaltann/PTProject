@@ -36,7 +36,7 @@ const TableContainer = () => {
         <Typography
           variant="h6"
           sx={{
-            color: "info.main",
+            color: "primary.main",
             p: 1,
           }}
         >

@@ -25,7 +25,7 @@ const Investments = () => {
             <InvestmentForm />
           </Stack>
           {messageData && (
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" color="success.main" gutterBottom>
               {messageData.message}
             </Typography>
           )}

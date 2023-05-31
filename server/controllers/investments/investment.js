@@ -51,9 +51,7 @@ const aggQuery = (purhaseDate) => {
         portfolio: 1,
         state: 1,
         presentPrice: "$presentvalue.price",
-        cost: {
-          $sum: [{ $multiply: ["$number", "$price"] }, "$commission"],
-        },
+        cost: { $multiply: ["$number", "$price"] },
         presentvalue: { $multiply: ["$presentvalue.price", "$number"] },
         plStatus: {
           $subtract: [
@@ -130,8 +128,6 @@ exports.investmentQuery = async (req, res) => {
   }
 };
 
-
-
 exports.investmentPurchase = async (req, res) => {
   const transectionList = req.body;
   try {
@@ -143,8 +139,6 @@ exports.investmentPurchase = async (req, res) => {
       message: "Yatırım İşlemleri Eklenemedi, Server Bağlantı Hatası",
     });
   }
-  
-
 };
 
 const invFifo = async (data, invList) => {

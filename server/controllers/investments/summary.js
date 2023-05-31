@@ -37,7 +37,7 @@ const query = [
       totalNumber: "$totalNumber",
       presentPrice: "$presentvalue.price",
       averagePrice: { $divide: ["$totalCost", "$totalNumber"] },
-      presentvalue: { $multiply: ["$presentvalue.price", "$totalNumber"] },
+      presentValue: { $multiply: ["$presentvalue.price", "$totalNumber"] },
       totalCost: "$totalCost",
       plStatus: {
         $subtract: [

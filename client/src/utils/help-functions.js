@@ -1,6 +1,7 @@
 import moment from "moment";
 
 export const today = moment();
+export const thisDay = moment().format("DD");
 export const thisMonth = moment().month() + 1;
 export const thisYear = moment().year();
 

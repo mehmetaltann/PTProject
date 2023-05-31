@@ -38,6 +38,7 @@ const DataTable = () => {
     {
       field: "portfolio",
       headerName: "Portföy",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
       width: 215,
@@ -45,13 +46,16 @@ const DataTable = () => {
     {
       field: "code",
       headerName: "Kod",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
       width: 40,
+      cellClassName: "boldandcolorcell",
     },
     {
       field: "number",
       headerName: "Adet",
+      headerClassName: "header",
       type: "number",
       filterable: false,
       headerAlign: "left",
@@ -61,6 +65,7 @@ const DataTable = () => {
     {
       field: "purchaseDate",
       headerName: "Alış Tarihi",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
       type: "date",
@@ -70,15 +75,18 @@ const DataTable = () => {
     {
       field: "purchasePrice",
       headerName: "Alış Fiyatı",
+      headerClassName: "header",
       headerAlign: "left",
       type: "number",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       align: "left",
       width: 110,
+      cellClassName: "boldandcolorcell",
     },
     {
       field: "saleDate",
       headerName: "Satış Tarihi",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
       type: "date",
@@ -89,14 +97,17 @@ const DataTable = () => {
       field: "salePrice",
       type: "number",
       headerName: "Satış Fiyatı",
+      headerClassName: "header",
       headerAlign: "left",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       align: "left",
       width: 110,
+      cellClassName: "boldandcolorcell",
     },
     {
       field: "plStatus",
       headerName: "Kar/Zarar",
+      headerClassName: "header",
       type: "number",
       width: 110,
       renderCell: (params) =>
@@ -109,7 +120,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
@@ -121,7 +132,7 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
+              sx={{ color: "error.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
@@ -131,6 +142,7 @@ const DataTable = () => {
     {
       field: "plPercentage",
       headerName: "Yüzde",
+      headerClassName: "header",
       type: "number",
       width: 110,
       renderCell: (params) =>
@@ -143,7 +155,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
@@ -155,7 +167,7 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
+              sx={{ color: "error.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
@@ -165,6 +177,7 @@ const DataTable = () => {
     {
       field: "dateDiff",
       headerName: "Gün Sayısı",
+      headerClassName: "header",
       type: "number",
       filterable: false,
       headerAlign: "center",
@@ -174,6 +187,7 @@ const DataTable = () => {
     {
       field: "actions",
       headerName: "İşlem",
+      headerClassName: "header",
       renderCell: (params, index) => {
         return (
           <IconButton

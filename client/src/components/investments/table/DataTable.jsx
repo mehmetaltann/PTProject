@@ -45,69 +45,89 @@ const DataTable = () => {
     {
       field: "code",
       headerName: "Kod",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
-      width: 40,
+      width: 60,
+      cellClassName: "boldandcolorcell",
     },
     {
       field: "date",
-      headerName: "Tarih",
       type: "date",
-      valueFormatter: (params) => dateFormat(params.value),
+      headerName: "Tarih",
+      headerClassName: "header",
       headerAlign: "left",
       align: "left",
       width: 100,
+      valueFormatter: (params) => dateFormat(params.value),
     },
     {
       field: "number",
       headerName: "Adet",
+      headerClassName: "header",
       type: "number",
       filterable: false,
       headerAlign: "left",
       align: "left",
-      width: 70,
+      width: 75,
     },
     {
       field: "price",
       headerName: "Br. Fiyat",
+      headerClassName: "header",
       type: "number",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       headerAlign: "left",
       align: "left",
-      width: 110,
+      width: 105,
     },
     {
       field: "commission",
       type: "number",
       headerName: "Komisyon",
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
+      headerClassName: "header",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       headerAlign: "left",
       align: "left",
-      width: 100,
+      width: 85,
     },
     {
       field: "cost",
       type: "number",
       headerName: "Maliyet",
-      valueGetter: (params) =>
-        params.row.number * params.row.cost + params.row.commission,
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
+      headerClassName: "header",
+      valueGetter: (params) => params.row.cost + params.row.commission,
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       headerAlign: "left",
       align: "left",
-      width: 110,
+      width: 105,
+      cellClassName: "boldandcolorcell",
     },
     {
-      field: "presentvalue",
-      headerName: "Gün. Değer",
+      field: "presentPrice",
+      headerName: "Gün. Fiyat",
+      headerClassName: "header",
       type: "number",
       valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
       headerAlign: "left",
       align: "left",
-      width: 110,
+      width: 105,
+    },
+    {
+      field: "presentvalue",
+      headerName: "Gün. Değer",
+      headerClassName: "header",
+      type: "number",
+      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
+      headerAlign: "left",
+      align: "left",
+      width: 105,
+      cellClassName: "boldandcolorcell",
     },
     {
       field: "plStatus",
       headerName: "Kar/Zarar",
+      headerClassName: "header",
       type: "number",
       width: 110,
       renderCell: (params) =>
@@ -120,7 +140,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
@@ -132,8 +152,8 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
-            >{`${params.row.plStatus} TL`}</Typography>
+              sx={{ color: "error.main", fontWeight: 500 }}
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
@@ -142,6 +162,7 @@ const DataTable = () => {
     {
       field: "plPercentage",
       headerName: "Yüzde",
+      headerClassName: "header",
       type: "number",
       width: 110,
       renderCell: (params) =>
@@ -154,7 +175,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
@@ -163,11 +184,14 @@ const DataTable = () => {
             justifyContent={"flex-start"}
             alignItems={"center"}
           >
-            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <SouthIcon
+              sx={{ color: "error.main", fontWeight: 500 }}
+              fontSize="small"
+            />
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`% ${params.row.plPercentage}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
       headerAlign: "left",
@@ -176,6 +200,7 @@ const DataTable = () => {
     {
       field: "dayDiff",
       headerName: "Gün",
+      headerClassName: "header",
       type: "number",
       filterable: false,
       headerAlign: "center",
@@ -185,6 +210,7 @@ const DataTable = () => {
     {
       field: "actions",
       headerName: "İşlem",
+      headerClassName: "header",
       renderCell: (params, index) => {
         return (
           <IconButton
@@ -212,7 +238,12 @@ const DataTable = () => {
     },
   ];
 
-  return <DataTableFrame columns={columns} rows={filteredData} />;
+  return (
+    <DataTableFrame
+      columns={columns}
+      rows={filteredData}
+    />
+  );
 };
 
 export default DataTable;

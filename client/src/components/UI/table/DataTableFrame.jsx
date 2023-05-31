@@ -32,6 +32,14 @@ const DataTableFrame = (props) => {
         "& .MuiDataGrid-cell:hover": {
           color: "primary.main",
         },
+        "& .boldandcolorcell": {
+          color: "primary.main",
+          fontWeight: "600",
+        },
+        "& .header": {
+          color: "primary.main",
+          fontWeight: "600",
+        },
         ...sxProps,
       }}
       disableRowSelectionOnClick

@@ -25,7 +25,7 @@ const Budget = () => {
             <BudgetForm />
           </Stack>
           {messageData && (
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom color="success.main">
               {messageData.message}
             </Typography>
           )}

@@ -49,7 +49,7 @@ const aggQuery = (creatDate) => {
           $multiply: [
             {
               $divide: [
-                { $abs: { $subtract: ["$purchasePrice", "$salePrice"] } },
+                { $subtract: ["$purchasePrice", "$salePrice"] },
                 "$purchasePrice",
               ],
             },
