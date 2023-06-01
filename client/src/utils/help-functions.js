@@ -21,6 +21,10 @@ export const dateFormat = (date) => {
   return moment(date).format("DD.MM.YYYY");
 };
 
+export const dateFormatNormal = (date) => {
+  return moment(date).format();
+};
+
 export const dateFormatMonths = (date) => {
   return moment(date).format("MM-YYYY");
 };

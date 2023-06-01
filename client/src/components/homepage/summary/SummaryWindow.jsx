@@ -57,7 +57,7 @@ const SummaryWindow = () => {
           <Typography variant="body1" fontWeight={700}>
             Özet
           </Typography>
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" sx={{ display: "none" }}>
             <RefreshIcon fontSize="inherit" color="primary.main" />
           </IconButton>
         </Stack>

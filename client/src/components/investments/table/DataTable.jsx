@@ -4,7 +4,7 @@ import SouthIcon from "@mui/icons-material/South";
 import DataTableFrame from "../../UI/table/DataTableFrame";
 import { dateFormat } from "../../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/generalSlice";
 import {
   useGetInvestmentsQuery,
   useDeleteInvestmentMutation,
@@ -220,9 +220,19 @@ const DataTable = () => {
             onClick={async () => {
               try {
                 const res = await deleteInvestment(params.row.id).unwrap();
-                dispatch(setMessage(res));
+                dispatch(
+                  setSnackbar({
+                    children: res.message,
+                    severity: "success",
+                  })
+                );
               } catch (error) {
-                console.log(error);
+                dispatch(
+                  setSnackbar({
+                    children: error,
+                    severity: "error",
+                  })
+                );
               }
             }}
           >
@@ -238,12 +248,7 @@ const DataTable = () => {
     },
   ];
 
-  return (
-    <DataTableFrame
-      columns={columns}
-      rows={filteredData}
-    />
-  );
+  return <DataTableFrame columns={columns} rows={filteredData} />;
 };
 
 export default DataTable;

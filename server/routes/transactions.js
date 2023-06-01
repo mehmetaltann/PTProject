@@ -5,10 +5,12 @@ const {
   budgetItemQuery,
   budgetItemDelete,
   budgetItemsAdd,
+  budgetItemUpdate,
 } = require("../controllers/budgets/budgetItem");
 router.post("/butce-veri-ekle", budgetItemsAdd);
 router.delete("/butce-veri-sil/:id", budgetItemDelete);
 router.get("/butce-sorgula/:date", budgetItemQuery);
+router.put("/butce-veri-guncelle/:id", budgetItemUpdate);
 
 //Budget Category
 const {

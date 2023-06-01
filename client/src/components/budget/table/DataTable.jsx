@@ -22,28 +22,80 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import NightlifeIcon from "@mui/icons-material/Nightlife";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
-import { useState } from "react";
-import { dateFormat } from "../../../utils/help-functions";
-import { IconButton, CircularProgress, Box } from "@mui/material";
+import { useState, useCallback } from "react";
+import { dateFormat, dateFormatNormal } from "../../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/generalSlice";
+import { IconButton, CircularProgress, Box } from "@mui/material";
 import {
   useGetBudgetItemsQuery,
   useDeleteBudgetItemMutation,
+  useUpdateBudgetItemMutation,
 } from "../../../redux/apis/budgetApi";
 
+const useFakeMutation = () => {
+  return useCallback(
+    (item) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (item.title?.trim() === "") {
+            reject(new Error("İşlem Konusu Boş Olamaz"));
+          } else {
+            resolve({ ...item, title: item.title });
+          }
+        }, 200);
+      }),
+    []
+  );
+};
+
 const DataTable = () => {
+  const dispatch = useDispatch();
+
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [deleteBudgetItem] = useDeleteBudgetItemMutation();
+  const [updateBudgetItem] = useUpdateBudgetItemMutation();
   const { selectedDate, selectedBudgetType } = useSelector(
     (state) => state.general
   );
+
+  const mutateRow = useFakeMutation();
+
   const {
     data: budgetItems,
     isLoading,
     isFetching,
   } = useGetBudgetItemsQuery(selectedDate);
-  const dispatch = useDispatch();
+
+  const processRowUpdate = useCallback(
+    async (newRow) => {
+      newRow.date = dateFormatNormal(newRow.date);
+      try {
+        const res = await updateBudgetItem(newRow).unwrap();
+        const response = await mutateRow(newRow);
+        dispatch(
+          setSnackbar({
+            children: res.message,
+            severity: "success",
+          })
+        );
+
+        return response;
+      } catch (error) {
+        dispatch(
+          setSnackbar({
+            children: error,
+            severity: "error",
+          })
+        );
+      }
+    },
+    [mutateRow, dispatch]
+  );
+
+  const handleProcessRowUpdateError = useCallback((error) => {
+    dispatch(setSnackbar({ children: error.message, severity: "error" }));
+  }, []);
 
   if (isLoading && isFetching)
     return (
@@ -51,6 +103,9 @@ const DataTable = () => {
         <CircularProgress />
       </Box>
     );
+
+  const valid = budgetItems.every(item => isNaN(x))
+
 
   const filteredData =
     selectedBudgetType !== "Tümü"
@@ -133,6 +188,11 @@ const DataTable = () => {
       align: "left",
       headerName: "İşlem",
       cellClassName: "boldandcolorcell",
+      editable: true,
+      preProcessEditCellProps: (params) => {
+        const hasError = params.props.value.length < 2;
+        return { ...params.props, error: hasError };
+      },
     },
     {
       field: "categoryA",
@@ -158,6 +218,7 @@ const DataTable = () => {
       headerAlign: "left",
       width: 100,
       align: "left",
+      editable: true,
       valueFormatter: (params) => dateFormat(params.value),
     },
     {
@@ -169,10 +230,16 @@ const DataTable = () => {
       headerAlign: "left",
       width: 150,
       align: "left",
+      editable: true,
       cellClassName: "boldandcolorcell",
+      preProcessEditCellProps: (params) => {
+        const hasError = params.props.value.length < 2;
+        return { ...params.props, error: hasError };
+      },
     },
     {
       field: "description",
+      editable: true,
       headerName: "Açıklama",
       headerClassName: "header",
       headerAlign: "left",
@@ -192,9 +259,19 @@ const DataTable = () => {
             onClick={async () => {
               try {
                 const res = await deleteBudgetItem(params.row.id).unwrap();
-                dispatch(setMessage(res));
+                dispatch(
+                  setSnackbar({
+                    children: res.message,
+                    severity: "success",
+                  })
+                );
               } catch (error) {
-                console.log(error);
+                dispatch(
+                  setSnackbar({
+                    children: error,
+                    severity: "success",
+                  })
+                );
               }
             }}
           >
@@ -202,8 +279,8 @@ const DataTable = () => {
           </IconButton>
         );
       },
-      headerAlign: "right",
-      width: 40,
+      headerAlign: "left",
+      width: 70,
       align: "right",
       filterable: false,
       sortable: false,
@@ -214,6 +291,8 @@ const DataTable = () => {
     <DataTableFrame
       columns={columns}
       rows={filteredData}
+      processRowUpdate={processRowUpdate}
+      onProcessRowUpdateError={handleProcessRowUpdateError}
       slotsProps={{
         footer: BudgetDataTableFooter,
       }}

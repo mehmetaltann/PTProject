@@ -4,7 +4,7 @@ const initialState = {
   selectedPortfolio: "Tümü",
   selectedDate: 2,
   selectedBudgetType: "Tümü",
-  messageData: null,
+  snackbar: null,
 };
 
 export const generalSlice = createSlice({
@@ -20,12 +20,12 @@ export const generalSlice = createSlice({
     pickBudgetType: (state, { payload }) => {
       state.selectedBudgetType = payload;
     },
-    setMessage: (state, { payload }) => {
-      state.messageData = payload;
+    setSnackbar: (state, { payload }) => {
+      state.snackbar = payload;
     },
   },
 });
 
 export default generalSlice.reducer;
-export const { pickPortfolio, pickDate, pickBudgetType, setMessage } =
+export const { pickPortfolio, pickDate, pickBudgetType, setSnackbar } =
   generalSlice.actions;

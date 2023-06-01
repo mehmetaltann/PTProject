@@ -1,11 +1,6 @@
 const InvPresentValueSchema = require("../../models/InvPresentValueModel");
 const { fundScraper, moneyScraper } = require("./scraper");
-const {
-  dbFind,
-  dbInsertMany,
-  dbFindOneAndDelete,
-  dbFindOneAndUpdate,
-} = require("../dbQueries");
+const { dbFind, dbInsertMany, dbFindOneAndDelete } = require("../dbQueries");
 
 exports.presentValueQuery = async (req, res) => {
   try {
@@ -18,7 +13,7 @@ exports.presentValueQuery = async (req, res) => {
   }
 };
 
-const presentValueAdd = async (dataList) => {
+async function presentValueAdd(dataList) {
   Promise.all(
     dataList.map(({ portfolio, code }) => {
       if (
@@ -37,7 +32,7 @@ const presentValueAdd = async (dataList) => {
     .catch((err) => {
       console.log(err);
     });
-};
+}
 
 exports.sendPresentValues = async (dataList) => {
   const codeList = dataList
@@ -66,11 +61,7 @@ exports.sendPresentValues = async (dataList) => {
   }
 };
 
-exports.presentValueDelete = (code) => {
-  dbFindOneAndDelete(InvPresentValueSchema, { code: code });
-};
-
-const fetchScrapData = async (presentData) => {
+async function fetchScrapData(presentData) {
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
   const result = [];
   for (const { code, portfolio } of presentData) {
@@ -79,19 +70,19 @@ const fetchScrapData = async (presentData) => {
         portfolio === "Bireysel Emeklilik Fonları" ||
         portfolio === "Yatırım Fonları"
       ) {
-        await timer(2);
+        await timer(1000);
         res = await fundScraper(code, portfolio);
       } else if (portfolio === "Döviz" || portfolio === "Altın") {
-        await timer(2);
+        await timer(1000);
         res = await moneyScraper(code, portfolio);
       }
       result.push(res);
     } catch (error) {
-      console.log(error);
+      console.log(`Yatırım değerlerini, başka siteden scrap hatası ${error}`);
     }
   }
   return result;
-};
+}
 
 exports.presentValueQueryAndUpdate = async () => {
   const query = [
@@ -106,25 +97,32 @@ exports.presentValueQueryAndUpdate = async () => {
 
   const presentData = await InvPresentValueSchema.aggregate(query);
   const data = await fetchScrapData(presentData);
-
-  const updateOps = data
+  const filteredData = data
     .filter((item) => item !== undefined)
-    .map((item) => {
-      let updateData = {
-        updateOne: {
-          filter: {
-            code: item.code,
-          },
-          update: {
-            price: item.price,
-          },
+    .filter((item) => item.price !== 0)
+    .filter((item) => item.price !== "");
+
+  const updateOps = filteredData.map((item) => {
+    let updateData = {
+      updateOne: {
+        filter: {
+          code: item.code,
         },
-      };
-      console.log(updateData);
-      return updateData;
-    });
+        update: {
+          price: item.price,
+        },
+      },
+    };
+    console.log(updateData);
+    return updateData;
+  });
+  try {
+    const res = await InvPresentValueSchema.bulkWrite(updateOps);
+  } catch (error) {
+    console.log(`Veritabanında güncel değerleri, yenileme sırasında ${error}`);
+  }
+};
 
-  const res = await InvPresentValueSchema.bulkWrite(updateOps);
-
-  console.log(res);
+exports.presentValueDelete = (code) => {
+  dbFindOneAndDelete(InvPresentValueSchema, { code: code });
 };

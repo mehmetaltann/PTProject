@@ -3,8 +3,8 @@ import DataTableFrame from "../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import { dateFormat } from "../../utils/help-functions";
+import { setSnackbar } from "../../redux/generalSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../redux/generalSlice";
 import {
   useGetRecordsQuery,
   useDeleteRecordMutation,
@@ -26,7 +26,6 @@ const DataTable = () => {
     isFetching,
   } = useGetRecordsQuery(selectedDate);
   const dispatch = useDispatch();
-
   if (isLoading && isFetching)
     return (
       <Box sx={{ display: "flex" }}>
@@ -197,9 +196,19 @@ const DataTable = () => {
             onClick={async () => {
               try {
                 const res = await deleteRecord(params.row.id).unwrap();
-                dispatch(setMessage(res));
+                dispatch(
+                  setSnackbar({
+                    children: res.message,
+                    severity: "success",
+                  })
+                );
               } catch (error) {
-                console.log(error);
+                dispatch(
+                  setSnackbar({
+                    children: error,
+                    severity: "error",
+                  })
+                );
               }
             }}
           >

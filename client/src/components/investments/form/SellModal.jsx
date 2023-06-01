@@ -11,7 +11,8 @@ import { Button, Typography, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddSellMutation } from "../../../redux/apis/investmentApi";
-import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
+import { pickPortfolio } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/generalSlice";
 
 const SellModal = ({ setOpenSatis }) => {
   const { selectedPortfolio } = useSelector((state) => state.general);
@@ -31,11 +32,21 @@ const SellModal = ({ setOpenSatis }) => {
     };
     try {
       const res = await addSell(yeniKayitListesi).unwrap();
-      dispatch(setMessage(res));
       dispatch(pickPortfolio(values.portfolio));
       setOpenSatis(false);
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
     } catch (error) {
-      console.log(error);
+      dispatch(
+        setSnackbar({
+          children: error,
+          severity: "error",
+        })
+      );
     }
   };
 

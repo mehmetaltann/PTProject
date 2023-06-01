@@ -60,3 +60,12 @@ exports.dbFindOneAndUpdate = async (transectionObj, filter, update) => {
     console.error(e);
   }
 };
+
+exports.dbFindByIdAndUpdate = async (transectionObj, id, updateData) => {
+  try {
+    const res = await transectionObj.findByIdAndUpdate(id, updateData);
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+};

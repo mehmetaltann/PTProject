@@ -1,5 +1,10 @@
 const BudgetItemSchema = require("../../models/BudgetItemModel");
-const { dbFind, dbFindByIdAndDelete, dbInsertMany } = require("../dbQueries");
+const {
+  dbFind,
+  dbFindByIdAndDelete,
+  dbInsertMany,
+  dbFindByIdAndUpdate,
+} = require("../dbQueries");
 const {
   thisMonthFirstDay,
   prevThreeMonthFirstDay,
@@ -45,6 +50,23 @@ exports.budgetItemsAdd = async (req, res) => {
     res
       .status(500)
       .json({ message: "Bütçe İşlemleri Eklenemedi, Server Bağlantı Hatası" });
+  }
+};
+
+exports.budgetItemUpdate = async (req, res) => {
+  updateData = {
+    title: req.body.title,
+    date: req.body.date,
+    amount: req.body.amount,
+    description: req.body.description,
+  };
+  try {
+    await dbFindByIdAndUpdate(BudgetItemSchema, req.params.id, updateData);
+    res.status(200).json({ message: "Bütçe Kalemi Güncellendi" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Bütçe Kalemi Güncellenemedi, Server Bağlantı Hatası" });
   }
 };
 
