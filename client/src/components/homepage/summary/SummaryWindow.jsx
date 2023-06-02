@@ -4,15 +4,7 @@ import { thisMonth, thisYear, thisDay } from "../../../utils/help-functions";
 import { aylar } from "../../../utils/localData";
 import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
 import { Fragment } from "react";
-import {
-  Paper,
-  Divider,
-  CircularProgress,
-  Box,
-  Typography,
-  Stack,
-  IconButton,
-} from "@mui/material";
+import { Paper, Divider, Typography, Stack, IconButton } from "@mui/material";
 
 const SummaryWindow = () => {
   const thisAyYil = `${thisDay} ${
@@ -20,12 +12,8 @@ const SummaryWindow = () => {
   } ${thisYear}`;
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
 
-  if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading && isFetching) return null;
+  if (!summaryData) return null;
 
   const portfolioValues = Object.values(
     summaryData.reduce((hash, item) => {

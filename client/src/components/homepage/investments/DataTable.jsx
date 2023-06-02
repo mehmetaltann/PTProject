@@ -1,10 +1,16 @@
 import DataTableFrame from "../../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useSelector } from "react-redux";
 import { useCallback } from "react";
-import { Stack, Typography, CircularProgress, Box } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
+import {
+  stringColumn,
+  priceColumn,
+  numberColumn,
+} from "../../UI/table/columns";
 
 const DataTable = () => {
   const { selectedPortfolio } = useSelector((state) => state.general);
@@ -18,11 +24,10 @@ const DataTable = () => {
   }, []);
 
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!summaryData)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const filteredData =
     selectedPortfolio !== "Tümü"
@@ -30,89 +35,25 @@ const DataTable = () => {
       : summaryData;
 
   const columns = [
-    {
-      field: "code",
-      headerName: "Kod",
-      headerAlign: "left",
-      align: "left",
-      width: 55,
+    stringColumn("code", "Kod", 55, {
       sortable: false,
       filterable: false,
       cellClassName: "boldandcolorcell",
-      headerClassName: "header",
-    },
-    {
-      field: "title",
-      headerName: "Fon Adı",
-      headerAlign: "left",
-      align: "left",
-      width: 300,
+    }),
+    stringColumn("title", "Fon Adı", 300, {
       sortable: false,
       filterable: false,
-      cellClassName: "fon_adi",
-      headerClassName: "header",
-    },
-    {
-      field: "totalNumber",
-      type: "number",
-      width: 80,
-      headerName: "Adet",
-      headerAlign: "left",
-      align: "left",
-      valueFormatter: ({ value }) => `${value.toFixed()}`,
-      headerClassName: "header",
-    },
-    {
-      field: "averagePrice",
-      headerName: "Ort. Fiyat",
-      type: "number",
-      width: 85,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      headerClassName: "header",
-      align: "left",
-    },
-    {
-      field: "presentPrice",
-      headerName: "Güncel Fiyat",
-      type: "number",
-      width: 85,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      headerClassName: "header",
-    },
-    {
-      field: "totalCost",
-      headerName: "Maliyet",
-      type: "number",
-      headerClassName: "header",
-      width: 105,
-      valueFormatter: ({ value }) =>
-        `${value
-          .toFixed(2)
-          .toLocaleString("en-US", { maximumFractionDigits: 2 })} TL`,
-      headerAlign: "left",
-      align: "left",
+    }),
+    numberColumn("totalNumber", "number", 80),
+    priceColumn("averagePrice", "Ort. Fiyat", 85),
+    priceColumn("presentPrice", "Güncel Fiyat", 85),
+    priceColumn("totalCost", "Maliyet", 105, {
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "presentValue",
-      headerName: "Değer",
-      headerClassName: "header",
-      type: "number",
-      width: 105,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
+    }),
+    priceColumn("presentValue", "Değer", 105, {
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "plStatus",
-      headerName: "Kar/Zarar",
-      headerClassName: "header",
-      type: "number",
-      width: 115,
+    }),
+    stringColumn("plStatus", "Kar/Zarar", 110, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -139,15 +80,8 @@ const DataTable = () => {
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plPercentage",
-      headerName: "Yüzde",
-      headerClassName: "header",
-      type: "number",
-      width: 100,
+    }),
+    stringColumn("plPercentage", "Yüzde", 110, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack
@@ -174,9 +108,7 @@ const DataTable = () => {
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
+    }),
   ];
 
   return (

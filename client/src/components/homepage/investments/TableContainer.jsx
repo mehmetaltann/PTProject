@@ -2,25 +2,15 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useSelector, useDispatch } from "react-redux";
 import { pickPortfolio } from "../../../redux/generalSlice";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
-import {
-  Typography,
-  TextField,
-  MenuItem,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+import { Typography, TextField, MenuItem } from "@mui/material";
 
 const TableContainer = () => {
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: portfolios, isLoading, isFetching } = useGetPortfoliosQuery();
   const dispatch = useDispatch();
 
-  if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+  if (isLoading && isFetching) return null;
+  if (!portfolios) return null;
 
   return (
     <Grid

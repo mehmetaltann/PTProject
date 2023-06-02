@@ -2,20 +2,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DataTableFrame from "../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
+import PageConnectionWait from "../UI/PageConnectionWait";
 import { dateFormat } from "../../utils/help-functions";
 import { setSnackbar } from "../../redux/generalSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { IconButton, Stack, Typography } from "@mui/material";
 import {
   useGetRecordsQuery,
   useDeleteRecordMutation,
 } from "../../redux/apis/investmentRecordApi";
 import {
-  IconButton,
-  Stack,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+  stringColumn,
+  dateColumn,
+  priceColumn,
+  numberColumn,
+  actionColumn,
+} from "../../components/UI/table/columns";
 
 const DataTable = () => {
   const [deleteRecord] = useDeleteRecordMutation();
@@ -26,89 +28,26 @@ const DataTable = () => {
     isFetching,
   } = useGetRecordsQuery(selectedDate);
   const dispatch = useDispatch();
+
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!records)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const columns = [
-    {
-      field: "portfolio",
-      headerName: "Portföy",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      width: 215,
-    },
-    {
-      field: "code",
-      headerName: "Kod",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      width: 40,
+    stringColumn("portfolio", "Portföy", 215),
+    stringColumn("code", "Kod", 50, { cellClassName: "boldandcolorcell" }),
+    numberColumn("number", "Adet", 70),
+    dateColumn("purchaseDate", "Alış Tarihi"),
+    priceColumn("purchasePrice", "Alış Fiyatı", 110, {
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "number",
-      headerName: "Adet",
-      headerClassName: "header",
-      type: "number",
-      filterable: false,
-      headerAlign: "left",
-      align: "left",
-      width: 70,
-    },
-    {
-      field: "purchaseDate",
-      headerName: "Alış Tarihi",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      type: "date",
-      width: 100,
-      valueFormatter: (params) => dateFormat(params.value),
-    },
-    {
-      field: "purchasePrice",
-      headerName: "Alış Fiyatı",
-      headerClassName: "header",
-      headerAlign: "left",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      align: "left",
-      width: 110,
+    }),
+    dateColumn("saleDate", "Satış Tarihi"),
+    priceColumn("salePrice", "Satış Fiyatı", 110, {
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "saleDate",
-      headerName: "Satış Tarihi",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      type: "date",
-      width: 100,
-      valueFormatter: (params) => dateFormat(params.value),
-    },
-    {
-      field: "salePrice",
-      type: "number",
-      headerName: "Satış Fiyatı",
-      headerClassName: "header",
-      headerAlign: "left",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      align: "left",
-      width: 110,
-      cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "plStatus",
-      headerName: "Kar/Zarar",
-      headerClassName: "header",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plStatus", "Kar/Zarar", 110, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -135,15 +74,8 @@ const DataTable = () => {
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plPercentage",
-      headerName: "Yüzde",
-      headerClassName: "header",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plPercentage", "Yüzde", 110, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack
@@ -170,23 +102,9 @@ const DataTable = () => {
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "dateDiff",
-      headerName: "Gün Sayısı",
-      headerClassName: "header",
-      type: "number",
-      filterable: false,
-      headerAlign: "center",
-      align: "center",
-      width: 60,
-    },
-    {
-      field: "actions",
-      headerName: "İşlem",
-      headerClassName: "header",
+    }),
+    numberColumn("dateDiff", "Gün", 60),
+    actionColumn({
       renderCell: (params, index) => {
         return (
           <IconButton
@@ -216,12 +134,7 @@ const DataTable = () => {
           </IconButton>
         );
       },
-      filterable: false,
-      sortable: false,
-      headerAlign: "right",
-      align: "right",
-      width: 60,
-    },
+    }),
   ];
 
   return <DataTableFrame columns={columns} rows={records} />;

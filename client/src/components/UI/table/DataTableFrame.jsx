@@ -12,9 +12,9 @@ const DataTableFrame = (props) => {
       density="compact"
       initialState={{
         ...rows?.initialState,
-        pagination: { paginationModel: { pageSize: 15 } },
+        pagination: { paginationModel: { pageSize: 30 } },
       }}
-      pageSizeOptions={[15, 30, 80]}
+      pageSizeOptions={[30, 60, 90]}
       slots={{
         noRowsOverlay: CustomNoRowsOverlay,
         toolbar: GridToolbar,

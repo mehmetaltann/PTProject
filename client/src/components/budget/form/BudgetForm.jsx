@@ -29,7 +29,7 @@ const style = {
   top: "40%",
   left: "50%",
   height: "70%",
-  width: "70%",
+  width: { xs: "90%", lg: "50%" },
   overflow: "auto",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",

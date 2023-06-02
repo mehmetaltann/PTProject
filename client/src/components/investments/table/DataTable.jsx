@@ -2,20 +2,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import DataTableFrame from "../../UI/table/DataTableFrame";
-import { dateFormat } from "../../../utils/help-functions";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useSelector, useDispatch } from "react-redux";
 import { setSnackbar } from "../../../redux/generalSlice";
+import { IconButton, Stack, Typography } from "@mui/material";
 import {
   useGetInvestmentsQuery,
   useDeleteInvestmentMutation,
 } from "../../../redux/apis/investmentApi";
 import {
-  IconButton,
-  Stack,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+  stringColumn,
+  dateColumn,
+  priceColumn,
+  numberColumn,
+  actionColumn,
+} from "../../UI/table/columns";
 
 const DataTable = () => {
   const { selectedDate, selectedPortfolio } = useSelector(
@@ -30,11 +31,10 @@ const DataTable = () => {
   const dispatch = useDispatch();
 
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!investments)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const filteredData =
     selectedPortfolio !== "Tümü"
@@ -42,94 +42,20 @@ const DataTable = () => {
       : investments;
 
   const columns = [
-    {
-      field: "code",
-      headerName: "Kod",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      width: 60,
-      cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "date",
-      type: "date",
-      headerName: "Tarih",
-      headerClassName: "header",
-      headerAlign: "left",
-      align: "left",
-      width: 100,
-      valueFormatter: (params) => dateFormat(params.value),
-    },
-    {
-      field: "number",
-      headerName: "Adet",
-      headerClassName: "header",
-      type: "number",
-      filterable: false,
-      headerAlign: "left",
-      align: "left",
-      width: 75,
-    },
-    {
-      field: "price",
-      headerName: "Br. Fiyat",
-      headerClassName: "header",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 105,
-    },
-    {
-      field: "commission",
-      type: "number",
-      headerName: "Komisyon",
-      headerClassName: "header",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 85,
-    },
-    {
-      field: "cost",
-      type: "number",
-      headerName: "Maliyet",
-      headerClassName: "header",
+    stringColumn("code", "Kod", 60, { cellClassName: "boldandcolorcell" }),
+    dateColumn("date", "Tarih"),
+    numberColumn("number", "Adet", 80),
+    priceColumn("price", "Br. Fiyat", 90),
+    priceColumn("commission", "Komisyon", 85),
+    priceColumn("cost", "Maliyet", 105, {
       valueGetter: (params) => params.row.cost + params.row.commission,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 105,
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "presentPrice",
-      headerName: "Gün. Fiyat",
-      headerClassName: "header",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 105,
-    },
-    {
-      field: "presentvalue",
-      headerName: "Gün. Değer",
-      headerClassName: "header",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 105,
+    }),
+    priceColumn("presentPrice", "Gün. Fiyat", 90),
+    priceColumn("presentvalue", "Gün. Değer", 105, {
       cellClassName: "boldandcolorcell",
-    },
-    {
-      field: "plStatus",
-      headerName: "Kar/Zarar",
-      headerClassName: "header",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plStatus", "Kar/Zarar", 110, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -156,15 +82,8 @@ const DataTable = () => {
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plPercentage",
-      headerName: "Yüzde",
-      headerClassName: "header",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plPercentage", "Yüzde", 110, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack
@@ -194,23 +113,9 @@ const DataTable = () => {
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "dayDiff",
-      headerName: "Gün",
-      headerClassName: "header",
-      type: "number",
-      filterable: false,
-      headerAlign: "center",
-      align: "center",
-      width: 60,
-    },
-    {
-      field: "actions",
-      headerName: "İşlem",
-      headerClassName: "header",
+    }),
+    numberColumn("dayDiff", "Gün", 60),
+    actionColumn({
       renderCell: (params, index) => {
         return (
           <IconButton
@@ -240,12 +145,7 @@ const DataTable = () => {
           </IconButton>
         );
       },
-      width: 40,
-      filterable: false,
-      sortable: false,
-      headerAlign: "right",
-      align: "right",
-    },
+    }),
   ];
 
   return <DataTableFrame columns={columns} rows={filteredData} />;

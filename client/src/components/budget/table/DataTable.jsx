@@ -22,16 +22,23 @@ import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import NightlifeIcon from "@mui/icons-material/Nightlife";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useState, useCallback } from "react";
-import { dateFormat, dateFormatNormal } from "../../../utils/help-functions";
+import { dateFormatNormal } from "../../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
 import { setSnackbar } from "../../../redux/generalSlice";
-import { IconButton, CircularProgress, Box } from "@mui/material";
+import { IconButton } from "@mui/material";
 import {
   useGetBudgetItemsQuery,
   useDeleteBudgetItemMutation,
   useUpdateBudgetItemMutation,
 } from "../../../redux/apis/budgetApi";
+import {
+  stringColumn,
+  dateColumn,
+  priceColumn,
+  actionColumn,
+} from "../../UI/table/columns";
 
 const useFakeMutation = () => {
   return useCallback(
@@ -98,14 +105,10 @@ const DataTable = () => {
   }, []);
 
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
 
-  const valid = budgetItems.every(item => isNaN(x))
-
+  if (!budgetItems)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const filteredData =
     selectedBudgetType !== "Tümü"
@@ -180,76 +183,27 @@ const DataTable = () => {
         }
       },
     },
-    {
-      field: "title",
-      headerAlign: "left",
-      headerClassName: "header",
-      width: 170,
-      align: "left",
-      headerName: "İşlem",
+    stringColumn("title", "İşlem", 170, {
       cellClassName: "boldandcolorcell",
       editable: true,
       preProcessEditCellProps: (params) => {
         const hasError = params.props.value.length < 2;
         return { ...params.props, error: hasError };
       },
-    },
-    {
-      field: "categoryA",
-      headerName: "Kategori A",
-      headerClassName: "header",
-      headerAlign: "left",
-      width: 130,
-      align: "left",
-    },
-    {
-      field: "categoryB",
-      headerName: "Kategori B",
-      headerClassName: "header",
-      headerAlign: "left",
-      width: 130,
-      align: "left",
-    },
-    {
-      field: "date",
-      headerName: "Tarih",
-      headerClassName: "header",
-      type: "date",
-      headerAlign: "left",
-      width: 100,
-      align: "left",
-      editable: true,
-      valueFormatter: (params) => dateFormat(params.value),
-    },
-    {
-      field: "amount",
-      headerName: "Tutar",
-      headerClassName: "header",
-      type: "number",
-      valueFormatter: (params) => `${params.value.toFixed(2)} TL`,
-      headerAlign: "left",
-      width: 150,
-      align: "left",
-      editable: true,
+    }),
+    stringColumn("categoryA", "Kategori A", 130),
+    stringColumn("categoryB", "Kategori B", 130),
+    dateColumn("date", "Tarih"),
+    priceColumn("amount", "Tutar", 150, {
       cellClassName: "boldandcolorcell",
+      editable: true,
       preProcessEditCellProps: (params) => {
         const hasError = params.props.value.length < 2;
         return { ...params.props, error: hasError };
       },
-    },
-    {
-      field: "description",
-      editable: true,
-      headerName: "Açıklama",
-      headerClassName: "header",
-      headerAlign: "left",
-      width: 200,
-      align: "left",
-    },
-    {
-      field: "actions",
-      headerName: "İşlem",
-      headerClassName: "header",
+    }),
+    stringColumn("description", "Açıklama", 200, { editable: true }),
+    actionColumn({
       renderCell: (params, index) => {
         return (
           <IconButton
@@ -279,12 +233,7 @@ const DataTable = () => {
           </IconButton>
         );
       },
-      headerAlign: "left",
-      width: 70,
-      align: "right",
-      filterable: false,
-      sortable: false,
-    },
+    }),
   ];
 
   return (
