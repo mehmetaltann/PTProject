@@ -19,9 +19,9 @@ const SummaryItem = ({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       spacing={2}
-      direction={{ xs: "column", sm: "row", md: "column", lg: "row" }}
+      direction={{ xs: "column", lg: "row" }}
     >
-      <Typography variant="subtitle" sx={{ width: "35%" }}>
+      <Typography variant="subtitle" sx={{ width: { lg: "35%", md: "100%" } }}>
         {title}
       </Typography>
       <Stack spacing={1}>

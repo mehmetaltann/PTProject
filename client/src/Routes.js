@@ -5,6 +5,7 @@ import Budget from "./pages/Budget";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import NavBar from "./layouts/NavBar";
+import CalculateSheet from "./pages/CalculateSheet";
 import {
   BrowserRouter,
   Routes,
@@ -29,6 +30,10 @@ const routes = [
   {
     path: "/butce-kayit",
     component: Budget,
+  },
+  {
+    path: "/hesaplama-tablosu",
+    component: CalculateSheet,
   },
 ];
 

@@ -44,16 +44,16 @@ const DataTable = () => {
       sortable: false,
       filterable: false,
     }),
-    numberColumn("totalNumber", "number", 80),
-    priceColumn("averagePrice", "Ort. Fiyat", 85),
-    priceColumn("presentPrice", "Güncel Fiyat", 85),
+    numberColumn("totalNumber", "number", 75),
+    priceColumn("averagePrice", "Ort. Fiyat", 80),
+    priceColumn("presentPrice", "Güncel Fiyat", 80),
     priceColumn("totalCost", "Maliyet", 105, {
       cellClassName: "boldandcolorcell",
     }),
     priceColumn("presentValue", "Değer", 105, {
       cellClassName: "boldandcolorcell",
     }),
-    stringColumn("plStatus", "Kar/Zarar", 110, {
+    stringColumn("plStatus", "Kar/Zarar", 120, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -81,7 +81,7 @@ const DataTable = () => {
           </Stack>
         ),
     }),
-    stringColumn("plPercentage", "Yüzde", 110, {
+    stringColumn("plPercentage", "Yüzde", 120, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack

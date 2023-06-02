@@ -52,6 +52,10 @@ const NavBar = () => {
     window.location.reload();
   };
 
+  function handleSpreadSheet() {
+    navigate("/hesaplama-tablosu");
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -190,6 +194,9 @@ const NavBar = () => {
             >
               <MenuItem onClick={handleLogOut}>
                 <Typography textAlign="center">Çıkış Yap</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleSpreadSheet}>
+                <Typography textAlign="center">Hesaplama Tablosu</Typography>
               </MenuItem>
             </Menu>
           </Box>
