@@ -2,8 +2,13 @@ import SummaryItem from "./SummaryItem";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { thisMonth, thisYear, thisDay } from "../../../utils/help-functions";
 import { aylar } from "../../../utils/localData";
-import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
+import {
+  useGetSummaryQuery,
+  useUpdateSummaryMutation,
+} from "../../../redux/apis/summaryApi";
 import { Fragment } from "react";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
+import { useDispatch } from "react-redux";
 import {
   Paper,
   Divider,
@@ -19,6 +24,8 @@ const SummaryWindow = () => {
     aylar.find((item) => item.value === thisMonth).label
   } ${thisYear}`;
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
+  const [updateSummary, { isLoading: updateLoad }] = useUpdateSummaryMutation();
+  const dispatch = useDispatch();
 
   if (isLoading && isFetching)
     return (
@@ -44,8 +51,33 @@ const SummaryWindow = () => {
     }, {})
   );
 
+  async function handleUpdate() {
+    try {
+      const res = await updateSummary().unwrap();
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          children: error,
+          severity: "error",
+        })
+      );
+    }
+  }
+
   return (
     <Paper>
+      {updateLoad && (
+        <Stack spacing={2} direction="row" sx={{ p: 2, mt:3 }}>
+          <Typography>Güncelleniyor</Typography>
+          <CircularProgress />
+        </Stack>
+      )}
       <Stack
         sx={[{ p: 2, color: "info.main" }]}
         spacing={2}
@@ -57,7 +89,7 @@ const SummaryWindow = () => {
           <Typography variant="body1" fontWeight={700}>
             Özet
           </Typography>
-          <IconButton aria-label="delete" sx={{ display: "none" }}>
+          <IconButton aria-label="update" onClick={handleUpdate}>
             <RefreshIcon fontSize="inherit" color="primary.main" />
           </IconButton>
         </Stack>

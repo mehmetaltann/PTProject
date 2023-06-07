@@ -4,25 +4,18 @@ import {
   keyColumn,
   createAddRowsComponent,
 } from "react-datasheet-grid";
-import "react-datasheet-grid/dist/style.css";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setData } from "../../redux/slices/calculateSlice";
+import { expenseList } from "../../pages/CalculateSheet";
 
 const BaseCalculateSheet = () => {
-  const [data, setData] = useState([{ market: 255, car: 135 }]);
+  const { data } = useSelector((state) => state.calculate);
+  const dispatch = useDispatch();
 
-  const columns = [
-    { ...keyColumn("market", floatColumn), title: "Market" },
-    { ...keyColumn("car", floatColumn), title: "Araba" },
-    { ...keyColumn("clothes", floatColumn), title: "Giyim" },
-    { ...keyColumn("healty", floatColumn), title: "Sağlık" },
-    { ...keyColumn("meal", floatColumn), title: "Hazır Yemek" },
-    { ...keyColumn("home", floatColumn), title: "Ev Eşyası" },
-    { ...keyColumn("fun", floatColumn), title: "Eğlence - Oyun" },
-    { ...keyColumn("edu", floatColumn), title: "Eğitim - Kitap" },
-    { ...keyColumn("subs", floatColumn), title: "Abonelikler" },
-    { ...keyColumn("cake", floatColumn), title: "Pastacılık" },
-    { ...keyColumn("other", floatColumn), title: "Diğer" },
-  ];
+  const columns = expenseList.map((item) => {
+    return { ...keyColumn(item.value, floatColumn), title: item.title };
+  });
+
   const AddRows = createAddRowsComponent({
     button: "Ekle", // Add
     unit: "satır", // rows
@@ -31,7 +24,7 @@ const BaseCalculateSheet = () => {
   return (
     <DataSheetGrid
       value={data}
-      onChange={setData}
+      onChange={(e) => dispatch(setData(e))}
       columns={columns}
       addRowsComponent={AddRows}
       height={700}

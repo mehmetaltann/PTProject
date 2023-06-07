@@ -56,6 +56,10 @@ const NavBar = () => {
     navigate("/hesaplama-tablosu");
   }
 
+  function handleParameters() {
+    navigate("/parametereler");
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -197,6 +201,9 @@ const NavBar = () => {
               </MenuItem>
               <MenuItem onClick={handleSpreadSheet}>
                 <Typography textAlign="center">Hesaplama Tablosu</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleParameters}>
+                <Typography textAlign="center">Parametreler</Typography>
               </MenuItem>
             </Menu>
           </Box>

@@ -1,31 +1,30 @@
-import { expenseList } from "../../pages/CalculateSheet";
 import { useSelector, useDispatch } from "react-redux";
-import { setBankData } from "../../redux/slices/calculateSlice";
+import { setTotalData } from "../../redux/slices/calculateSlice";
+import { expenseList } from "../../pages/CalculateSheet";
 import {
   DataSheetGrid,
   floatColumn,
-  textColumn,
   keyColumn,
+  textColumn,
 } from "react-datasheet-grid";
 
-const BanksCalculateSheets = () => {
-  const { bankData } = useSelector((state) => state.calculate);
+const TotalCalculateSheets = () => {
   const dispatch = useDispatch();
+  const { totalData } = useSelector((state) => state.calculate);
 
   const columnsList = expenseList.map((item) => {
     return { ...keyColumn(item.value, floatColumn), title: item.title };
   });
 
   const columns = [
-    { ...keyColumn("bank", textColumn), title: "Banka" },
     ...columnsList,
     { ...keyColumn("costing", textColumn), title: "Toplam" },
   ];
 
   return (
     <DataSheetGrid
-      value={bankData}
-      onChange={(e) => dispatch(setBankData(e))}
+      value={totalData}
+      onChange={(e) => dispatch(setTotalData(e))}
       columns={columns}
       rowHeight={35}
       headerRowHeight={50}
@@ -34,4 +33,4 @@ const BanksCalculateSheets = () => {
   );
 };
 
-export default BanksCalculateSheets;
+export default TotalCalculateSheets;

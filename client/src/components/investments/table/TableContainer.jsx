@@ -3,7 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import PageConnectionWait from "../../UI/PageConnectionWait";
 import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
-import { pickDate, pickPortfolio } from "../../../redux/generalSlice";
+import { pickDate, pickPortfolio } from "../../../redux/slices/generalSlice";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 

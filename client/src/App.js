@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material";
 import { GlobalTheme } from "./styles/GlobalTheme";
 import { Snackbar, Alert } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { setSnackbar } from "./redux/generalSlice";
+import { setSnackbar } from "./redux/slices/generalSlice";
 
 function App() {
   const { snackbar } = useSelector((state) => state.general);

@@ -13,7 +13,7 @@ import { Form, Formik, FieldArray, Field } from "formik";
 import { materialDateInput } from "../../../utils/help-functions";
 import { useAddBudgetItemMutation } from "../../../redux/apis/budgetApi";
 import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
 import {
   Typography,
   MenuItem,

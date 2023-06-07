@@ -53,21 +53,33 @@ router.delete("/portfoy-sil/:id", portfolioDelete);
 router.get("/portfoy-sorgula", portfolioQuery);
 
 //Investement Summary
-const { presentPositions } = require("../controllers/investments/summary");
+const {
+  presentPositions,
+  presentPositionsUpdate,
+} = require("../controllers/investments/summary");
 router.get("/guncel-durum", presentPositions);
+router.get("/guncel-durum-yenile", presentPositionsUpdate);
 
 //Investment Present Values
 const {
   presentValueQuery,
-  presentValueQueryAndUpdate,
 } = require("../controllers/investments/presentValue");
 router.get("/guncel-deger-sorgula", presentValueQuery);
-router.post("/guncel-deger-guncelle", presentValueQueryAndUpdate);
 
 //User ve Auth const { postUser, authUser } = require("../controllers/user/userIslemleri");
 const { postUser, authUser } = require("../controllers/user/userIslemleri");
 router.post("/postUser", postUser);
 router.post("/authUser", authUser);
+
+//Parameters
+const {
+  parameterQuery,
+  parameterAdd,
+  parameterDelete,
+} = require("../controllers/parameters/parameters");
+router.get("/parametre-sorgula", parameterQuery);
+router.post("/parametre-ekle", parameterAdd);
+router.delete("/parametre-sil/:id", parameterDelete);
 
 //MongoDb Queries
 const {

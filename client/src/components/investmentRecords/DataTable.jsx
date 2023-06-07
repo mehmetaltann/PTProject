@@ -3,8 +3,7 @@ import DataTableFrame from "../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import PageConnectionWait from "../UI/PageConnectionWait";
-import { dateFormat } from "../../utils/help-functions";
-import { setSnackbar } from "../../redux/generalSlice";
+import { setSnackbar } from "../../redux/slices/generalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { IconButton, Stack, Typography } from "@mui/material";
 import {

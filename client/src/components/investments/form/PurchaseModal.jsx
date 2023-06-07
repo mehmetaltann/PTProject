@@ -12,8 +12,7 @@ import { Form, Formik, FieldArray, Field } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
-import { pickPortfolio } from "../../../redux/generalSlice";
-import { setSnackbar } from "../../../redux/generalSlice";
+import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 import {
   Button,
   IconButton,

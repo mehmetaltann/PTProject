@@ -26,7 +26,7 @@ import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useState, useCallback } from "react";
 import { dateFormatNormal } from "../../../utils/help-functions";
 import { useSelector, useDispatch } from "react-redux";
-import { setSnackbar } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
 import { IconButton } from "@mui/material";
 import {
   useGetBudgetItemsQuery,

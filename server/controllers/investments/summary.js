@@ -1,5 +1,8 @@
 const InvestmentSchema = require("../../models/InvestmentModel");
 const { dbFindAggregate } = require("../dbQueries");
+const {
+  presentValueQueryAndUpdate,
+} = require("../../controllers/investments/presentValue");
 
 const query = [
   {
@@ -69,6 +72,19 @@ exports.presentPositions = async (req, res) => {
   try {
     const data = await dbFindAggregate(InvestmentSchema, query);
     res.status(200).json(data);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Özet Bilgiler Gitirilemedi, Server Bağlantı Hatası" });
+  }
+};
+
+exports.presentPositionsUpdate = async (req, res) => {
+  try {
+    await presentValueQueryAndUpdate();
+    res
+      .status(200)
+      .json({ message: "Veriler Güncellendi" });
   } catch (error) {
     res
       .status(500)

@@ -4,7 +4,7 @@ import SouthIcon from "@mui/icons-material/South";
 import DataTableFrame from "../../UI/table/DataTableFrame";
 import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useSelector, useDispatch } from "react-redux";
-import { setSnackbar } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
 import { IconButton, Stack, Typography } from "@mui/material";
 import {
   useGetInvestmentsQuery,

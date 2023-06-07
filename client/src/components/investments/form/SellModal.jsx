@@ -11,8 +11,7 @@ import { Button, Typography, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddSellMutation } from "../../../redux/apis/investmentApi";
-import { pickPortfolio } from "../../../redux/generalSlice";
-import { setSnackbar } from "../../../redux/generalSlice";
+import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 
 const SellModal = ({ setOpenSatis }) => {
   const { selectedPortfolio } = useSelector((state) => state.general);

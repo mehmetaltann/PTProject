@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useSelector, useDispatch } from "react-redux";
-import { pickPortfolio } from "../../../redux/generalSlice";
+import { pickPortfolio } from "../../../redux/slices/generalSlice";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { Typography, TextField, MenuItem } from "@mui/material";
 

@@ -11,9 +11,14 @@ export const summaryApi = baseApi.injectEndpoints({
           ...rest,
         })),
     }),
+    updateSummary: builder.mutation({
+      query: () => ({
+        url: `guncel-durum-yenile`,
+        method: "GET",
+      }),
+      invalidatesTags: ["Summary"],
+    }),
   }),
 });
 
-export const {
-  useGetSummaryQuery,
-} = summaryApi;
+export const { useGetSummaryQuery, useUpdateSummaryMutation } = summaryApi;

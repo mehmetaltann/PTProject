@@ -10,6 +10,7 @@ export const baseApi = createApi({
     "Category",
     "Summary",
     "Record",
+    "Parameter",
   ],
   endpoints: () => ({}),
 });
