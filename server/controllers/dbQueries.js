@@ -25,6 +25,15 @@ exports.dbFind = async (transectionObj, fQuery = null, sortQuery = null) => {
   }
 };
 
+exports.dbFindOne = async (transectionObj, fQuery = null, sortQuery = null) => {
+  try {
+    const res = await transectionObj.findOne(fQuery).sort(sortQuery);
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 exports.dbFindAggregate = async (transectionObj, query) => {
   try {
     const res = await transectionObj.aggregate(query);
@@ -55,6 +64,15 @@ exports.dbFindOneAndDelete = async (transectionObj, query) => {
 exports.dbFindOneAndUpdate = async (transectionObj, filter, update) => {
   try {
     const res = await transectionObj.findOneAndUpdate(filter, update);
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+exports.dbFindByIdAndUpdate = async (transectionObj, id, updateData) => {
+  try {
+    const res = await transectionObj.findByIdAndUpdate(id, updateData);
     return res;
   } catch (e) {
     console.error(e);

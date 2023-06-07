@@ -1,8 +1,9 @@
 import DataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
-import { pickDate, pickPortfolio } from "../../../redux/generalSlice";
+import { pickDate, pickPortfolio } from "../../../redux/slices/generalSlice";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 
@@ -10,8 +11,14 @@ const TableContainer = () => {
   const { selectedDate, selectedPortfolio } = useSelector(
     (state) => state.general
   );
-  const { data: portfolios } = useGetPortfoliosQuery();
+  const { data: portfolios, isLoading, isFetching } = useGetPortfoliosQuery();
   const dispatch = useDispatch();
+
+  if (isLoading && isFetching)
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!portfolios)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   return (
     <Paper variant="outlined" sx={{ p: 3, height: "100%" }}>

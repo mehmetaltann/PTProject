@@ -1,5 +1,11 @@
 const BudgetItemCategorySchema = require("../../models/BudgetItemCategoryModel");
-const { dbFind, dbFindByIdAndDelete, dbSave } = require("../dbQueries");
+const BudgetItemSchema = require("../../models/BudgetItemModel");
+const {
+  dbFind,
+  dbFindByIdAndDelete,
+  dbFindOne,
+  dbSave,
+} = require("../dbQueries");
 
 exports.budgetItemCategoryQuery = async (req, res) => {
   try {
@@ -30,12 +36,25 @@ exports.budgetItemCategoryAdd = async (req, res) => {
 };
 
 exports.budgetItemCategoryDelete = async (req, res) => {
-  try {
-    await dbFindByIdAndDelete(BudgetItemCategorySchema, req.params.id);
-    res.status(200).json({ message: "Kategori Silindi" });
-  } catch (error) {
+  const categoryRes = await dbFindOne(BudgetItemCategorySchema, {
+    _id: req.params.id,
+  });
+  const budRes = await dbFindOne(BudgetItemSchema, {
+    categoryB: categoryRes.categoryB,
+  });
+  const isUse = budRes ? true : false;
+  if (!isUse) {
+    try {
+      await dbFindByIdAndDelete(BudgetItemCategorySchema, req.params.id);
+      res.status(200).json({ message: "Kategori Silindi" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Kategori Silinemedi, Server Bağlantı Hatası" });
+    }
+  } else {
     res
-      .status(500)
-      .json({ message: "Kategori Silinemedi, Server Bağlantı Hatası" });
+      .status(200)
+      .json({ message: "Bu Kategori Silinemez, Seçili Verisi Bunuyor." });
   }
 };

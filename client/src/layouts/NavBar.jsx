@@ -23,7 +23,7 @@ const pages = [
   { title: "Bütçe İşlemleri", link: "butce-kayit" },
 ];
 
-const Navbar = () => {
+const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
@@ -51,6 +51,14 @@ const Navbar = () => {
     navigate("/");
     window.location.reload();
   };
+
+  function handleSpreadSheet() {
+    navigate("/hesaplama-tablosu");
+  }
+
+  function handleParameters() {
+    navigate("/parametereler");
+  }
 
   return (
     <AppBar position="static">
@@ -191,6 +199,12 @@ const Navbar = () => {
               <MenuItem onClick={handleLogOut}>
                 <Typography textAlign="center">Çıkış Yap</Typography>
               </MenuItem>
+              <MenuItem onClick={handleSpreadSheet}>
+                <Typography textAlign="center">Hesaplama Tablosu</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleParameters}>
+                <Typography textAlign="center">Parametreler</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
@@ -198,4 +212,4 @@ const Navbar = () => {
     </AppBar>
   );
 };
-export default Navbar;
+export default NavBar;

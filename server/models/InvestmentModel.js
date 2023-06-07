@@ -39,7 +39,7 @@ const InvestmentSchema = new mongoose.Schema(
     state: {
       type: String,
       trim: true,
-      default: "Açık",
+      default: "open",
       maxLength: 7,
     },
   },

@@ -4,12 +4,18 @@ export const investmentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getInvestments: builder.query({
       query: (date) => `yatirim-islem-sorgula/${date}`,
-      providesTags: ["Investment"],
       transformResponse: (res) =>
         res.map(({ _id: id, ...rest }) => ({
           id,
           ...rest,
         })),
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "Investment", id })),
+              "Investment",
+            ]
+          : ["Investment"],
     }),
     addPurchases: builder.mutation({
       query: (postData) => ({
@@ -17,7 +23,9 @@ export const investmentApi = baseApi.injectEndpoints({
         method: "POST",
         body: postData,
       }),
-      invalidatesTags: ["Investment"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "Investment", id: arg.id },
+      ],
     }),
     addSell: builder.mutation({
       query: (postData) => ({
@@ -25,14 +33,18 @@ export const investmentApi = baseApi.injectEndpoints({
         method: "POST",
         body: postData,
       }),
-      invalidatesTags: ["Investment"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "Investment", id: arg.id },
+      ],
     }),
     deleteInvestment: builder.mutation({
       query: (id) => ({
-        url: `yatirim-islem-sil/${id}`,
+        url: `yatirim-islem-sil/${id}/`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Investment"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "Investment", id: arg.id },
+      ],
     }),
   }),
 });

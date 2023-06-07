@@ -2,20 +2,21 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
 import DataTableFrame from "../../UI/table/DataTableFrame";
-import { dateFormat } from "../../../utils/help-functions";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessage } from "../../../redux/generalSlice";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
+import { IconButton, Stack, Typography } from "@mui/material";
 import {
   useGetInvestmentsQuery,
   useDeleteInvestmentMutation,
 } from "../../../redux/apis/investmentApi";
 import {
-  IconButton,
-  Stack,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@mui/material";
+  stringColumn,
+  dateColumn,
+  priceColumn,
+  numberColumn,
+  actionColumn,
+} from "../../UI/table/columns";
 
 const DataTable = () => {
   const { selectedDate, selectedPortfolio } = useSelector(
@@ -30,11 +31,10 @@ const DataTable = () => {
   const dispatch = useDispatch();
 
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!investments)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const filteredData =
     selectedPortfolio !== "Tümü"
@@ -42,74 +42,20 @@ const DataTable = () => {
       : investments;
 
   const columns = [
-    {
-      field: "code",
-      headerName: "Kod",
-      headerAlign: "left",
-      align: "left",
-      width: 40,
-    },
-    {
-      field: "date",
-      headerName: "Tarih",
-      type: "date",
-      valueFormatter: (params) => dateFormat(params.value),
-      headerAlign: "left",
-      align: "left",
-      width: 100,
-    },
-    {
-      field: "number",
-      headerName: "Adet",
-      type: "number",
-      filterable: false,
-      headerAlign: "left",
-      align: "left",
-      width: 70,
-    },
-    {
-      field: "price",
-      headerName: "Br. Fiyat",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 110,
-    },
-    {
-      field: "commission",
-      type: "number",
-      headerName: "Komisyon",
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 100,
-    },
-    {
-      field: "cost",
-      type: "number",
-      headerName: "Maliyet",
-      valueGetter: (params) =>
-        params.row.number * params.row.cost + params.row.commission,
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 110,
-    },
-    {
-      field: "presentvalue",
-      headerName: "Gün. Değer",
-      type: "number",
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-      width: 110,
-    },
-    {
-      field: "plStatus",
-      headerName: "Kar/Zarar",
-      type: "number",
-      width: 110,
+    stringColumn("code", "Kod", 60, { cellClassName: "boldandcolorcell" }),
+    dateColumn("date", "Tarih"),
+    numberColumn("number", "Adet", 80),
+    priceColumn("price", "Br. Fiyat", 90),
+    priceColumn("commission", "Komisyon", 85),
+    priceColumn("cost", "Maliyet", 105, {
+      valueGetter: (params) => params.row.cost + params.row.commission,
+      cellClassName: "boldandcolorcell",
+    }),
+    priceColumn("presentPrice", "Gün. Fiyat", 90),
+    priceColumn("presentvalue", "Gün. Değer", 105, {
+      cellClassName: "boldandcolorcell",
+    }),
+    stringColumn("plStatus", "Kar/Zarar", 110, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -120,7 +66,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
@@ -132,18 +78,12 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
-            >{`${params.row.plStatus} TL`}</Typography>
+              sx={{ color: "error.main", fontWeight: 500 }}
+            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plPercentage",
-      headerName: "Yüzde",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plPercentage", "Yüzde", 110, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack
@@ -154,7 +94,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
@@ -163,28 +103,19 @@ const DataTable = () => {
             justifyContent={"flex-start"}
             alignItems={"center"}
           >
-            <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
+            <SouthIcon
+              sx={{ color: "error.main", fontWeight: 500 }}
+              fontSize="small"
+            />
             <Typography
               variant="body2"
               sx={{ color: "error.main" }}
-            >{`% ${params.row.plPercentage}`}</Typography>
+            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "dayDiff",
-      headerName: "Gün",
-      type: "number",
-      filterable: false,
-      headerAlign: "center",
-      align: "center",
-      width: 60,
-    },
-    {
-      field: "actions",
-      headerName: "İşlem",
+    }),
+    numberColumn("dayDiff", "Gün", 60),
+    actionColumn({
       renderCell: (params, index) => {
         return (
           <IconButton
@@ -194,9 +125,19 @@ const DataTable = () => {
             onClick={async () => {
               try {
                 const res = await deleteInvestment(params.row.id).unwrap();
-                dispatch(setMessage(res));
+                dispatch(
+                  setSnackbar({
+                    children: res.message,
+                    severity: "success",
+                  })
+                );
               } catch (error) {
-                console.log(error);
+                dispatch(
+                  setSnackbar({
+                    children: error,
+                    severity: "error",
+                  })
+                );
               }
             }}
           >
@@ -204,12 +145,7 @@ const DataTable = () => {
           </IconButton>
         );
       },
-      width: 40,
-      filterable: false,
-      sortable: false,
-      headerAlign: "right",
-      align: "right",
-    },
+    }),
   ];
 
   return <DataTableFrame columns={columns} rows={filteredData} />;

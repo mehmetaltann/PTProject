@@ -43,7 +43,7 @@ const InvRecordSchema = new mongoose.Schema(
       trim: true,
     },
     saleCommission: {
-      type: Date,
+      type: Number,
       required: true,
       trim: true,
     },

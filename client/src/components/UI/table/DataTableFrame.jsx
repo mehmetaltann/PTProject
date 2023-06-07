@@ -12,9 +12,9 @@ const DataTableFrame = (props) => {
       density="compact"
       initialState={{
         ...rows?.initialState,
-        pagination: { paginationModel: { pageSize: 15 } },
+        pagination: { paginationModel: { pageSize: 30 } },
       }}
-      pageSizeOptions={[15, 30, 80]}
+      pageSizeOptions={[30, 60, 90]}
       slots={{
         noRowsOverlay: CustomNoRowsOverlay,
         toolbar: GridToolbar,
@@ -31,6 +31,14 @@ const DataTableFrame = (props) => {
         boxShadow: 2,
         "& .MuiDataGrid-cell:hover": {
           color: "primary.main",
+        },
+        "& .boldandcolorcell": {
+          color: "primary.main",
+          fontWeight: "600",
+        },
+        "& .header": {
+          color: "primary.main",
+          fontWeight: "600",
         },
         ...sxProps,
       }}

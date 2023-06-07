@@ -22,6 +22,7 @@ const aggQuery = (creatDate) => {
         },
       },
     },
+    { $sort: { saleDate: -1 } },
     {
       $project: {
         _id: 1,
@@ -48,7 +49,7 @@ const aggQuery = (creatDate) => {
           $multiply: [
             {
               $divide: [
-                { $abs: { $subtract: ["$purchasePrice", "$salePrice"] } },
+                { $subtract: ["$purchasePrice", "$salePrice"] },
                 "$purchasePrice",
               ],
             },
@@ -109,7 +110,7 @@ exports.recordAdd = (
   saleDate,
   saleCommission
 ) => {
-  const newRecord = YtHistory({
+  const newRecord = InvRecordSchema({
     code,
     portfolio,
     number,

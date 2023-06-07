@@ -5,10 +5,12 @@ const {
   budgetItemQuery,
   budgetItemDelete,
   budgetItemsAdd,
+  budgetItemUpdate,
 } = require("../controllers/budgets/budgetItem");
 router.post("/butce-veri-ekle", budgetItemsAdd);
 router.delete("/butce-veri-sil/:id", budgetItemDelete);
 router.get("/butce-sorgula/:date", budgetItemQuery);
+router.put("/butce-veri-guncelle/:id", budgetItemUpdate);
 
 //Budget Category
 const {
@@ -51,8 +53,12 @@ router.delete("/portfoy-sil/:id", portfolioDelete);
 router.get("/portfoy-sorgula", portfolioQuery);
 
 //Investement Summary
-const { presentPositions } = require("../controllers/investments/summary");
+const {
+  presentPositions,
+  presentPositionsUpdate,
+} = require("../controllers/investments/summary");
 router.get("/guncel-durum", presentPositions);
+router.get("/guncel-durum-yenile", presentPositionsUpdate);
 
 //Investment Present Values
 const {
@@ -64,6 +70,20 @@ router.get("/guncel-deger-sorgula", presentValueQuery);
 const { postUser, authUser } = require("../controllers/user/userIslemleri");
 router.post("/postUser", postUser);
 router.post("/authUser", authUser);
+
+//Parameters
+const {
+  parameterQuery,
+  parameterAdd,
+  parameterDelete,
+  parameterContentAdd,
+  parameterContentDelete,
+} = require("../controllers/parameters/parameters");
+router.get("/parametre-sorgula", parameterQuery);
+router.post("/parametre-ekle", parameterAdd);
+router.put("/parametre-icerik-ekle", parameterContentAdd);
+router.put("/parametre-icerik-sil", parameterContentDelete);
+router.delete("/parametre-sil/:id", parameterDelete);
 
 //MongoDb Queries
 const {

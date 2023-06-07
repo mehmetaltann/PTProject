@@ -4,7 +4,10 @@ export const budgetApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getBudgetItems: builder.query({
       query: (date) => `butce-sorgula/${date}`,
-      providesTags: ["Budget"],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: "Budget", id })), "Budget"]
+          : ["Budget"],
       transformResponse: (res) =>
         res.map(({ _id: id, ...rest }) => ({
           id,
@@ -17,7 +20,18 @@ export const budgetApi = baseApi.injectEndpoints({
         method: "POST",
         body: postData,
       }),
-      invalidatesTags: ["Budget"],
+      invalidatesTags: (result, error, arg) => [{ type: "Budget", id: arg.id }],
+    }),
+    updateBudgetItem: builder.mutation({
+      query(data) {
+        const { id, ...body } = data;
+        return {
+          url: `butce-veri-guncelle/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: (result, error, arg) => [{ type: "Budget", id: arg.id }],
     }),
     deleteBudgetItem: builder.mutation({
       query: (id) => ({
@@ -32,5 +46,6 @@ export const budgetApi = baseApi.injectEndpoints({
 export const {
   useGetBudgetItemsQuery,
   useAddBudgetItemMutation,
+  useUpdateBudgetItemMutation,
   useDeleteBudgetItemMutation,
 } = budgetApi;

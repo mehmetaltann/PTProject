@@ -12,7 +12,7 @@ import { Form, Formik, FieldArray, Field } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
-import { setMessage, pickPortfolio } from "../../../redux/generalSlice";
+import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 import {
   Button,
   IconButton,
@@ -51,11 +51,21 @@ const PurchaseModal = ({ setOpenAlis }) => {
     });
     try {
       const res = await addPurchases(yeniKayitListesi).unwrap();
-      dispatch(setMessage(res));
       dispatch(pickPortfolio(portfolio));
       setOpenAlis(false);
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
     } catch (error) {
-      console.log(error);
+      dispatch(
+        setSnackbar({
+          children: error,
+          severity: "error",
+        })
+      );
     }
   };
 
@@ -153,7 +163,7 @@ const PurchaseModal = ({ setOpenAlis }) => {
                             <FormTextField
                               sx={{ maxWidth: 100 }}
                               name={`fons.${index}.code`}
-                              label="code"
+                              label="Kod"
                               size="small"
                             />
                           </Grid>

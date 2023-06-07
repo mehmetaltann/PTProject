@@ -11,14 +11,12 @@ const extractWithCheerio = ($, code) => {
 
 exports.fundScraper = async (code, portfolio) => {
   try {
-    console.log(code + portfolio);
     const body = await request({
       url: `https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=${code}`,
       method: "GET",
     });
     const $ = cheerio.load(body);
     const result = extractWithCheerio($, code);
-    console.log(result);
     return {
       title: result.title,
       price: parseFloat(result.price.replace(/,/, ".")),
@@ -60,7 +58,7 @@ exports.moneyScraper = async (code, portfolio) => {
     }
     return {
       title: title,
-      price: data[parameter]["alis"],
+      price: parseFloat(data[parameter]["alis"].replace(/,/, ".")),
       category: category,
       code,
       portfolio,

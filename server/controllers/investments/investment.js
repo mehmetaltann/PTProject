@@ -1,7 +1,7 @@
 const InvestmentSchema = require("../../models/InvestmentModel");
 const InvPresentValueSchema = require("../../models/InvPresentValueModel");
 const { recordAdd } = require("./record");
-const { presentValueDelete, presentValueAdd } = require("./presentValue");
+const { presentValueDelete, sendPresentValues } = require("./presentValue");
 const {
   dbInsertMany,
   dbFind,
@@ -28,6 +28,7 @@ const aggQuery = (purhaseDate) => {
         },
       },
     },
+    { $sort: { date: -1 } },
     {
       $lookup: {
         from: "presentvalues",
@@ -50,9 +51,7 @@ const aggQuery = (purhaseDate) => {
         portfolio: 1,
         state: 1,
         presentPrice: "$presentvalue.price",
-        cost: {
-          $sum: [{ $multiply: ["$number", "$price"] }, "$commission"],
-        },
+        cost: { $multiply: ["$number", "$price"] },
         presentvalue: { $multiply: ["$presentvalue.price", "$number"] },
         plStatus: {
           $subtract: [
@@ -129,45 +128,12 @@ exports.investmentQuery = async (req, res) => {
   }
 };
 
-const compareWithCurrentList = async (postDataList) => {
-  const codeList = postDataList
-    .map(({ code }) => code)
-    .filter((value, index, array) => array.indexOf(value) === index);
-
-  try {
-    const findCodes = await dbFind(InvPresentValueSchema, {
-      code: {
-        $in: codeList,
-      },
-    });
-
-    const findCodesList =
-      findCodes.length > 0 ? findCodes.map(({ code }) => code) : [];
-    const isNewDataExist = findCodesList.length < codeList.length;
-    return { isNewDataExist, findCodes };
-  } catch (e) {
-    console.error(e);
-  }
-};
-
 exports.investmentPurchase = async (req, res) => {
   const transectionList = req.body;
   try {
     await dbInsertMany(InvestmentSchema, transectionList);
     res.status(200).json({ message: "Yatırım İşlemleri Eklendi" });
-    try {
-      const { isNewDataExist, findcodes } = await compareWithCurrentList(
-        transectionList
-      );
-      if (isNewDataExist) {
-        const presentValues = transectionList.filter(
-          ({ code }) => !findcodes?.map(({ code }) => code).includes(code)
-        );
-        presentValueAdd(presentValues);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    await sendPresentValues(transectionList);
   } catch (error) {
     res.status(500).json({
       message: "Yatırım İşlemleri Eklenemedi, Server Bağlantı Hatası",
@@ -177,15 +143,15 @@ exports.investmentPurchase = async (req, res) => {
 
 const invFifo = async (data, invList) => {
   const { number, price, date, commission } = data;
-
-  while (number > 0) {
+  let sellNumber = number;
+  while (sellNumber > 0) {
     let pickedInv = invList[0];
     let pickedInvNumber = Number(Number(pickedInv.number).toFixed(8));
-    if (pickedInvNumber === number) {
+    if (pickedInvNumber === sellNumber) {
       recordAdd(
         pickedInv.code,
         pickedInv.portfolio,
-        number,
+        sellNumber,
         pickedInv.price,
         pickedInv.date,
         price,
@@ -193,29 +159,31 @@ const invFifo = async (data, invList) => {
         commission
       );
       dbFindByIdAndDelete(InvestmentSchema, pickedInv.id);
-      number = 0;
-    } else if (pickedInvNumber > number) {
-      pickedInvNumber -= number;
+      sellNumber = 0;
+    } else if (pickedInvNumber > sellNumber) {
+      pickedInvNumber -= sellNumber;
       dbFindOneAndUpdate(
         InvestmentSchema,
         { _id: pickedInv.id },
         {
-          durum: "Güncellendi",
-          adet: pickedInvNumber,
+          state: "updated",
+          number: pickedInvNumber,
         }
       );
       recordAdd(
         pickedInv.code,
         pickedInv.portfolio,
-        number,
+        sellNumber,
         pickedInv.price,
         pickedInv.date,
         price,
         date,
         commission
       );
-      number = 0;
+      sellNumber = 0;
     } else {
+      sellNumber -= pickedInvNumber;
+      dbFindByIdAndDelete(InvestmentSchema, pickedInv.id);
       recordAdd(
         pickedInv.code,
         pickedInv.portfolio,
@@ -226,9 +194,7 @@ const invFifo = async (data, invList) => {
         date,
         commission
       );
-      number -= pickedInvNumber;
       invList.splice(0, 1);
-      dbFindByIdAndDelete(InvestmentSchema, pickedInv.id);
     }
   }
 };
@@ -237,12 +203,17 @@ exports.investmentSell = async (req, res) => {
   const { code, number } = req.body;
   const soldNumber = Number(Number(number).toFixed(8));
   try {
-    const invlist = await dbFind(InvestmentSchema, {
-      code: code,
-    });
-    const invTotalNumber = calculateSum(invlist, "adet");
+    const invlist = await dbFind(
+      InvestmentSchema,
+      {
+        code: code,
+      },
+      { date: 1 }
+    );
 
-    if (invTotalNumber.length === 0) {
+    const invTotalNumber = calculateSum(invlist, "number");
+
+    if (invTotalNumber === 0) {
       res.status(200).json({ message: `Portföyde "${code}" Bulunmamaktadır.` });
     } else if (invTotalNumber < soldNumber) {
       res
@@ -252,10 +223,10 @@ exports.investmentSell = async (req, res) => {
       try {
         await invFifo(req.body, invlist);
         res.status(200).json({ message: `"${code}" Satış İşlemi Gerçekleşti` });
-        presentValueDelete(code);
       } catch (error) {
         res.status(200).json(error.message);
       }
+      presentValueDelete(code);
     } else {
       try {
         await invFifo(req.body, invlist);

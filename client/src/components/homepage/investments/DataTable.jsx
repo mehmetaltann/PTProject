@@ -1,20 +1,33 @@
 import DataTableFrame from "../../UI/table/DataTableFrame";
 import NorthIcon from "@mui/icons-material/North";
 import SouthIcon from "@mui/icons-material/South";
+import PageConnectionWait from "../../UI/PageConnectionWait";
 import { useSelector } from "react-redux";
-import { Stack, Typography, CircularProgress, Box } from "@mui/material";
+import { useCallback } from "react";
+import { Stack, Typography } from "@mui/material";
 import { useGetSummaryQuery } from "../../../redux/apis/summaryApi";
+import {
+  stringColumn,
+  priceColumn,
+  numberColumn,
+} from "../../UI/table/columns";
 
 const DataTable = () => {
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
 
+  const getRowSpacing = useCallback((params) => {
+    return {
+      top: params.isFirstVisible ? 0 : 2,
+      bottom: params.isLastVisible ? 0 : 4,
+    };
+  }, []);
+
   if (isLoading && isFetching)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
+
+  if (!summaryData)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
   const filteredData =
     selectedPortfolio !== "Tümü"
@@ -22,74 +35,25 @@ const DataTable = () => {
       : summaryData;
 
   const columns = [
-    {
-      field: "code",
-      headerName: "Kod",
-      headerAlign: "left",
-      align: "left",
-      width: 40,
+    stringColumn("code", "Kod", 55, {
       sortable: false,
       filterable: false,
-    },
-    {
-      field: "title",
-      headerName: "Fon Adı",
-      headerAlign: "left",
-      align: "left",
-      width: 250,
+      cellClassName: "boldandcolorcell",
+    }),
+    stringColumn("title", "Fon Adı", 300, {
       sortable: false,
       filterable: false,
-      cellClassName: "fon_adi",
-    },
-    {
-      field: "totalNumber",
-      type: "number",
-      width: 60,
-      headerName: "Adet",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "averagePrice",
-      headerName: "Ort. Fiyat",
-      type: "number",
-      width: 110,
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "presentPrice",
-      headerName: "Güncel Fiyat",
-      type: "number",
-      width: 110,
-      valueFormatter: ({ value }) => `${value.toFixed(3)} TL`,
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "totalCost",
-      headerName: "Top. Maliyet",
-      type: "number",
-      width: 110,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "presentvalue",
-      headerName: "Top. Değer",
-      type: "number",
-      width: 110,
-      valueFormatter: ({ value }) => `${value.toFixed(2)} TL`,
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plStatus",
-      headerName: "Kar/Zarar",
-      type: "number",
-      width: 110,
+    }),
+    numberColumn("totalNumber", "number", 75),
+    priceColumn("averagePrice", "Ort. Fiyat", 80),
+    priceColumn("presentPrice", "Güncel Fiyat", 80),
+    priceColumn("totalCost", "Maliyet", 105, {
+      cellClassName: "boldandcolorcell",
+    }),
+    priceColumn("presentValue", "Değer", 105, {
+      cellClassName: "boldandcolorcell",
+    }),
+    stringColumn("plStatus", "Kar/Zarar", 120, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -100,7 +64,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
@@ -112,18 +76,12 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
+              sx={{ color: "error.main", fontWeight: 500 }}
             >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "plPercentage",
-      headerName: "Yüzde",
-      type: "number",
-      width: 110,
+    }),
+    stringColumn("plPercentage", "Yüzde", 120, {
       renderCell: (params) =>
         params.row.plPercentage >= 0 ? (
           <Stack
@@ -134,7 +92,7 @@ const DataTable = () => {
             <NorthIcon sx={{ color: "success.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "success.main" }}
+              sx={{ color: "success.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ) : (
@@ -146,26 +104,20 @@ const DataTable = () => {
             <SouthIcon sx={{ color: "error.main" }} fontSize="small" />
             <Typography
               variant="body2"
-              sx={{ color: "error.main" }}
+              sx={{ color: "error.main", fontWeight: 500 }}
             >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
           </Stack>
         ),
-      headerAlign: "left",
-      align: "left",
-    },
+    }),
   ];
 
   return (
     <DataTableFrame
       columns={columns}
       rows={filteredData}
-      density="standard"
-      sxProps={{
-        "& .fon_adi": {
-          whiteSpace: "normal !important",
-          lineHeight: "normal !important",
-        },
-      }}
+      getRowHeight={() => "auto"}
+      getEstimatedRowHeight={() => 200}
+      getRowSpacing={getRowSpacing}
     />
   );
 };

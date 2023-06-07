@@ -3,7 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { tarihSecim } from "../../utils/localData";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { pickDate } from "../../redux/generalSlice";
+import { pickDate } from "../../redux/slices/generalSlice";
 
 const TableContainer = () => {
   const { selectedDate } = useSelector((state) => state.general);

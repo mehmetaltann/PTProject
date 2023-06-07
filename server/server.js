@@ -18,9 +18,10 @@ app.use(cors());
 
 //scheduled tasks
 cron.schedule(
-  "00 00 16 * * *",
+  "00 19 16-12 * * 0-5",
   () => {
-    console.log("Running a job at 01:00 at America/Sao_Paulo timezone");
+    presentValueQueryAndUpdate()
+    console.log("değerler Güncellendi")
   },
   {
     scheduled: true,
