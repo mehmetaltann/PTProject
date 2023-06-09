@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setTotalData } from "../../redux/slices/calculateSlice";
-import { expenseList } from "../../pages/CalculateSheet";
 import {
   DataSheetGrid,
   floatColumn,
@@ -8,11 +7,10 @@ import {
   textColumn,
 } from "react-datasheet-grid";
 
-const TotalCalculateSheets = () => {
+const TotalCalculateSheets = ({ expenseList }) => {
   const dispatch = useDispatch();
   const { totalData } = useSelector((state) => state.calculate);
-
-  const columnsList = expenseList.map((item) => {
+  const columnsList = expenseList.content.map((item) => {
     return { ...keyColumn(item.value, floatColumn), title: item.title };
   });
 

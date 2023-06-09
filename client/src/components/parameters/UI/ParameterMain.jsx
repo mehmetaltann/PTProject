@@ -3,17 +3,9 @@ import ParameterTable from "./ParameterTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Paper, Typography } from "@mui/material";
 
-const ParameterMain = ({
-  title1,
-  title2,
-  formName,
-  tableWidth,
-  data,
-  deleteFunction,
-  addFunction,
-}) => {
+const ParameterMain = ({ title1, title2, formName, tableWidth, data }) => {
   return (
-    <Grid container spacing={2} sx={{ p: 3 }}>
+    <Grid container spacing={2} sx={{ mt: 2 }}>
       <Grid>
         <Typography
           variant="subtitle1"
@@ -23,7 +15,7 @@ const ParameterMain = ({
           {title1}
         </Typography>
         <Paper>
-          <ParameterForm formName={formName} addFunction={addFunction} />
+          <ParameterForm formName={formName} />
         </Paper>
       </Grid>
       <Grid>
@@ -38,7 +30,7 @@ const ParameterMain = ({
           <ParameterTable
             tableWidth={tableWidth}
             data={data}
-            deleteFunction={deleteFunction}
+            formName={formName}
           />
         </Paper>
       </Grid>

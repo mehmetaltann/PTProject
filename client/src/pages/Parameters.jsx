@@ -2,6 +2,7 @@ import PortflioParameters from "../components/parameters/PortfolioParameters";
 import CategoryParameters from "../components/parameters/CategoryParameters";
 import OtherParameter from "../components/parameters/OtherParameters";
 import PageConnectionWait from "../components/UI/PageConnectionWait";
+import NewParameter from "../components/parameters/NewParameter";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Stack,
@@ -29,7 +30,12 @@ const Parameters = () => {
   return (
     <Box sx={{ height: "85vh", overflow: "auto" }}>
       <Container sx={{ mt: 4, p: 3 }}>
-        <Stack direction="row" alignItems={"center"} spacing={4} sx={{ mb: 3 }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          alignItems={{ sm: "center" }}
+          spacing={4}
+          sx={{ mb: 3 }}
+        >
           <Typography variant="h6">Parametreler</Typography>
           <ToggleButtonGroup
             value={parameterType}
@@ -67,7 +73,7 @@ const Parameters = () => {
 
             <ToggleButton
               color="secondary"
-              value="ekle"
+              value="newParam"
               sx={{ minWidth: "12ch", p: 0.8 }}
               size="small"
             >
@@ -78,7 +84,10 @@ const Parameters = () => {
         </Stack>
         {parameterType === "portfolio" && <PortflioParameters />}
         {parameterType === "category" && <CategoryParameters />}
-        {parameterType === "other" && <OtherParameter />}
+        {parameterType === "newParam" && <NewParameter />}
+        {parameterType !== "portfolio" &&
+          parameterType !== "category" &&
+          parameterType !== "newParam" && <OtherParameter />}
       </Container>
     </Box>
   );

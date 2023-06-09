@@ -1,5 +1,10 @@
 const ParameterSchema = require("../../models/ParametersModal");
-const { dbFind, dbFindByIdAndDelete, dbSave } = require("../dbQueries");
+const {
+  dbFind,
+  dbFindByIdAndDelete,
+  dbSave,
+  dbFindOneAndUpdate,
+} = require("../dbQueries");
 
 exports.parameterQuery = async (req, res) => {
   try {
@@ -13,18 +18,52 @@ exports.parameterQuery = async (req, res) => {
 };
 
 exports.parameterAdd = async (req, res) => {
-  const { name, content } = req.body;
-  const category = ParameterSchema({
-    name,
+  const { variant, content } = req.body;
+  const parameter = ParameterSchema({
+    variant,
     content,
   });
   try {
-    await dbSave(category);
+    await dbSave(parameter);
     res.status(200).json({ message: "Parametre Eklendi" });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Parametre Eklenemedi, Server Bağlantı Hatası" });
+  }
+};
+
+exports.parameterContentAdd = async (req, res) => {
+  const { variant, title, value } = req.body;
+  try {
+    await dbFindOneAndUpdate(
+      ParameterSchema,
+      { variant },
+      { $push: { content: [{ title, value }] } }
+    );
+    res.status(200).json({ message: "Parametre İçeriği Eklendi" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Parametre İçeriği Eklenemedi, Server Bağlantı Hatası",
+    });
+  }
+};
+
+exports.parameterContentDelete = async (req, res) => {
+  const { variant, title, value } = req.body;
+
+  try {
+    await dbFindOneAndUpdate(
+      ParameterSchema,
+      { variant },
+      { $pull: { content: { value } } },
+      { safe: true, multi: false }
+    );
+    res.status(200).json({ message: "Parametre İçeriği Silindi" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Parametre İçeriği Silinemedi, Server Bağlantı Hatası",
+    });
   }
 };
 

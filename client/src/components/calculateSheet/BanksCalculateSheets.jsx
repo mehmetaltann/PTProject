@@ -1,4 +1,3 @@
-import { expenseList } from "../../pages/CalculateSheet";
 import { useSelector, useDispatch } from "react-redux";
 import { setBankData } from "../../redux/slices/calculateSlice";
 import {
@@ -8,11 +7,11 @@ import {
   keyColumn,
 } from "react-datasheet-grid";
 
-const BanksCalculateSheets = () => {
+const BanksCalculateSheets = ({ expenseList }) => {
   const { bankData } = useSelector((state) => state.calculate);
   const dispatch = useDispatch();
 
-  const columnsList = expenseList.map((item) => {
+  const columnsList = expenseList.content.map((item) => {
     return { ...keyColumn(item.value, floatColumn), title: item.title };
   });
 

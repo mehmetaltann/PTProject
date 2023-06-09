@@ -26,6 +26,22 @@ export const parameterApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Parameter"],
     }),
+    addParameterContent: builder.mutation({
+      query: (postData) => ({
+        url: `parametre-icerik-ekle`,
+        method: "PUT",
+        body: postData,
+      }),
+      invalidatesTags: ["Parameter"],
+    }),
+    deleteParameterContent: builder.mutation({
+      query: (postData) => ({
+        url: `parametre-icerik-sil`,
+        method: "PUT",
+        body: postData,
+      }),
+      invalidatesTags: ["Parameter"],
+    }),
   }),
 });
 
@@ -33,4 +49,6 @@ export const {
   useGetParametersQuery,
   useAddParameterMutation,
   useDeleteParameterMutation,
+  useAddParameterContentMutation,
+  useDeleteParameterContentMutation,
 } = parameterApi;

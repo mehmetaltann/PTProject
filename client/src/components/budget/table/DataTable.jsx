@@ -97,12 +97,15 @@ const DataTable = () => {
         );
       }
     },
-    [mutateRow, dispatch]
+    [mutateRow, dispatch, updateBudgetItem]
   );
 
-  const handleProcessRowUpdateError = useCallback((error) => {
-    dispatch(setSnackbar({ children: error.message, severity: "error" }));
-  }, []);
+  const handleProcessRowUpdateError = useCallback(
+    (error) => {
+      dispatch(setSnackbar({ children: error.message, severity: "error" }));
+    },
+    [dispatch]
+  );
 
   if (isLoading && isFetching)
     return <PageConnectionWait title="Veriler Bekleniyor" />;
@@ -193,7 +196,7 @@ const DataTable = () => {
     }),
     stringColumn("categoryA", "Kategori A", 130),
     stringColumn("categoryB", "Kategori B", 130),
-    dateColumn("date", "Tarih"),
+    dateColumn("date", "Tarih", 100, { editable: true }),
     priceColumn("amount", "Tutar", 150, {
       cellClassName: "boldandcolorcell",
       editable: true,
@@ -253,16 +256,6 @@ const DataTable = () => {
       }}
       rowSelectionModel={rowSelectionModel}
       checkboxSelection
-      sx={{
-        "& .boldandcolorcell": {
-          color: "primary.main",
-          fontWeight: "600",
-        },
-        "& .header": {
-          color: "primary.main",
-          fontWeight: "600",
-        },
-      }}
     />
   );
 };

@@ -1,8 +1,7 @@
-import axios from "axios";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState, useEffect } from "react";
-import { BASE_URL } from "../utils/localData";
+import { useDispatch } from "react-redux";
+import { setSnackbar } from "../redux/slices/generalSlice";
+import { useAddAuthMutation } from "../redux/apis/userApi";
 import {
   Avatar,
   Button,
@@ -10,23 +9,11 @@ import {
   TextField,
   Box,
   Container,
-  CssBaseline,
 } from "@mui/material";
 
-const defaultTheme = createTheme();
-
 export default function UserLogin() {
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setError(null);
-    }, 1000);
-
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, [error]);
+  const dispatch = useDispatch();
+  const [addAuth] = useAddAuthMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,81 +23,72 @@ export default function UserLogin() {
       password: data.get("password"),
     };
     try {
-      const { data: res } = await axios.post(`${BASE_URL}/authUser`, userData);
-      console.log(res.message);
+      const res = await addAuth(userData).unwrap();
       localStorage.setItem("token", res.data);
       window.location = "/";
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-      }
+      dispatch(
+        setSnackbar({
+          children: error.data.message,
+          severity: "error",
+        })
+      );
     }
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 15,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Kullanıcı Girişi
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 15,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Kullanıcı Girişi
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Kullanıcı Adı"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Şifre"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Kullanıcı Adı"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Şifre"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Giriş
-            </Button>
-            {error && (
-              <Typography sx={{ color: "error.main", mb: 2 }}>
-                {error}
-              </Typography>
-            )}
-          </Box>
+            Giriş
+          </Button>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   );
 }

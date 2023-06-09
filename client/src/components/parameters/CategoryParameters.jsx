@@ -66,7 +66,7 @@ const CategoryParameters = () => {
   }
 
   return (
-    <Grid container spacing={2} sx={{ p: 3 }}>
+    <Grid container spacing={2} sx={{ mt: 2 }}>
       <Grid>
         <Typography
           variant="subtitle1"

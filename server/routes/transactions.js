@@ -76,9 +76,13 @@ const {
   parameterQuery,
   parameterAdd,
   parameterDelete,
+  parameterContentAdd,
+  parameterContentDelete,
 } = require("../controllers/parameters/parameters");
 router.get("/parametre-sorgula", parameterQuery);
 router.post("/parametre-ekle", parameterAdd);
+router.put("/parametre-icerik-ekle", parameterContentAdd);
+router.put("/parametre-icerik-sil", parameterContentDelete);
 router.delete("/parametre-sil/:id", parameterDelete);
 
 //MongoDb Queries

@@ -1,6 +1,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { setSnackbar } from "../../../redux/slices/generalSlice";
 import { useDispatch } from "react-redux";
+import { useDeleteParameterContentMutation } from "../../../redux/apis/parameterApi";
 import {
   Paper,
   TableRow,
@@ -12,8 +13,33 @@ import {
   IconButton,
 } from "@mui/material";
 
-const ParameterTable = ({ tableWidth, data, deleteFunction }) => {
+const ParameterTable = ({ tableWidth, data, formName }) => {
   const dispatch = useDispatch();
+  const [deleteParameterContent] = useDeleteParameterContentMutation();
+
+  async function deleteHandler(title, val) {
+    const newRecord = {
+      variant: formName,
+      title: title,
+      value: val,
+    };
+    try {
+      const res = await deleteParameterContent(newRecord).unwrap();
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          children: error,
+          severity: "error",
+        })
+      );
+    }
+  }
 
   return (
     <TableContainer component={Paper} sx={{ width: tableWidth }}>
@@ -26,9 +52,9 @@ const ParameterTable = ({ tableWidth, data, deleteFunction }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.content.map((row) => (
+          {data.content.map((row, index) => (
             <TableRow
-              key={row.id}
+              key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
@@ -39,9 +65,26 @@ const ParameterTable = ({ tableWidth, data, deleteFunction }) => {
                 <IconButton
                   size="small"
                   color="error"
-                  onClick={async () => {
+                  onClick={() => deleteHandler(row.title, row.value)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+export default ParameterTable;
+
+/* 
+async () => {
                     try {
-                      const res = await deleteFunction(
+                      const res = await deleteParameterContent(
+                        row.title,
                         row.value
                       ).unwrap();
                       dispatch(
@@ -58,17 +101,6 @@ const ParameterTable = ({ tableWidth, data, deleteFunction }) => {
                         })
                       );
                     }
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-};
+                  }
 
-export default ParameterTable;
+*/

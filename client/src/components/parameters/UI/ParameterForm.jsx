@@ -1,31 +1,45 @@
-import { Form, Formik } from "formik";
 import SendIcon from "@mui/icons-material/Send";
 import FormTextField from "../../UI/formElements/FormTextField";
 import { setSnackbar } from "../../../redux/slices/generalSlice";
 import { useDispatch } from "react-redux";
 import { Button, Stack } from "@mui/material";
+import { Form, Formik } from "formik";
+import { useAddParameterContentMutation } from "../../../redux/apis/parameterApi";
 
 const ParameterForm = ({ formName, addFunction }) => {
   const dispatch = useDispatch();
+  const [addParameterContent] = useAddParameterContentMutation();
 
   async function submitHandler(values, { resetForm }) {
     const newRecord = {
       variant: formName,
-      content: [
-        {
-          title: values.title,
-          value: values.val,
-        },
-      ],
+      title: values.title,
+      value: values.val,
     };
-    console.log(newRecord);
+    try {
+      const res = await addParameterContent(newRecord).unwrap();
+      resetForm();
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setSnackbar({
+          children: error,
+          severity: "error",
+        })
+      );
+    }
   }
 
   return (
     <Formik
       initialValues={{
         title: "",
-        value: "",
+        val: "",
       }}
       onSubmit={submitHandler}
     >
@@ -46,9 +60,7 @@ const ParameterForm = ({ formName, addFunction }) => {
             />
             <Button
               type="submit"
-              disabled={isSubmitting}
               sx={{ borderRadius: "5%", minWidth: 120 }}
-              size="large"
               variant="contained"
               color={"success"}
               endIcon={<SendIcon />}

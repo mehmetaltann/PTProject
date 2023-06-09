@@ -3,6 +3,8 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import BaseCalculateSheet from "../components/calculateSheet/BaseCalculateSheet";
 import BanksCalculateSheets from "../components/calculateSheet/BanksCalculateSheets";
 import TotalCalculateSheets from "../components/calculateSheet/TotalCalculateSheets";
+import PageConnectionWait from "../components/UI/PageConnectionWait";
+import { useGetParametersQuery } from "../redux/apis/parameterApi";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -21,32 +23,16 @@ import {
   Typography,
 } from "@mui/material";
 
-export const banksList = ["Vakıfbank", "Yapı Kredi", "Finansbank"];
-
-export const expenseList = [
-  { value: "market", title: "Market" },
-  { value: "car", title: "Araba" },
-  { value: "clothes", title: "Giysi" },
-  { value: "healty", title: "Sağlık" },
-  { value: "meal", title: "Hazır Yemek" },
-  { value: "home", title: "Ev Eşyası" },
-  { value: "fun", title: "Eğlence - Teknoloji" },
-  { value: "edu", title: "Eğitim - Kitap" },
-  { value: "subs", title: "Abonelikler" },
-  { value: "cake", title: "Pastacılık" },
-  { value: "other", title: "Diğer" },
-];
-
 function sumByList(attrList, dataList) {
   let totalList = attrList.map((item) => {
     return { value: item.value, total: 0 };
   });
 
   dataList.map((item) => {
-    for (var key in item) {
+    for (let keyItem in item) {
       totalList.forEach((element, index) => {
-        if (element.value === key) {
-          totalList[index].total += item[key];
+        if (element.value === keyItem) {
+          totalList[index].total += item[keyItem];
         }
       });
     }
@@ -61,41 +47,63 @@ function sumByList(attrList, dataList) {
 }
 
 const CalculateSheet = () => {
+  const {
+    data: parameterData,
+    isLoading,
+    isFetching,
+  } = useGetParametersQuery();
   const dispatch = useDispatch();
   const { selectedBank, data, bankData, totalData } = useSelector(
     (state) => state.calculate
   );
 
-  useEffect(() => {
-    setData([{}, {}, {}, {}, {}, {}, {}, {}]);
-  }, [selectedBank]);
+  if (isLoading && isFetching)
+    return <PageConnectionWait title="Veriler Bekleniyor" />;
 
-  function handleBankData() {
-    const newBankObject = Object.assign({}, ...sumByList(expenseList, data));
-    newBankObject["costing"] = Object.values(newBankObject).reduce(
-      (a, b) => a + b,
-      0
+  if (!parameterData)
+    return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
+
+  const expenseList = parameterData.filter(
+    (item) => item.variant === "Gider Türleri"
+  )[0];
+
+  const banksList = parameterData.filter((item) => item.variant === "Banka")[0];
+
+  async function handleBankData() {
+    const newBankObject = Object.assign(
+      {},
+      ...(await sumByList(expenseList.content, data))
     );
-    newBankObject["bank"] = selectedBank;
+    newBankObject["costing"] = Object.values(newBankObject)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
+    newBankObject["bank"] = banksList.content.filter(
+      (item) => item.value === selectedBank
+    )[0].title;
 
-    const filteredBankData = bankData.filter(
-      (item) => item.bank !== selectedBank
+    console.log(bankData);
+    console.log(newBankObject);
+    const bankObject = bankData.filter(
+      (item) => item.bank === newBankObject.bank
     );
 
-    dispatch(setBankData([newBankObject, ...filteredBankData]));
+    if (bankObject.length > 0) {
+      console.log(bankObject);
+    }
+
+    dispatch(setBankData([newBankObject]));
+    dispatch(setData([{}, {}, {}, {}, {}, {}, {}, {}]));
   }
 
   function handleTotalData() {
-    console.log(totalData);
     const newTotalObject = Object.assign(
       {},
-      ...sumByList(expenseList, bankData)
-    );
-    newTotalObject["costing"] = Object.values(newTotalObject).reduce(
-      (a, b) => a + b,
-      0
+      ...sumByList(expenseList.content, bankData)
     );
     console.log(newTotalObject);
+    newTotalObject["costing"] = Object.values(newTotalObject)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
 
     dispatch(setTotalData([newTotalObject]));
   }
@@ -114,7 +122,7 @@ const CalculateSheet = () => {
               <TextField
                 select
                 id="bank"
-                defaultValue="Vakıfbank"
+                defaultValue="VB"
                 value={selectedBank}
                 label="Banka"
                 size="small"
@@ -124,9 +132,9 @@ const CalculateSheet = () => {
                 }}
                 sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
               >
-                {banksList.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
+                {banksList.content.map((item) => (
+                  <MenuItem key={item._id} value={item.value}>
+                    {item.title}
                   </MenuItem>
                 ))}
               </TextField>
@@ -141,18 +149,18 @@ const CalculateSheet = () => {
           </Grid>
           <Grid xs={12}>
             <Box sx={{ p: 1 }}>
-              <BaseCalculateSheet />
+              <BaseCalculateSheet expenseList={expenseList} />
             </Box>
           </Grid>
           <Grid xs={12}>
             <Box sx={{ p: 1 }}>
-              <BanksCalculateSheets />
+              <BanksCalculateSheets expenseList={expenseList} />
             </Box>
           </Grid>
           <Grid xs={12}>
             <Typography>Toplam</Typography>
             <Box sx={{ p: 1 }}>
-              <TotalCalculateSheets />
+              <TotalCalculateSheets expenseList={expenseList} />
             </Box>
           </Grid>
         </Grid>

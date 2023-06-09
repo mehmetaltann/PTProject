@@ -4,7 +4,7 @@ const initialState = {
   data: [{}, {}, {}, {}, {}, {}, {}, {}],
   bankData: [],
   totalData: [],
-  selectedBank: "Vakıfbank",
+  selectedBank: "VB",
 };
 
 export const calculateSlice = createSlice({

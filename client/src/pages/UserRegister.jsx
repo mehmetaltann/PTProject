@@ -1,9 +1,8 @@
-import axios from "axios";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { BASE_URL } from "../utils/localData";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setSnackbar } from "../redux/slices/generalSlice";
+import { useAddUserMutation } from "../redux/apis/userApi";
 import {
   Avatar,
   Button,
@@ -12,7 +11,6 @@ import {
   Link,
   Box,
   Container,
-  CssBaseline,
 } from "@mui/material";
 
 function Copyright(props) {
@@ -28,26 +26,14 @@ function Copyright(props) {
         Mehmet ALTAN
       </Link>{" "}
       {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }
 
-const defaultTheme = createTheme();
-
 export default function UserRegister() {
-  const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setError(null);
-    }, 1000);
-
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, [error]);
+  const dispatch = useDispatch();
+  const [addUser] = useAddUserMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,84 +43,75 @@ export default function UserRegister() {
       password: data.get("password"),
     };
     try {
-      const { data: res } = await axios.post(`${BASE_URL}/postUser`, userData);
+      const res = await addUser(userData).unwrap();
+      dispatch(
+        setSnackbar({
+          children: res.message,
+          severity: "success",
+        })
+      );
       navigate("/");
-      console.log(res.message);
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-      }
+      dispatch(
+        setSnackbar({
+          children: error.data.message,
+          severity: "error",
+        })
+      );
     }
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 15,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <HowToRegIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Kullanıcı Kayıt
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 15,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <HowToRegIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Kullanıcı Kayıt
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Kullanıcı Adı"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Şifre"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Kullanıcı Adı"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Şifre"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Kayıt Ol
-            </Button>
-            {error && (
-              <Typography sx={{ color: "error.main", mb: 2 }}>
-                {error}
-              </Typography>
-            )}
-            <Link variant="body2" component={RouterLink} to="/login">
-              {"Giriş Sayfası"}
-            </Link>
-          </Box>
+            Kayıt Ol
+          </Button>
+          <Link variant="body2" component={RouterLink} to="/login">
+            {"Giriş Sayfası"}
+          </Link>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
   );
 }

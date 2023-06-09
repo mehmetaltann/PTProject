@@ -1,18 +1,17 @@
+import { useSelector, useDispatch } from "react-redux";
+import { setData } from "../../redux/slices/calculateSlice";
 import {
   DataSheetGrid,
   floatColumn,
   keyColumn,
   createAddRowsComponent,
 } from "react-datasheet-grid";
-import { useSelector, useDispatch } from "react-redux";
-import { setData } from "../../redux/slices/calculateSlice";
-import { expenseList } from "../../pages/CalculateSheet";
 
-const BaseCalculateSheet = () => {
+const BaseCalculateSheet = ({ expenseList }) => {
   const { data } = useSelector((state) => state.calculate);
   const dispatch = useDispatch();
 
-  const columns = expenseList.map((item) => {
+  const columns = expenseList.content.map((item) => {
     return { ...keyColumn(item.value, floatColumn), title: item.title };
   });
 

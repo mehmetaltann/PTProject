@@ -1,16 +1,15 @@
 import PageConnectionWait from "../UI/PageConnectionWait";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import FormTextField from "../UI/formElements/FormTextField";
-import { Form, Formik } from "formik";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/slices/generalSlice";
 import {
-  useGetPortfoliosQuery,
-  useDeletePortfolioMutation,
-  useAddPortfolioMutation,
-} from "../../redux/apis/portfolioApi";
+  useGetParametersQuery,
+  useAddParameterMutation,
+  useDeleteParameterMutation,
+} from "../../redux/apis/parameterApi";
 import {
   Button,
   Paper,
@@ -22,32 +21,34 @@ import {
   Table,
   Stack,
   Typography,
+  TextField,
   IconButton,
 } from "@mui/material";
 
-const PortfolioParameters = () => {
-  const { data: portfolios, isLoading, isFetching } = useGetPortfoliosQuery();
-  const [deletePortfolio] = useDeletePortfolioMutation();
-  const [addPortfolio] = useAddPortfolioMutation();
+const NewParameter = () => {
+  const { data: parameters, isLoading, isFetching } = useGetParametersQuery();
+  const [variant, setVariant] = useState("");
+  const [deleteParameter] = useDeleteParameterMutation();
+  const [addParameter] = useAddParameterMutation();
   const dispatch = useDispatch();
 
   if (isLoading && isFetching)
     return <PageConnectionWait title="Veriler Bekleniyor" />;
 
-  if (!portfolios)
+  if (!parameters)
     return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
-  async function submitHandler(values, { resetForm }) {
-    const newRecord = { code: values.code, title: values.title };
+  async function handleSubmit() {
+    const newRecord = { variant, content: [] };
     try {
-      const res = await addPortfolio(newRecord).unwrap();
-      resetForm();
+      const res = await addParameter(newRecord).unwrap();
       dispatch(
         setSnackbar({
           children: res.message,
           severity: "success",
         })
       );
+      setVariant("");
     } catch (error) {
       dispatch(
         setSnackbar({
@@ -59,54 +60,28 @@ const PortfolioParameters = () => {
   }
 
   return (
-    <Grid container spacing={2} sx={{ mt: 2 }}>
+    <Grid container sx={{ width: 800, mt: 2 }} spacing={2}>
       <Grid>
-        <Typography
-          variant="subtitle1"
-          textAlign={"center"}
-          sx={{ p: 1, mb: 1 }}
-        >
-          Portföy Ekle
-        </Typography>
-        <Paper>
-          <Formik
-            initialValues={{
-              code: "",
-              title: "",
-            }}
-            onSubmit={submitHandler}
+        {" "}
+        <Stack spacing={2}>
+          <Typography>Yeni Parametre</Typography>
+          <TextField
+            sx={{ minWidth: 120, maxWidth: 200 }}
+            size="small"
+            label="İsim"
+            onChange={(e) => setVariant(e.target.value)}
+          />
+          <Button
+            type="submit"
+            sx={{ borderRadius: "5%", minWidth: 120, maxWidth: 200 }}
+            variant="contained"
+            color={"success"}
+            endIcon={<SendIcon />}
+            onClick={handleSubmit}
           >
-            {({ values, isSubmitting }) => (
-              <Form>
-                <Stack spacing={3} sx={{ p: 2 }}>
-                  <FormTextField
-                    sx={{ maxWidth: 180 }}
-                    name="code"
-                    label="Kod"
-                    size="small"
-                  />
-                  <FormTextField
-                    sx={{ maxWidth: 180 }}
-                    name="title"
-                    label="İsim"
-                    size="small"
-                  />
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    sx={{ borderRadius: "5%", minWidth: 120 }}
-                    size="large"
-                    variant="contained"
-                    color={"success"}
-                    endIcon={<SendIcon />}
-                  >
-                    Ekle
-                  </Button>
-                </Stack>
-              </Form>
-            )}
-          </Formik>
-        </Paper>
+            Ekle
+          </Button>
+        </Stack>
       </Grid>
       <Grid>
         <Typography
@@ -120,28 +95,23 @@ const PortfolioParameters = () => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Kod</TableCell>
                 <TableCell align="left">İsim</TableCell>
-                <TableCell align="center">İşlem</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {portfolios.map((row) => (
+              {parameters.map((row) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {row.code}
-                  </TableCell>
-                  <TableCell align="left">{row.title}</TableCell>
+                  <TableCell align="left">{row.variant}</TableCell>
                   <TableCell align="center">
                     <IconButton
                       size="small"
                       color="error"
                       onClick={async () => {
                         try {
-                          const res = await deletePortfolio(row.id).unwrap();
+                          const res = await deleteParameter(row.id).unwrap();
                           dispatch(
                             setSnackbar({
                               children: res.message,
@@ -171,4 +141,4 @@ const PortfolioParameters = () => {
   );
 };
 
-export default PortfolioParameters;
+export default NewParameter;
