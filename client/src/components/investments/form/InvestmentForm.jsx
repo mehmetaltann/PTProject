@@ -1,6 +1,7 @@
 import SendIcon from "@mui/icons-material/Send";
 import PurchaseModal from "./PurchaseModal";
 import SellModal from "./SellModal";
+import TableModal from "./TableModal";
 import { Button, Stack, Modal, Box } from "@mui/material";
 import { useState } from "react";
 
@@ -33,7 +34,7 @@ const InvestmentForm = () => {
             top: "40%",
             left: "50%",
             height: "70%",
-            width: { md: "70%", sm: "70%", xs: "85%", xl: "35%", lg: "55%" },
+            width: { md: "70%", sm: "70%", xs: "85%", xl: "60%", lg: "65%" },
             overflow: "auto",
             transform: "translate(-50%, -50%)",
             bgcolor: "background.paper",
@@ -42,7 +43,7 @@ const InvestmentForm = () => {
             p: 2,
           }}
         >
-          <PurchaseModal setOpenAlis={setOpenAlis} />
+          <TableModal setOpenAlis={setOpenAlis} />
         </Box>
       </Modal>
       <Button

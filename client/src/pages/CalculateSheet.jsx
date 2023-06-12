@@ -6,7 +6,6 @@ import TotalCalculateSheets from "../components/calculateSheet/TotalCalculateShe
 import PageConnectionWait from "../components/UI/PageConnectionWait";
 import { useGetParametersQuery } from "../redux/apis/parameterApi";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import {
   setBankData,
   setTotalData,
@@ -53,7 +52,7 @@ const CalculateSheet = () => {
     isFetching,
   } = useGetParametersQuery();
   const dispatch = useDispatch();
-  const { selectedBank, data, bankData, totalData } = useSelector(
+  const { selectedBank, data, bankData } = useSelector(
     (state) => state.calculate
   );
 
@@ -69,48 +68,58 @@ const CalculateSheet = () => {
 
   const banksList = parameterData.filter((item) => item.variant === "Banka")[0];
 
-  async function handleBankData() {
-    const newBankObject = Object.assign(
-      {},
-      ...(await sumByList(expenseList.content, data))
-    );
-    newBankObject["costing"] = Object.values(newBankObject)
-      .reduce((a, b) => a + b, 0)
-      .toFixed(2);
-    newBankObject["bank"] = banksList.content.filter(
-      (item) => item.value === selectedBank
-    )[0].title;
-
-    console.log(bankData);
-    console.log(newBankObject);
-    const bankObject = bankData.filter(
-      (item) => item.bank === newBankObject.bank
-    );
-
-    if (bankObject.length > 0) {
-      console.log(bankObject);
-    }
-
-    dispatch(setBankData([newBankObject]));
-    dispatch(setData([{}, {}, {}, {}, {}, {}, {}, {}]));
-  }
-
-  function handleTotalData() {
+  async function handleTotalData(bankDATAS) {
     const newTotalObject = Object.assign(
       {},
-      ...sumByList(expenseList.content, bankData)
+      ...(await sumByList(expenseList.content, bankDATAS))
     );
-    console.log(newTotalObject);
-    newTotalObject["costing"] = Object.values(newTotalObject)
+    newTotalObject["costing"] = +Object.values(newTotalObject)
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
 
     dispatch(setTotalData([newTotalObject]));
   }
 
-  function calculateHandle() {
-    handleBankData();
-    handleTotalData();
+  async function calculateHandle() {
+    const newBankObject = Object.assign(
+      {},
+      ...(await sumByList(expenseList.content, data))
+    );
+    newBankObject["costing"] = +Object.values(newBankObject)
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
+
+    const bankName = banksList.content.filter(
+      (item) => item.value === selectedBank
+    )[0].title;
+
+    newBankObject["bank"] = bankName;
+
+    const bankObject = bankData
+      .filter((item) => item.bank === newBankObject.bank)
+      .shift();
+
+    if (!bankObject) {
+      const newBankData = [newBankObject, ...bankData];
+      dispatch(setBankData(newBankData));
+      handleTotalData(newBankData);
+      dispatch(setData([{}, {}, {}, {}, {}, {}, {}, {}]));
+    } else {
+      const mergedObject = [
+        ...Object.entries(newBankObject),
+        ...Object.entries(bankObject),
+      ].reduce(
+        (acc, [key, val]) => ({ ...acc, [key]: (acc[key] || 0) + val }),
+        {}
+      );
+      mergedObject["bank"] = bankName;
+      const newBankData = bankData.filter((item) => item.bank !== bankName);
+
+      newBankData.push(mergedObject);
+      dispatch(setBankData(newBankData));
+      handleTotalData(newBankData);
+      dispatch(setData([{}, {}, {}, {}, {}, {}, {}, {}]));
+    }
   }
 
   return (
