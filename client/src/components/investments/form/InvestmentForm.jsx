@@ -1,5 +1,5 @@
 import SendIcon from "@mui/icons-material/Send";
-import PurchaseModal from "./PurchaseModal";
+// import PurchaseModal from "./PurchaseModal"; // submit new records with formik form
 import SellModal from "./SellModal";
 import TableModal from "./TableModal";
 import { Button, Stack, Modal, Box } from "@mui/material";

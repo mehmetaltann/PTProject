@@ -1,5 +1,6 @@
 import PageTitle from "../components/UI/PageTitle";
 import BudgetForm from "../components/budget/form/BudgetForm";
+import BudgetFormAlt from "../components/budget/form/BudgetFormAlt";
 import TableContainer from "../components/budget/table/TableContainer";
 import { Stack, Box, Container } from "@mui/material";
 

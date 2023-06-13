@@ -4,6 +4,8 @@ const initialState = {
   selectedPortfolio: "Tümü",
   selectedDate: 2,
   selectedBudgetType: "Tümü",
+  selectedCategoryA: "Aylık Gelirler",
+  selectedCategoryB: "",
   snackbar: null,
 };
 
@@ -20,6 +22,12 @@ export const generalSlice = createSlice({
     pickBudgetType: (state, { payload }) => {
       state.selectedBudgetType = payload;
     },
+    pickCategoryA: (state, { payload }) => {
+      state.selectedCategoryA = payload;
+    },
+    pickCategoryB: (state, { payload }) => {
+      state.selectedCategoryB = payload;
+    },
     setSnackbar: (state, { payload }) => {
       state.snackbar = payload;
     },
@@ -27,5 +35,5 @@ export const generalSlice = createSlice({
 });
 
 export default generalSlice.reducer;
-export const { pickPortfolio, pickDate, pickBudgetType, setSnackbar } =
+export const { pickPortfolio, pickDate, pickBudgetType, setSnackbar,pickCategoryA,pickCategoryB } =
   generalSlice.actions;

@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: [{}, {}, {}, {}, {}, {}, {}, {}],
+  investmentData: [{}, {}],
+  budgetData: [{}, {}],
   bankData: [],
   totalData: [],
   selectedBank: "VB",
@@ -13,6 +15,12 @@ export const calculateSlice = createSlice({
   reducers: {
     setData: (state, { payload }) => {
       state.data = payload;
+    },
+    setInvestmentData: (state, { payload }) => {
+      state.investmentData = payload;
+    },
+    setBudgetData: (state, { payload }) => {
+      state.budgetData = payload;
     },
     setBankData: (state, { payload }) => {
       state.bankData = payload;
@@ -33,4 +41,6 @@ export const {
   setTotalData,
   setSelectedBank,
   updateBankData,
+  setInvestmentData,
+  setBudgetData,
 } = calculateSlice.actions;

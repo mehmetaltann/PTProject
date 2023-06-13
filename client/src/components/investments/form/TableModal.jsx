@@ -1,7 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setData } from "../../../redux/slices/calculateSlice";
+import { setInvestmentData } from "../../../redux/slices/calculateSlice";
 import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+import { dateFormatNormal } from "../../../utils/help-functions";
+import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
 import {
   DataSheetGrid,
   floatColumn,
@@ -10,12 +12,20 @@ import {
   keyColumn,
   createAddRowsComponent,
 } from "react-datasheet-grid";
-import { Box, Stack, Button, TextField, MenuItem } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Button,
+  TextField,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 
 const TableModal = ({ setOpenAlis }) => {
-  const { data } = useSelector((state) => state.calculate);
+  const { budgetData: data } = useSelector((state) => state.calculate);
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: portfolios } = useGetPortfoliosQuery();
+  const [addPurchases] = useAddPurchasesMutation();
   const dispatch = useDispatch();
 
   const columns = [
@@ -32,7 +42,7 @@ const TableModal = ({ setOpenAlis }) => {
   });
 
   function dataValidation(controlData) {
-    controlData.map((item) => {
+    const returnList = controlData.map((item) => {
       if (!item.date) {
         dispatch(
           setSnackbar({
@@ -40,13 +50,15 @@ const TableModal = ({ setOpenAlis }) => {
             severity: "error",
           })
         );
-      } else if (!item.code || item.length < 3 || item.length > 3) {
+        return false;
+      } else if (!item.code || item.code.length < 3 || item.code.length > 3) {
         dispatch(
           setSnackbar({
             children: "Kod Girilmemiş veya Hatalı girilmiş kayıt var",
             severity: "error",
           })
         );
+        return false;
       } else if (!item.number || item.number === 0) {
         dispatch(
           setSnackbar({
@@ -54,6 +66,7 @@ const TableModal = ({ setOpenAlis }) => {
             severity: "error",
           })
         );
+        return false;
       } else if (!item.price || item.price === 0) {
         dispatch(
           setSnackbar({
@@ -61,21 +74,60 @@ const TableModal = ({ setOpenAlis }) => {
             severity: "error",
           })
         );
+        return false;
       } else {
         return true;
       }
     });
+
+    return returnList.every((item) => item === true);
   }
 
-  function purchaseHandle() {
-    if (!dataValidation(data)) {
-      console.log("deneme");
-      console.log(data);
+  async function purchaseHandle() {
+    if (dataValidation(data)) {
+      const newRecords = data.map((v) => ({
+        ...v,
+        code: v.code.toUpperCase().trim(),
+        portfolio:
+          selectedPortfolio === "Tümü"
+            ? "Bireysel Emeklilik Fonları"
+            : selectedPortfolio,
+        date: dateFormatNormal(v.date),
+        commission: v.commission ? v.commission : 0,
+      }));
+      try {
+        const res = await addPurchases(newRecords).unwrap();
+        setOpenAlis(false);
+        dispatch(
+          setSnackbar({
+            children: res.message,
+            severity: "success",
+          })
+        );
+        dispatch(setInvestmentData([{}, {}]));
+      } catch (error) {
+        dispatch(
+          setSnackbar({
+            children: error,
+            severity: "error",
+          })
+        );
+      }
     }
   }
 
   return (
     <Stack spacing={2}>
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 2,
+          borderBottom: 1,
+          borderColor: "grey.500",
+        }}
+      >
+        Yeni Alış
+      </Typography>
       <Stack direction="row" spacing={2} alignItems={"center"}>
         <TextField
           select
@@ -111,7 +163,7 @@ const TableModal = ({ setOpenAlis }) => {
       <Box sx={{ p: 2 }}>
         <DataSheetGrid
           value={data}
-          onChange={(e) => dispatch(setData(e))}
+          onChange={(e) => dispatch(setInvestmentData(e))}
           columns={columns}
           addRowsComponent={AddRows}
           height={700}
