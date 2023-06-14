@@ -2,6 +2,8 @@ import PageConnectionWait from "../../UI/PageConnectionWait";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import TableForm from "./TableForm";
 import FormikForm from "./FormikForm";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useGetCategoriesQuery } from "../../../redux/apis/categoryApi";
 import {
@@ -36,6 +38,7 @@ const BudgetFormMain = () => {
   const handleGelirOpen = () => setOpen({ state: true, type: "Gelir" });
   const handleGiderOpen = () => setOpen({ state: true, type: "Gider" });
   const handleClose = () => setOpen({ state: false, type: "Gelir" });
+  const navigate = useNavigate();
 
   if (isLoading && isFetching)
     return <PageConnectionWait title="Veriler Bekleniyor" />;
@@ -43,8 +46,17 @@ const BudgetFormMain = () => {
   if (!categories)
     return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
+  function handlePageStatictic() {
+    navigate("/butce-istatistik");
+  }
+
   return (
-    <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      justifyContent={"center"}
+      spacing={{ xs: 1, sm: 3 }}
+      sx={{ pt: 2 }}
+    >
       <Button
         type="button"
         onClick={handleGelirOpen}
@@ -64,6 +76,15 @@ const BudgetFormMain = () => {
         size="large"
       >
         Gider Ekle
+      </Button>
+      <Button
+        startIcon={<BarChartIcon />}
+        type="button"
+        onClick={handlePageStatictic}
+        color="info"
+        size="small"
+      >
+        İstatistikler
       </Button>
       <Modal
         open={open.state}

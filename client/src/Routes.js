@@ -2,11 +2,12 @@ import Home from "./pages/Home";
 import Investments from "./pages/Investments.jsx";
 import InvestmentRecords from "./pages/InvestmentRecords";
 import Budget from "./pages/Budget";
+import BudgetStatistics from "./pages/BudgetStatistics.jsx";
 import UserLogin from "./pages/UserLogin";
 import UserRegister from "./pages/UserRegister";
 import NavBar from "./layouts/NavBar";
 import CalculateSheet from "./pages/CalculateSheet";
-import Parameters from "./pages/Parameters"
+import Parameters from "./pages/Parameters";
 import {
   BrowserRouter,
   Routes,
@@ -39,7 +40,11 @@ const routes = [
   {
     path: "/parametereler",
     component: Parameters,
-  }
+  },
+  {
+    path: "/butce-istatistik",
+    component: BudgetStatistics,
+  },
 ];
 
 export const Rotalar = () => {

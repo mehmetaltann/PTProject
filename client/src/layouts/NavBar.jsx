@@ -27,38 +27,6 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  const handleRoutes = (path) => {
-    navigate(path);
-  };
-
-  const handleLogOut = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    window.location.reload();
-  };
-
-  function handleSpreadSheet() {
-    navigate("/hesaplama-tablosu");
-  }
-
-  function handleParameters() {
-    navigate("/parametereler");
-  }
 
   return (
     <AppBar position="static">
@@ -91,7 +59,9 @@ const NavBar = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={(e) => {
+                setAnchorElNav(e.currentTarget);
+              }}
               color="inherit"
             >
               <MenuIcon />
@@ -109,7 +79,9 @@ const NavBar = () => {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => {
+                setAnchorElNav(null);
+              }}
               sx={{
                 display: { xs: "block", md: "none" },
               }}
@@ -118,8 +90,8 @@ const NavBar = () => {
                 <MenuItem
                   key={title}
                   onClick={() => {
-                    handleRoutes(`/${link}`);
-                    handleCloseNavMenu();
+                    navigate(`/${link}`);
+                    setAnchorElNav(null);
                   }}
                 >
                   <Typography textAlign="center">{title}</Typography>
@@ -162,7 +134,7 @@ const NavBar = () => {
             {pages.map(({ title, link }) => (
               <Button
                 key={title}
-                onClick={() => handleRoutes(`/${link}`)}
+                onClick={() => navigate(`/${link}`)}
                 sx={{
                   my: 2,
                   color: "white",
@@ -176,7 +148,12 @@ const NavBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <IconButton
+              onClick={(e) => {
+                setAnchorElUser(e.currentTarget);
+              }}
+              sx={{ p: 0 }}
+            >
               <Avatar alt="Mehmet Altan" src={profile} />
             </IconButton>
 
@@ -194,16 +171,39 @@ const NavBar = () => {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClose={() => {
+                setAnchorElUser(null);
+              }}
             >
-              <MenuItem onClick={handleLogOut}>
+              <MenuItem
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/");
+                  window.location.reload();
+                }}
+              >
                 <Typography textAlign="center">Çıkış Yap</Typography>
               </MenuItem>
-              <MenuItem onClick={handleSpreadSheet}>
+              <MenuItem
+                onClick={() => {
+                  navigate("/parametereler");
+                }}
+              >
                 <Typography textAlign="center">Hesaplama Tablosu</Typography>
               </MenuItem>
-              <MenuItem onClick={handleParameters}>
+              <MenuItem
+                onClick={() => {
+                  navigate("/hesaplama-tablosu");
+                }}
+              >
                 <Typography textAlign="center">Parametreler</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate("/butce-istatistik");
+                }}
+              >
+                <Typography textAlign="center">Bütçe İstatistikleri</Typography>
               </MenuItem>
             </Menu>
           </Box>
