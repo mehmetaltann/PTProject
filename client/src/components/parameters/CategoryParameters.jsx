@@ -3,7 +3,7 @@ import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import FormTextField from "../UI/formElements/FormTextField";
-import InvestmentFormSelect from "../../components/investments/form/InvestmentFormSelect";
+import FormikFormSelect from "../../components/investments/form/UI/FormikFormSelect";
 import { Form, Formik, Field } from "formik";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/slices/generalSlice";
@@ -89,7 +89,7 @@ const CategoryParameters = () => {
                 <Stack spacing={3} sx={{ p: 2 }}>
                   <Field
                     name="type"
-                    component={InvestmentFormSelect}
+                    component={FormikFormSelect}
                     label="Tip"
                     minW={150}
                   >

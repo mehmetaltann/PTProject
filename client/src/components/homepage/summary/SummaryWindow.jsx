@@ -1,7 +1,6 @@
 import SummaryItem from "./SummaryItem";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { thisMonth, thisYear, thisDay } from "../../../utils/help-functions";
-import { aylar } from "../../../utils/localData";
 import {
   useGetSummaryQuery,
   useUpdateSummaryMutation,
@@ -19,9 +18,24 @@ import {
   IconButton,
 } from "@mui/material";
 
+export const monthsTranslate = [
+  { value: 1, label: "Ocak" },
+  { value: 2, label: "Şubat" },
+  { value: 3, label: "Mart" },
+  { value: 4, label: "Nisan" },
+  { value: 5, label: "Mayıs" },
+  { value: 6, label: "Haziran" },
+  { value: 7, label: "Temmuz" },
+  { value: 8, label: "Ağustos" },
+  { value: 9, label: "Eylül" },
+  { value: 10, label: "Ekim" },
+  { value: 11, label: "Kasım" },
+  { value: 12, label: "Aralık" },
+];
+
 const SummaryWindow = () => {
   const thisAyYil = `${thisDay} ${
-    aylar.find((item) => item.value === thisMonth).label
+    monthsTranslate.find((item) => item.value === thisMonth).label
   } ${thisYear}`;
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
   const [updateSummary, { isLoading: updateLoad }] = useUpdateSummaryMutation();
@@ -73,7 +87,7 @@ const SummaryWindow = () => {
   return (
     <Paper>
       {updateLoad && (
-        <Stack spacing={2} direction="row" sx={{ p: 2, mt:3 }}>
+        <Stack spacing={2} direction="row" sx={{ p: 2, mt: 3 }}>
           <Typography>Güncelleniyor</Typography>
           <CircularProgress />
         </Stack>

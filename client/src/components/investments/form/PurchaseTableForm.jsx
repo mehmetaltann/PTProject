@@ -1,9 +1,12 @@
+import SendIcon from "@mui/icons-material/Send";
 import { useSelector, useDispatch } from "react-redux";
 import { setInvestmentData } from "../../../redux/slices/calculateSlice";
 import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { dateFormatNormal } from "../../../utils/help-functions";
 import { useAddPurchasesMutation } from "../../../redux/apis/investmentApi";
+import { Box, Stack, Button, TextField, MenuItem } from "@mui/material";
+import { Fragment } from "react";
 import {
   DataSheetGrid,
   floatColumn,
@@ -12,17 +15,9 @@ import {
   keyColumn,
   createAddRowsComponent,
 } from "react-datasheet-grid";
-import {
-  Box,
-  Stack,
-  Button,
-  TextField,
-  MenuItem,
-  Typography,
-} from "@mui/material";
 
-const TableModal = ({ setOpenAlis }) => {
-  const { budgetData: data } = useSelector((state) => state.calculate);
+const PurchaseTableForm = ({ setOpenAlis }) => {
+  const { investmentData: data } = useSelector((state) => state.calculate);
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: portfolios } = useGetPortfoliosQuery();
   const [addPurchases] = useAddPurchasesMutation();
@@ -117,22 +112,13 @@ const TableModal = ({ setOpenAlis }) => {
   }
 
   return (
-    <Stack spacing={2}>
-      <Typography
-        variant="h5"
-        sx={{
-          mb: 2,
-          borderBottom: 1,
-          borderColor: "grey.500",
-        }}
-      >
-        Yeni Alış
-      </Typography>
-      <Stack direction="row" spacing={2} alignItems={"center"}>
+    <Fragment>
+      <Stack direction="row" alignItems={"center"}>
         <TextField
           select
           id="bank"
           defaultValue="Bireysel Emeklilik Fonları"
+          variant="outlined"
           value={
             selectedPortfolio === "Tümü"
               ? "Bireysel Emeklilik Fonları"
@@ -140,7 +126,6 @@ const TableModal = ({ setOpenAlis }) => {
           }
           label="Portföy"
           size="small"
-          variant="standard"
           onChange={(e) => {
             dispatch(pickPortfolio(e.target.value));
           }}
@@ -156,6 +141,8 @@ const TableModal = ({ setOpenAlis }) => {
           variant="contained"
           onClick={purchaseHandle}
           sx={{ minWidth: "15ch" }}
+          color="success"
+          endIcon={<SendIcon />}
         >
           Ekle
         </Button>
@@ -172,8 +159,8 @@ const TableModal = ({ setOpenAlis }) => {
           autoAddRow
         />
       </Box>
-    </Stack>
+    </Fragment>
   );
 };
 
-export default TableModal;
+export default PurchaseTableForm;

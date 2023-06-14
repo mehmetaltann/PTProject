@@ -1,6 +1,5 @@
 import PageTitle from "../components/UI/PageTitle";
-import BudgetForm from "../components/budget/form/BudgetForm";
-import BudgetFormAlt from "../components/budget/form/BudgetFormAlt";
+import BudgetFormMain from "../components/budget/form/BudgetFormMain";
 import TableContainer from "../components/budget/table/TableContainer";
 import { Stack, Box, Container } from "@mui/material";
 
@@ -11,7 +10,7 @@ const Budget = () => {
         <Stack spacing={2}>
           <Stack spacing={{ sm: 4 }} direction={{ sm: "row", xs: "column" }}>
             <PageTitle title="Bütçe İşlemleri" />
-            <BudgetForm />
+            <BudgetFormMain />
           </Stack>
           <TableContainer />
         </Stack>

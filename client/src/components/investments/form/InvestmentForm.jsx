@@ -1,13 +1,23 @@
 import SendIcon from "@mui/icons-material/Send";
-// import PurchaseModal from "./PurchaseModal"; // submit new records with formik form
-import SellModal from "./SellModal";
-import TableModal from "./TableModal";
-import { Button, Stack, Modal, Box } from "@mui/material";
+import SellFormikForm from "./SellFormikForm";
+import PurchaseTableForm from "./PurchaseTableForm";
+import PurchaseFormikForm from "./PurchaseFormikForm";
 import { useState } from "react";
+import {
+  Button,
+  Stack,
+  Modal,
+  Box,
+  Typography,
+  Divider,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "@mui/material";
 
 const InvestmentForm = () => {
   const [openAlis, setOpenAlis] = useState(false);
   const [openSatis, setOpenSatis] = useState(false);
+  const [formType, setFormType] = useState("table");
 
   return (
     <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
@@ -43,7 +53,40 @@ const InvestmentForm = () => {
             p: 2,
           }}
         >
-          <TableModal setOpenAlis={setOpenAlis} />
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={2} sx={{ pt: 2, pl: 2 }}>
+              <Typography variant="h5">Yeni Alış</Typography>
+              <ToggleButtonGroup
+                value={formType}
+                exclusive
+                onChange={(e) => setFormType(e.target.value)}
+                aria-label="Platform"
+              >
+                <ToggleButton
+                  color="success"
+                  value="table"
+                  sx={{ minWidth: "12ch", p: 0.8 }}
+                  size="small"
+                >
+                  Tablo
+                </ToggleButton>
+                <ToggleButton
+                  color="error"
+                  value="form"
+                  sx={{ minWidth: "12ch", p: 0.8 }}
+                  size="small"
+                >
+                  Form
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Stack>
+            <Divider />
+            {formType === "table" ? (
+              <PurchaseTableForm setOpenAlis={setOpenAlis} />
+            ) : (
+              <PurchaseFormikForm setOpenAlis={setOpenAlis} />
+            )}
+          </Stack>
         </Box>
       </Modal>
       <Button
@@ -78,7 +121,7 @@ const InvestmentForm = () => {
             p: 2,
           }}
         >
-          <SellModal setOpenSatis={setOpenSatis} />
+          <SellFormikForm setOpenSatis={setOpenSatis} />
         </Box>
       </Modal>
     </Stack>

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import InvestmentFormSelect from "./InvestmentFormSelect";
+import FormikFormSelect from "./UI/FormikFormSelect";
 import FormTextField from "../../UI/formElements/FormTextField";
 import FormDatePicker from "../../UI/formElements/FormDatePicker";
 import SendIcon from "@mui/icons-material/Send";
@@ -13,7 +13,7 @@ import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddSellMutation } from "../../../redux/apis/investmentApi";
 import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
 
-const SellModal = ({ setOpenSatis }) => {
+const SellFormikForm = ({ setOpenSatis }) => {
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: portfolios } = useGetPortfoliosQuery();
   const [addSell] = useAddSellMutation();
@@ -97,7 +97,7 @@ const SellModal = ({ setOpenSatis }) => {
               <Grid>
                 <Field
                   name="portfolio"
-                  component={InvestmentFormSelect}
+                  component={FormikFormSelect}
                   label="Portföy"
                   minW={200}
                 >
@@ -166,4 +166,4 @@ const SellModal = ({ setOpenSatis }) => {
   );
 };
 
-export default SellModal;
+export default SellFormikForm;

@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-const InvestmentFormSelect = ({ children, minW, label, form, field }) => {
+const FormikFormSelect = ({ children, minW, label, form, field }) => {
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -22,4 +22,4 @@ const InvestmentFormSelect = ({ children, minW, label, form, field }) => {
   );
 };
 
-export default InvestmentFormSelect;
+export default FormikFormSelect;

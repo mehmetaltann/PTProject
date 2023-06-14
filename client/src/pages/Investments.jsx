@@ -12,7 +12,6 @@ const Investments = () => {
             <PageTitle title="Yatırım İşlemleri" />
             <InvestmentForm />
           </Stack>
-
           <TableContainer />
         </Stack>
       </Container>

@@ -1,11 +1,19 @@
 import DataTable from "./DataTable";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import PageConnectionWait from "../../UI/PageConnectionWait";
-import { tarihSecim } from "../../../utils/localData";
 import { useSelector, useDispatch } from "react-redux";
 import { pickDate, pickPortfolio } from "../../../redux/slices/generalSlice";
 import { MenuItem, Typography, Paper, Box, TextField } from "@mui/material";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
+
+export const historyPick = [
+  { value: 1, label: "Son 1 Ay" },
+  { value: 2, label: "Son 3 Ay" },
+  { value: 3, label: "Son 6 Ay" },
+  { value: 4, label: "Son 1 Yıl" },
+  { value: 5, label: "Son 3 Yıl" },
+  { value: 0, label: "Tümü" },
+];
 
 const TableContainer = () => {
   const { selectedDate, selectedPortfolio } = useSelector(
@@ -54,7 +62,7 @@ const TableContainer = () => {
                 }}
                 sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
               >
-                {tarihSecim.map((option) => (
+                {historyPick.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
