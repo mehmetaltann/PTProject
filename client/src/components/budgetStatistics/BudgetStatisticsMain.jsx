@@ -18,6 +18,7 @@ import {
   FormHelperText,
   Box,
   Button,
+  Stack,
 } from "@mui/material";
 
 const monthsTranslate = [
@@ -87,6 +88,8 @@ const BudgetStatisticsMain = () => {
   if (!budgetItems)
     return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
+  const monthNumber = months.length * years.length;
+
   function handleMonthChange(event) {
     const {
       target: { value },
@@ -149,7 +152,32 @@ const BudgetStatisticsMain = () => {
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>Çoklu Seçilebilir</FormHelperText>
+            <Stack
+              spacing={1}
+              direction="row"
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              sx={{ ml: 1, mr: 1 }}
+            >
+              <FormHelperText>Çoklu Seçilebilir</FormHelperText>
+
+              <Button
+                sx={{ fontSize: "0.6rem" }}
+                onClick={() => {
+                  setYears(yearsList);
+                }}
+              >
+                Tüm Yıllar
+              </Button>
+              <Button
+                sx={{ fontSize: "0.6rem" }}
+                onClick={() => {
+                  setYears([thisYear]);
+                }}
+              >
+                Sıfırla
+              </Button>
+            </Stack>
           </Grid>
           <Grid>
             <InputLabel id="ay">Ay</InputLabel>
@@ -176,7 +204,32 @@ const BudgetStatisticsMain = () => {
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>Çoklu Seçilebilir</FormHelperText>
+            <Stack
+              spacing={1}
+              direction="row"
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              sx={{ ml: 1, mr: 1 }}
+            >
+              <FormHelperText>Çoklu Seçilebilir</FormHelperText>
+
+              <Button
+                sx={{ fontSize: "0.6rem" }}
+                onClick={() => {
+                  setMonths([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+                }}
+              >
+                Tüm Aylar
+              </Button>
+              <Button
+                sx={{ fontSize: "0.6rem" }}
+                onClick={() => {
+                  setMonths([thisMonth]);
+                }}
+              >
+                Sıfırla
+              </Button>
+            </Stack>
           </Grid>
           <Grid>
             <Button
@@ -192,7 +245,10 @@ const BudgetStatisticsMain = () => {
       </Paper>
       <Paper>
         <Box sx={{ p: 2 }}>
-          <BudgetStatisticsTable data={filteredData} />
+          <BudgetStatisticsTable
+            data={filteredData}
+            monthNumber={monthNumber}
+          />
         </Box>
       </Paper>
     </Fragment>
