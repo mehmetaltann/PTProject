@@ -1,13 +1,13 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { useSelector, useDispatch } from "react-redux";
+import AltanSelect from "../../UI/AltanSelect";
+import { useSelector } from "react-redux";
 import { pickPortfolio } from "../../../redux/slices/generalSlice";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
-import { Typography, TextField, MenuItem } from "@mui/material";
+import { Typography } from "@mui/material";
 
 const TableContainer = () => {
   const { selectedPortfolio } = useSelector((state) => state.general);
   const { data: portfolios, isLoading, isFetching } = useGetPortfoliosQuery();
-  const dispatch = useDispatch();
 
   if (isLoading && isFetching) return null;
   if (!portfolios) return null;
@@ -26,33 +26,26 @@ const TableContainer = () => {
         <Typography
           variant="h6"
           sx={{
-            color: "primary.main",
+            color: "info.main",
             p: 1,
+            ml: 2,
           }}
         >
-          Yatırım Kalemleri
+          Aktif Yatırım Kalemleri
         </Typography>
       </Grid>
       <Grid>
-        <TextField
-          select
+        <AltanSelect
           id="portfoy"
           defaultValue="Tümü"
           value={selectedPortfolio}
-          size="small"
-          variant="standard"
-          onChange={(e) => {
-            dispatch(pickPortfolio(e.target.value));
-          }}
-          sx={{ minWidth: "25ch", p: 1, borderColor: "primary.main" }}
-        >
-          <MenuItem value="Tümü">Tümü</MenuItem>
-          {portfolios.map((item) => (
-            <MenuItem key={item.id} value={item.title}>
-              {item.title}
-            </MenuItem>
-          ))}
-        </TextField>
+          minWidth="25ch"
+          onChange={pickPortfolio}
+          data={portfolios}
+          dataTextAttr="title"
+          dataValueAttr="title"
+          isAll={true}
+        />
       </Grid>
     </Grid>
   );

@@ -38,7 +38,7 @@ const routes = [
     component: CalculateSheet,
   },
   {
-    path: "/parametereler",
+    path: "/parametreler",
     component: Parameters,
   },
   {

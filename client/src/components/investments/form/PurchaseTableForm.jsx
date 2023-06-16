@@ -1,4 +1,5 @@
 import SendIcon from "@mui/icons-material/Send";
+import AltanSelect from "../../UI/AltanSelect";
 import { useSelector, useDispatch } from "react-redux";
 import { setInvestmentData } from "../../../redux/slices/calculateSlice";
 import { pickPortfolio, setSnackbar } from "../../../redux/slices/generalSlice";
@@ -113,30 +114,24 @@ const PurchaseTableForm = ({ setOpenAlis }) => {
 
   return (
     <Fragment>
-      <Stack direction="row" alignItems={"center"}>
-        <TextField
-          select
-          id="bank"
+      <Stack direction="row" alignItems={"center"} spacing={2} sx={{ ml: 2 }}>
+        <AltanSelect
+          id="portfoy"
           defaultValue="Bireysel Emeklilik Fonları"
-          variant="outlined"
           value={
             selectedPortfolio === "Tümü"
               ? "Bireysel Emeklilik Fonları"
               : selectedPortfolio
           }
+          minWidth="20ch"
+          onChange={pickPortfolio}
+          data={portfolios}
+          dataTextAttr="title"
+          dataValueAttr="title"
           label="Portföy"
-          size="small"
-          onChange={(e) => {
-            dispatch(pickPortfolio(e.target.value));
-          }}
-          sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
-        >
-          {portfolios.map((item) => (
-            <MenuItem key={item.id} value={item.title}>
-              {item.title}
-            </MenuItem>
-          ))}
-        </TextField>
+          color="success"
+          sxProps={{ ml: 3 }}
+        />
         <Button
           variant="contained"
           onClick={purchaseHandle}

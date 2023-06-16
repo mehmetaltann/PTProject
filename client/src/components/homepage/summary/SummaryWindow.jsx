@@ -1,13 +1,15 @@
 import SummaryItem from "./SummaryItem";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import { thisMonth, thisYear, thisDay } from "../../../utils/help-functions";
+import { Fragment } from "react";
+import { setSnackbar } from "../../../redux/slices/generalSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   useGetSummaryQuery,
   useUpdateSummaryMutation,
 } from "../../../redux/apis/summaryApi";
-import { Fragment } from "react";
-import { setSnackbar } from "../../../redux/slices/generalSlice";
-import { useDispatch } from "react-redux";
 import {
   Paper,
   Divider,
@@ -16,6 +18,7 @@ import {
   Typography,
   Stack,
   IconButton,
+  Button,
 } from "@mui/material";
 
 export const monthsTranslate = [
@@ -40,6 +43,7 @@ const SummaryWindow = () => {
   const { data: summaryData, isLoading, isFetching } = useGetSummaryQuery();
   const [updateSummary, { isLoading: updateLoad }] = useUpdateSummaryMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   if (isLoading && isFetching)
     return (
@@ -85,73 +89,92 @@ const SummaryWindow = () => {
   }
 
   return (
-    <Paper>
-      {updateLoad && (
-        <Stack spacing={2} direction="row" sx={{ p: 2, mt: 3 }}>
-          <Typography>Güncelleniyor</Typography>
-          <CircularProgress />
-        </Stack>
-      )}
-      <Stack
-        sx={[{ p: 2, color: "info.main" }]}
-        spacing={2}
-        direction="row"
-        justifyContent={"space-between"}
-        alignItems={"center"}
-      >
-        <Stack direction="row" alignItems={"center"}>
+    <Stack spacing={2}>
+      <Paper>
+        {updateLoad && (
+          <Stack spacing={2} direction="row" sx={{ p: 2, mt: 3 }}>
+            <Typography>Güncelleniyor</Typography>
+            <CircularProgress />
+          </Stack>
+        )}
+        <Stack
+          sx={[{ p: 1.5, color: "info.main" }]}
+          spacing={2}
+          direction="row"
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <Stack direction="row" alignItems={"center"}>
+            <Typography variant="body1" fontWeight={700}>
+              Yatırım Özet
+            </Typography>
+            <IconButton aria-label="update" onClick={handleUpdate}>
+              <RefreshIcon fontSize="inherit" color="primary.main" />
+            </IconButton>
+          </Stack>
           <Typography variant="body1" fontWeight={700}>
-            Özet
+            {thisAyYil}
           </Typography>
-          <IconButton aria-label="update" onClick={handleUpdate}>
-            <RefreshIcon fontSize="inherit" color="primary.main" />
-          </IconButton>
         </Stack>
-        <Typography variant="body1" fontWeight={700}>
-          {thisAyYil}
-        </Typography>
-      </Stack>
-      <Divider />
-
-      {portfolioValues.map(
-        ({ name, presentValue, totalCost, plStatus }, index) => {
-          const plPercentage = (plStatus / totalCost) * 100;
-          const color = plStatus >= 0 ? "success.main" : "error.main";
-          return (
-            <Fragment key={index}>
-              <SummaryItem
-                title={name}
-                presentValue={`${presentValue.toFixed(2)} TL`}
-                totalCost={`${totalCost.toFixed(2)} TL`}
-                plStatus={`${plStatus.toFixed(2)} TL`}
-                plPercentage={`% ${plPercentage.toFixed(2)}`}
-                sx={{
-                  color: "primary.main",
-                }}
-                plColor={color}
-              />
-              <Divider />
-            </Fragment>
-          );
-        }
-      )}
-      <Divider />
-      <Stack
-        sx={[{ p: 2, fontWeight: 500, color: "info.main" }]}
-        spacing={2}
-        direction="row"
-        justifyContent={"space-between"}
-      >
-        <Typography variant="body1" fontWeight={700}>
-          Toplam Yatırım Değeri
-        </Typography>
-        <Typography variant="body1" fontWeight={700}>
-          {`${summaryData
-            .reduce((n, { presentValue }) => n + Number(presentValue), 0)
-            .toFixed(2)} TL`}
-        </Typography>
-      </Stack>
-    </Paper>
+        <Divider />
+        <Stack spacing={1} sx={{ pt: 1 }}>
+          {portfolioValues.map(
+            ({ name, presentValue, totalCost, plStatus }, index) => {
+              const plPercentage = (plStatus / totalCost) * 100;
+              const color = plStatus >= 0 ? "success.main" : "error.main";
+              return (
+                <Fragment key={index}>
+                  <SummaryItem
+                    title={name}
+                    presentValue={`${presentValue.toFixed(2)} TL`}
+                    totalCost={`${totalCost.toFixed(2)} TL`}
+                    plStatus={`${plStatus.toFixed(2)} TL`}
+                    plPercentage={`% ${plPercentage.toFixed(2)}`}
+                    sx={{
+                      color: "primary.main",
+                    }}
+                    plColor={color}
+                  />
+                  <Divider />
+                </Fragment>
+              );
+            }
+          )}
+        </Stack>
+        <Divider />
+        <Stack
+          sx={[{ p: 2, fontWeight: 500, color: "info.main" }]}
+          spacing={2}
+          direction="row"
+          justifyContent={"space-between"}
+        >
+          <Typography variant="body1" fontWeight={700}>
+            Toplam Yatırım Değeri
+          </Typography>
+          <Typography variant="body1" fontWeight={700}>
+            {`${summaryData
+              .reduce((n, { presentValue }) => n + Number(presentValue), 0)
+              .toFixed(2)} TL`}
+          </Typography>
+        </Stack>
+      </Paper>
+      <Paper>
+        <Button
+          sx={{ p: 2 }}
+          startIcon={<BarChartIcon />}
+          type="button"
+          onClick={() => {
+            navigate("/butce-istatistik");
+          }}
+          color="info"
+          size="small"
+        >
+          <Typography variant="body1" fontWeight={700}>
+            Bütçe İstatistikleri
+          </Typography>
+        </Button>
+      </Paper>
+    </Stack>
   );
 };
 

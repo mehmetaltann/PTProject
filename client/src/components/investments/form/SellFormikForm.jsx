@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { materialDateInput } from "../../../utils/help-functions";
 import { Fragment } from "react";
 import { Form, Formik, Field } from "formik";
-import { Button, Typography, MenuItem } from "@mui/material";
+import { Button, Typography, MenuItem, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetPortfoliosQuery } from "../../../redux/apis/portfolioApi";
 import { useAddSellMutation } from "../../../redux/apis/investmentApi";
@@ -76,92 +76,94 @@ const SellFormikForm = ({ setOpenSatis }) => {
       >
         Yeni Satış
       </Typography>
-      <Formik
-        initialValues={{
-          date: materialDateInput,
-          portfolio:
-            selectedPortfolio === "Tümü"
-              ? "Bireysel Emeklilik Fonları"
-              : selectedPortfolio,
-          code: "",
-          number: 0,
-          price: 0,
-          commission: 0,
-        }}
-        onSubmit={submitHandler}
-        validationSchema={validateSchema}
-      >
-        {({ values, isSubmitting }) => (
-          <Form>
-            <Grid container spacing={2}>
-              <Grid>
-                <Field
-                  name="portfolio"
-                  component={FormikFormSelect}
-                  label="Portföy"
-                  minW={200}
-                >
-                  {portfolios?.map((item) => (
-                    <MenuItem value={item.title} key={item.id}>
-                      {item.title}
-                    </MenuItem>
-                  ))}
-                </Field>
+      <Box sx={{ p: 2, ml: 2 }}>
+        <Formik
+          initialValues={{
+            date: materialDateInput,
+            portfolio:
+              selectedPortfolio === "Tümü"
+                ? "Bireysel Emeklilik Fonları"
+                : selectedPortfolio,
+            code: "",
+            number: 0,
+            price: 0,
+            commission: 0,
+          }}
+          onSubmit={submitHandler}
+          validationSchema={validateSchema}
+        >
+          {({ values, isSubmitting }) => (
+            <Form>
+              <Grid container spacing={2}>
+                <Grid>
+                  <Field
+                    name="portfolio"
+                    component={FormikFormSelect}
+                    label="Portföy"
+                    minW={200}
+                  >
+                    {portfolios?.map((item) => (
+                      <MenuItem value={item.title} key={item.id}>
+                        {item.title}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </Grid>
+                <Grid>
+                  <FormDatePicker name="date" label="Tarih" size="small" />
+                </Grid>
+                <Grid>
+                  <FormTextField
+                    sx={{ maxWidth: 120 }}
+                    name="code"
+                    label="Kod"
+                    size="small"
+                  />
+                </Grid>
+                <Grid>
+                  <FormTextField
+                    sx={{ maxWidth: 120 }}
+                    name="number"
+                    label="Adet"
+                    type="number"
+                    size="small"
+                  />
+                </Grid>
+                <Grid>
+                  <FormTextField
+                    sx={{ maxWidth: 120 }}
+                    name="price"
+                    label="Fiyat"
+                    type="number"
+                    size="small"
+                  />
+                </Grid>
+                <Grid>
+                  <FormTextField
+                    sx={{ maxWidth: 120 }}
+                    name="commission"
+                    label="Komisyon"
+                    type="number"
+                    size="small"
+                  />
+                </Grid>
+                <Grid>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    sx={{ minWidth: 180, maxHeight: 55 }}
+                    variant="contained"
+                    color="error"
+                    endIcon={<SendIcon />}
+                  >
+                    Ekle
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid>
-                <FormDatePicker name="date" label="Tarih" size="small" />
-              </Grid>
-              <Grid>
-                <FormTextField
-                  sx={{ maxWidth: 120 }}
-                  name="code"
-                  label="Kod"
-                  size="small"
-                />
-              </Grid>
-              <Grid>
-                <FormTextField
-                  sx={{ maxWidth: 120 }}
-                  name="number"
-                  label="Adet"
-                  type="number"
-                  size="small"
-                />
-              </Grid>
-              <Grid>
-                <FormTextField
-                  sx={{ maxWidth: 120 }}
-                  name="price"
-                  label="Fiyat"
-                  type="number"
-                  size="small"
-                />
-              </Grid>
-              <Grid>
-                <FormTextField
-                  sx={{ maxWidth: 120 }}
-                  name="commission"
-                  label="Komisyon"
-                  type="number"
-                  size="small"
-                />
-              </Grid>
-              <Grid>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  sx={{ minWidth: 180, maxHeight: 55 }}
-                  variant="contained"
-                  color="error"
-                  endIcon={<SendIcon />}
-                >
-                  Ekle
-                </Button>
-              </Grid>
-            </Grid>
-          </Form>
-        )}
-      </Formik>
+            </Form>
+          )}
+        </Formik>
+      </Box>
     </Fragment>
   );
 };

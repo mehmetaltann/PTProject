@@ -186,14 +186,14 @@ const NavBar = () => {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigate("/parametereler");
+                  navigate("/hesaplama-tablosu");
                 }}
               >
                 <Typography textAlign="center">Hesaplama Tablosu</Typography>
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigate("/hesaplama-tablosu");
+                  navigate("/parametreler");
                 }}
               >
                 <Typography textAlign="center">Parametreler</Typography>

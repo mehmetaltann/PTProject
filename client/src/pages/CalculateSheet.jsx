@@ -1,26 +1,19 @@
-import "react-datasheet-grid/dist/style.css";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import BaseCalculateSheet from "../components/calculateSheet/BaseCalculateSheet";
 import BanksCalculateSheets from "../components/calculateSheet/BanksCalculateSheets";
 import TotalCalculateSheets from "../components/calculateSheet/TotalCalculateSheets";
 import PageConnectionWait from "../components/UI/PageConnectionWait";
+import AltanSelect from "../components/UI/AltanSelect";
+import { PageWrapper } from "../layouts/Wrappers";
 import { useGetParametersQuery } from "../redux/apis/parameterApi";
 import { useSelector, useDispatch } from "react-redux";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import {
   setBankData,
   setTotalData,
   setData,
   setSelectedBank,
 } from "../redux/slices/calculateSlice";
-import {
-  Box,
-  Button,
-  Container,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
 
 function sumByList(attrList, dataList) {
   let totalList = attrList.map((item) => {
@@ -123,58 +116,48 @@ const CalculateSheet = () => {
   }
 
   return (
-    <Box sx={{ height: "85vh", overflow: "auto" }}>
-      <Container sx={{ mt: 2 }} maxWidth="xl">
-        <Grid container>
-          <Grid xs={12}>
-            <Stack direction="row" spacing={2} alignItems={"center"}>
-              <TextField
-                select
-                id="bank"
-                defaultValue="VB"
-                value={selectedBank}
-                label="Banka"
-                size="small"
-                variant="standard"
-                onChange={(e) => {
-                  dispatch(setSelectedBank(e.target.value));
-                }}
-                sx={{ minWidth: "20ch", p: 1, borderColor: "primary.main" }}
-              >
-                {banksList.content.map((item) => (
-                  <MenuItem key={item._id} value={item.value}>
-                    {item.title}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button
-                variant="contained"
-                onClick={calculateHandle}
-                sx={{ minWidth: "15ch" }}
-              >
-                Ekle
-              </Button>
-            </Stack>
-          </Grid>
-          <Grid xs={12}>
-            <Box sx={{ p: 1 }}>
-              <BaseCalculateSheet expenseList={expenseList} />
-            </Box>
-          </Grid>
-          <Grid xs={12}>
-            <Box sx={{ p: 1 }}>
-              <BanksCalculateSheets expenseList={expenseList} />
-            </Box>
-          </Grid>
-          <Grid xs={12}>
-            <Typography>Toplam</Typography>
-            <Box sx={{ p: 1 }}>
-              <TotalCalculateSheets expenseList={expenseList} />
-            </Box>
-          </Grid>
+    <PageWrapper maxWidth="xl">
+      <Grid container>
+        <Grid xs={12}>
+          <Stack direction="row" spacing={2} alignItems={"center"}>
+            <AltanSelect
+              id="bank"
+              defaultValue="VB"
+              value={selectedBank}
+              minWidth="20ch"
+              onChange={setSelectedBank}
+              data={banksList.content}
+              dataTextAttr="title"
+              dataValueAttr="value"
+              label="Banka"
+            />
+            <Button
+              variant="contained"
+              onClick={calculateHandle}
+              sx={{ minWidth: "15ch" }}
+            >
+              Ekle
+            </Button>
+          </Stack>
         </Grid>
-      </Container>
-    </Box>
+        <Grid xs={12}>
+          <Box sx={{ p: 1 }}>
+            <BaseCalculateSheet expenseList={expenseList} />
+          </Box>
+        </Grid>
+        <Grid xs={12}>
+          <Box sx={{ p: 1 }}>
+            <BanksCalculateSheets expenseList={expenseList} />
+          </Box>
+        </Grid>
+        <Grid xs={12}>
+          <Typography>Toplam</Typography>
+          <Box sx={{ p: 1 }}>
+            <TotalCalculateSheets expenseList={expenseList} />
+          </Box>
+        </Grid>
+      </Grid>
+    </PageWrapper>
   );
 };
 

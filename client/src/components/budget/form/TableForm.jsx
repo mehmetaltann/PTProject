@@ -1,13 +1,14 @@
 import SelectComponent from "./UI/SelectComponent";
 import SendIcon from "@mui/icons-material/Send";
-import { useState, useEffect, useMemo, Fragment } from "react";
+import AltanSelect from "../../UI/AltanSelect";
+import { useState, useEffect, useMemo } from "react";
 import { uniqListFunc } from "../../../utils/help-functions";
 import { dateFormatNormal } from "../../../utils/help-functions";
 import { useDispatch, useSelector } from "react-redux";
 import { setBudgetData } from "../../../redux/slices/calculateSlice";
 import { useAddBudgetItemMutation } from "../../../redux/apis/budgetApi";
 import { setSnackbar, pickCategoryA } from "../../../redux/slices/generalSlice";
-import { TextField, Button, Box, Stack, MenuItem } from "@mui/material";
+import { Button, Box, Stack } from "@mui/material";
 import {
   floatColumn,
   textColumn,
@@ -151,29 +152,23 @@ const TableForm = ({ openType, categories, closeModel }) => {
     unit: "satır", // rows
   });
   return (
-    <Fragment>
-      <Stack direction="row" alignItems={"center"}>
-        <TextField
-          select
+    <Stack sx={{ p: 1 }}>
+      <Stack direction="row" alignItems={"center"} spacing={2}>
+        <AltanSelect
           id="categoryA"
-          label="Kategori A"
-          size="small"
-          variant="outlined"
-          sx={{ minWidth: "25ch", p: 1, borderColor: "primary.main" }}
           value={selectedCategoryA}
-          onChange={(e) => {
-            dispatch(pickCategoryA(e.target.value));
-          }}
-        >
-          {uniqListFunc(
+          minWidth="25ch"
+          onChange={pickCategoryA}
+          data={uniqListFunc(
             categories.filter((cat) => cat.type === openType),
             "categoryA"
-          ).map((catA, index) => (
-            <MenuItem value={catA.categoryA} key={index}>
-              {catA.categoryA}
-            </MenuItem>
-          ))}
-        </TextField>
+          )}
+          dataTextAttr="categoryA"
+          dataValueAttr="categoryA"
+          label="Kategori A"
+          color={openType === "Gelir" ? "success" : "error"}
+          sxProps={{ ml: 2 }}
+        />
         <Button
           onClick={submitHandler}
           sx={{ borderRadius: "5%", minWidth: 150 }}
@@ -196,7 +191,7 @@ const TableForm = ({ openType, categories, closeModel }) => {
           headerRowHeight={50}
         />
       </Box>
-    </Fragment>
+    </Stack>
   );
 };
 

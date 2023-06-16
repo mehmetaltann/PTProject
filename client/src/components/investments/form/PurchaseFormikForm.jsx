@@ -82,125 +82,130 @@ const PurchaseFormikForm = ({ setOpenAlis }) => {
   });
 
   return (
-    <Formik
-      initialValues={{
-        portfolio:
-          selectedPortfolio === "Tümü"
-            ? "Bireysel Emeklilik Fonları"
-            : selectedPortfolio,
-        fons: [initialFonInfoMemo],
-      }}
-      onSubmit={submitHandler}
-      validationSchema={validateSchema}
-    >
-      {({ values, isSubmitting }) => (
-        <Form>
-          <Stack spacing={3}>
-            <Stack direction={{ md: "row", sx: "column" }} spacing={{ xs: 2 }}>
-              <Field
-                name="portfolio"
-                component={FormikFormSelect}
-                label="Portföy"
-                minW={{ xs: 120, md: 200 }}
+    <Box sx={{ p: 2 }}>
+      <Formik
+        initialValues={{
+          portfolio:
+            selectedPortfolio === "Tümü"
+              ? "Bireysel Emeklilik Fonları"
+              : selectedPortfolio,
+          fons: [initialFonInfoMemo],
+        }}
+        onSubmit={submitHandler}
+        validationSchema={validateSchema}
+      >
+        {({ values, isSubmitting }) => (
+          <Form>
+            <Stack spacing={3}>
+              <Stack
+                direction={{ md: "row", sx: "column" }}
+                spacing={{ xs: 2 }}
               >
-                {portfolios?.map((item) => (
-                  <MenuItem value={item.title} key={item.id}>
-                    {item.title}
-                  </MenuItem>
-                ))}
-              </Field>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                sx={{ minW: "15ch" }}
-                variant="contained"
-                color="success"
-                endIcon={<SendIcon />}
-              >
-                Ekle
-              </Button>
-            </Stack>
-            <Box>
-              <FieldArray name="fons">
-                {({ push, remove }) => (
-                  <Fragment>
-                    {values.fons.map((i, index) => (
-                      <Grid
-                        container="true"
-                        sx={{ pb: 2 }}
-                        key={index}
-                        spacing={1}
+                <Field
+                  name="portfolio"
+                  component={FormikFormSelect}
+                  label="Portföy"
+                  minW={{ xs: 120, md: 200 }}
+                >
+                  {portfolios?.map((item) => (
+                    <MenuItem value={item.title} key={item.id}>
+                      {item.title}
+                    </MenuItem>
+                  ))}
+                </Field>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  sx={{ minW: "15ch" }}
+                  variant="contained"
+                  color="success"
+                  endIcon={<SendIcon />}
+                >
+                  Ekle
+                </Button>
+              </Stack>
+              <Box>
+                <FieldArray name="fons">
+                  {({ push, remove }) => (
+                    <Fragment>
+                      {values.fons.map((i, index) => (
+                        <Grid
+                          container="true"
+                          sx={{ pb: 2 }}
+                          key={index}
+                          spacing={1}
+                        >
+                          <Grid>
+                            <FormDatePicker
+                              name={`fons.${index}.date`}
+                              label="Tarih"
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid>
+                            <FormTextField
+                              sx={{ maxWidth: 100 }}
+                              name={`fons.${index}.code`}
+                              label="Kod"
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid>
+                            <FormTextField
+                              sx={{ maxWidth: 100 }}
+                              name={`fons.${index}.number`}
+                              label="Adet"
+                              type="number"
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid>
+                            <FormTextField
+                              sx={{ maxWidth: 100 }}
+                              name={`fons.${index}.price`}
+                              label="Fiyat"
+                              type="number"
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid>
+                            <FormTextField
+                              sx={{ maxWidth: 100 }}
+                              name={`fons.${index}.commission`}
+                              label="Komisyon"
+                              type="number"
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid>
+                            <IconButton
+                              type="button"
+                              aria-label="delete"
+                              onClick={() => remove(index)}
+                              size="small"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      ))}
+                      <IconButton
+                        onClick={() => push(initialFonInfoMemo)}
+                        variant="contained"
+                        size="small"
+                        type="button"
                       >
-                        <Grid>
-                          <FormDatePicker
-                            name={`fons.${index}.date`}
-                            label="Tarih"
-                            size="small"
-                          />
-                        </Grid>
-                        <Grid>
-                          <FormTextField
-                            sx={{ maxWidth: 100 }}
-                            name={`fons.${index}.code`}
-                            label="Kod"
-                            size="small"
-                          />
-                        </Grid>
-                        <Grid>
-                          <FormTextField
-                            sx={{ maxWidth: 100 }}
-                            name={`fons.${index}.number`}
-                            label="Adet"
-                            type="number"
-                            size="small"
-                          />
-                        </Grid>
-                        <Grid>
-                          <FormTextField
-                            sx={{ maxWidth: 100 }}
-                            name={`fons.${index}.price`}
-                            label="Fiyat"
-                            type="number"
-                            size="small"
-                          />
-                        </Grid>
-                        <Grid>
-                          <FormTextField
-                            sx={{ maxWidth: 100 }}
-                            name={`fons.${index}.commission`}
-                            label="Komisyon"
-                            type="number"
-                            size="small"
-                          />
-                        </Grid>
-                        <Grid>
-                          <IconButton
-                            type="button"
-                            aria-label="delete"
-                            onClick={() => remove(index)}
-                            size="small"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    ))}
-                    <IconButton
-                      onClick={() => push(initialFonInfoMemo)}
-                      variant="contained"
-                      size="small"
-                      type="button"
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
-                  </Fragment>
-                )}
-              </FieldArray>
-            </Box>
-          </Stack>
-        </Form>
-      )}
-    </Formik>
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Fragment>
+                  )}
+                </FieldArray>
+              </Box>
+            </Stack>
+          </Form>
+        )}
+      </Formik>
+    </Box>
   );
 };
 

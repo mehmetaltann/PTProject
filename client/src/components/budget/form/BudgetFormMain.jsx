@@ -46,16 +46,11 @@ const BudgetFormMain = () => {
   if (!categories)
     return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
 
-  function handlePageStatictic() {
-    navigate("/butce-istatistik");
-  }
-
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
       justifyContent={"center"}
-      spacing={{ xs: 1, sm: 3 }}
-      sx={{ pt: 2 }}
+      spacing={1}
     >
       <Button
         type="button"
@@ -80,9 +75,12 @@ const BudgetFormMain = () => {
       <Button
         startIcon={<BarChartIcon />}
         type="button"
-        onClick={handlePageStatictic}
+        onClick={() => {
+          navigate("/butce-istatistik");
+        }}
         color="info"
         size="small"
+        variant="outlined"
       >
         İstatistikler
       </Button>

@@ -20,7 +20,7 @@ const InvestmentForm = () => {
   const [formType, setFormType] = useState("table");
 
   return (
-    <Stack direction="row" justifyContent={"center"} spacing={3} sx={{ pt: 2 }}>
+    <Stack direction="row" justifyContent={"center"} spacing={1} sx={{ p:1 }}>
       <Button
         type="button"
         onClick={() => setOpenAlis(true)}

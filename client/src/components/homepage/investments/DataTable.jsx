@@ -44,16 +44,16 @@ const DataTable = () => {
       sortable: false,
       filterable: false,
     }),
-    numberColumn("totalNumber", "number", 75),
-    priceColumn("averagePrice", "Ort. Fiyat", 80),
-    priceColumn("presentPrice", "Güncel Fiyat", 80),
-    priceColumn("totalCost", "Maliyet", 105, {
+    numberColumn("totalNumber", "Adet", 65),
+    priceColumn("averagePrice", "Ort. Fiyat", 85),
+    priceColumn("presentPrice", "Güncel Fiyat", 85),
+    priceColumn("totalCost", "Maliyet", 110, {
       cellClassName: "boldandcolorcell",
     }),
-    priceColumn("presentValue", "Değer", 105, {
+    priceColumn("presentValue", "Değer", 110, {
       cellClassName: "boldandcolorcell",
     }),
-    stringColumn("plStatus", "Kar/Zarar", 120, {
+    stringColumn("plStatus", "Kar/Zarar", 130, {
       renderCell: (params) =>
         params.row.plStatus >= 0 ? (
           <Stack
@@ -118,6 +118,7 @@ const DataTable = () => {
       getRowHeight={() => "auto"}
       getEstimatedRowHeight={() => 200}
       getRowSpacing={getRowSpacing}
+      density="standard"
     />
   );
 };

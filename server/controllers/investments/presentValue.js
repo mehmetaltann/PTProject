@@ -70,10 +70,10 @@ async function fetchScrapData(presentData) {
         portfolio === "Bireysel Emeklilik Fonları" ||
         portfolio === "Yatırım Fonları"
       ) {
-        await timer(1000);
+        await timer(300);
         res = await fundScraper(code, portfolio);
       } else if (portfolio === "Döviz" || portfolio === "Altın") {
-        await timer(1000);
+        await timer(300);
         res = await moneyScraper(code, portfolio);
       }
       result.push(res);
