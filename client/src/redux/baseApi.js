@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1623/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://altanfirst.onrender.com/" }),
   tagTypes: [
     "Budget",
     "Investment",
@@ -14,3 +14,5 @@ export const baseApi = createApi({
   ],
   endpoints: () => ({}),
 });
+
+/*  http://localhost:1623/ */

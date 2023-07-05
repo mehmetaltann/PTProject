@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cron = require("node-cron");
-const { db } = require("./db/DB.JS");
+const { db } = require("./db/db.JS");
 const { readdirSync } = require("fs");
 const {
   presentValueQueryAndUpdate,
