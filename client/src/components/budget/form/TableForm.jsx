@@ -111,6 +111,7 @@ const TableForm = ({ openType, categories, closeModel }) => {
       try {
         const res = await addBudgetItem(newRecords).unwrap();
         closeModel();
+        dispatch(setBudgetData([{}, {}]));
         dispatch(
           setSnackbar({
             children: res.message,

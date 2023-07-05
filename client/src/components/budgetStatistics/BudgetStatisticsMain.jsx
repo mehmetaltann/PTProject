@@ -2,7 +2,7 @@ import PageConnectionWait from "../UI/PageConnectionWait";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import BudgetStatisticsTable from "./BudgetStatisticsTable";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect, useMemo, Fragment } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   generateArrayOfYears,
   thisMonth,
@@ -65,7 +65,7 @@ const BudgetStatisticsMain = () => {
     data: budgetItems,
     isLoading,
     isFetching,
-  } = useGetBudgetItemsQuery(2);
+  } = useGetBudgetItemsQuery(0);
 
   const theme = useTheme();
   const yearsList = useMemo(() => generateArrayOfYears(), []);
@@ -125,7 +125,7 @@ const BudgetStatisticsMain = () => {
   }
 
   return (
-    <Fragment>
+    <Stack spacing={1}>
       <Paper>
         <Grid container sx={{ p: 2 }} alignItems={"center"} spacing={1}>
           <Grid>
@@ -251,7 +251,7 @@ const BudgetStatisticsMain = () => {
           />
         </Box>
       </Paper>
-    </Fragment>
+    </Stack>
   );
 };
 

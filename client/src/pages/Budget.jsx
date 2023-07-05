@@ -6,7 +6,7 @@ import { Stack, Typography, Paper } from "@mui/material";
 const Budget = () => {
   return (
     <PageWrapper>
-      <Stack spacing={2}>
+      <Stack spacing={1}>
         <Paper sx={{ p: 2 }}>
           <Stack
             spacing={{ xs: 4, md: 4 }}

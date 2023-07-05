@@ -87,7 +87,7 @@ const TableContainer = () => {
         </Grid>
         <Grid container xs={12}>
           <DataTableWrapper
-            tableHeight={"67vh"}
+            tableHeight={"68vh"}
             sxProps={{ p: { xs: 0, md: 1 } }}
           >
             <BudgetDataTable />
