@@ -196,7 +196,7 @@ const DataTable = () => {
     }),
     stringColumn("categoryA", "Kategori A", 130),
     stringColumn("categoryB", "Kategori B", 130),
-    dateColumn("date", "Tarih", 100, { editable: true }),
+    dateColumn("date", "Tarih", 100 ),
     priceColumn("amount", "Tutar", 150, {
       cellClassName: "boldandcolorcell",
       editable: true,

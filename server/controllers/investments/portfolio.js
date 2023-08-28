@@ -35,7 +35,6 @@ exports.portfolioAdd = async (req, res) => {
 };
 
 exports.portfolioDelete = async (req, res) => {
-  console.log(req.params.id);
   const portfolioRes = await dbFindOne(InvPortfolioSchema, {
     _id: req.params.id,
   });

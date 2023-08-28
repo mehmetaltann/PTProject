@@ -184,7 +184,7 @@ const BudgetStatisticsTable = ({ data, monthNumber }) => {
           </Typography>
           {totalBalance < 0 ? (
             <Typography variant="h6" gutterBottom color="error">
-              {`- ${totalBalance.toFixed(2)} TL`}
+              {`${totalBalance.toFixed(2)} TL`}
             </Typography>
           ) : (
             <Typography variant="h6" gutterBottom color="success.main">

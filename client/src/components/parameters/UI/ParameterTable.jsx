@@ -79,28 +79,3 @@ const ParameterTable = ({ tableWidth, data, formName }) => {
 };
 
 export default ParameterTable;
-
-/* 
-async () => {
-                    try {
-                      const res = await deleteParameterContent(
-                        row.title,
-                        row.value
-                      ).unwrap();
-                      dispatch(
-                        setSnackbar({
-                          children: res.message,
-                          severity: "success",
-                        })
-                      );
-                    } catch (error) {
-                      dispatch(
-                        setSnackbar({
-                          children: error,
-                          severity: "error",
-                        })
-                      );
-                    }
-                  }
-
-*/

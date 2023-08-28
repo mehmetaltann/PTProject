@@ -48,7 +48,7 @@ const DataTable = () => {
     }),
     stringColumn("plStatus", "Kar/Zarar", 110, {
       renderCell: (params) =>
-        params.row.plStatus >= 0 ? (
+        params.row.plStatus <= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -58,7 +58,7 @@ const DataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main", fontWeight: 500 }}
-            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
+            >{`${(params.row.plStatus * -1).toFixed(2)} TL`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -70,13 +70,13 @@ const DataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main", fontWeight: 500 }}
-            >{`${params.row.plStatus.toFixed(2)} TL`}</Typography>
+            >{`${(params.row.plStatus * -1).toFixed(2)} TL`}</Typography>
           </Stack>
         ),
     }),
     stringColumn("plPercentage", "Yüzde", 110, {
       renderCell: (params) =>
-        params.row.plPercentage >= 0 ? (
+        params.row.plPercentage <= 0 ? (
           <Stack
             direction="row"
             justifyContent={"flex-start"}
@@ -86,7 +86,7 @@ const DataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "success.main", fontWeight: 500 }}
-            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
+            >{`% ${(params.row.plPercentage * -1).toFixed(2)}`}</Typography>
           </Stack>
         ) : (
           <Stack
@@ -98,7 +98,7 @@ const DataTable = () => {
             <Typography
               variant="body2"
               sx={{ color: "error.main", fontWeight: 500 }}
-            >{`% ${params.row.plPercentage.toFixed(2)}`}</Typography>
+            >{`% ${(params.row.plPercentage * -1).toFixed(2)}`}</Typography>
           </Stack>
         ),
     }),

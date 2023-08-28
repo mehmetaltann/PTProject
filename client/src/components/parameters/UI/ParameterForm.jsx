@@ -75,24 +75,3 @@ const ParameterForm = ({ formName, addFunction }) => {
 };
 
 export default ParameterForm;
-
-/*
-    try {
-      const res = await addFunction(newRecord).unwrap();
-      resetForm();
-      dispatch(
-        setSnackbar({
-          children: res.message,
-          severity: "success",
-        })
-      );
-    } catch (error) {
-      dispatch(
-        setSnackbar({
-          children: error,
-          severity: "error",
-        })
-      );
-    }
-  }
- */

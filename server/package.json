@@ -21,6 +21,6 @@
     "build": "npm i",
     "start": "nodemon server.js"
   },
-  "author": "",
+  "author": "Mehmet Altan",
   "license": "ISC"
 }
