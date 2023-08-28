@@ -22,17 +22,20 @@ const DataTable = () => {
   const [deleteRecord] = useDeleteRecordMutation();
   const { selectedDate } = useSelector((state) => state.general);
   const {
-    data: records,
+    data: recordsraw,
     isLoading,
     isFetching,
   } = useGetRecordsQuery(selectedDate);
+
   const dispatch = useDispatch();
 
   if (isLoading && isFetching)
     return <PageConnectionWait title="Veriler Bekleniyor" />;
 
-  if (!records)
+  if (!recordsraw)
     return <PageConnectionWait title="Server Bağlantısı Kurulamadı" />;
+
+  const records = recordsraw.slice().sort((a, b) => a.dateDiff - b.dateDiff);
 
   const columns = [
     stringColumn("portfolio", "Portföy", 215),

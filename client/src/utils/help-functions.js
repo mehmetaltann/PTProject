@@ -33,6 +33,7 @@ export const dateFormatYears = (date) => {
   return moment(date).format("YYYY");
 };
 
+
 export const sortDate = (dateA, dateB, direction = "asc") => {
   const formats = ["DD-MM-YYYY"]; // can be several
   return (
