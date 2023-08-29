@@ -41,6 +41,8 @@ const DataTable = () => {
       ? investments?.filter((item) => item.portfolio === selectedPortfolio)
       : investments;
 
+  console.log(filteredData);
+
   const columns = [
     stringColumn("code", "Kod", 60, { cellClassName: "boldandcolorcell" }),
     dateColumn("date", "Tarih"),
@@ -124,7 +126,10 @@ const DataTable = () => {
             color="error"
             onClick={async () => {
               try {
-                const res = await deleteInvestment(params.row.id).unwrap();
+                const res = await deleteInvestment({
+                  id: params.row.id,
+                  code: params.row.code,
+                }).unwrap();
                 dispatch(
                   setSnackbar({
                     children: res.message,

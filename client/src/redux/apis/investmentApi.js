@@ -38,9 +38,10 @@ export const investmentApi = baseApi.injectEndpoints({
       ],
     }),
     deleteInvestment: builder.mutation({
-      query: (id) => ({
-        url: `yatirim-islem-sil/${id}/`,
-        method: "DELETE",
+      query: (postData) => ({
+        url: `yatirim-islem-sil`,
+        method: "PUT",
+        body: postData,
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Investment", id: arg.id },

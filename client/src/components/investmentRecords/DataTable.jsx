@@ -38,8 +38,8 @@ const DataTable = () => {
   const records = recordsraw.slice().sort((a, b) => a.dateDiff - b.dateDiff);
 
   const columns = [
-    stringColumn("portfolio", "Portföy", 215),
-    stringColumn("code", "Kod", 50, { cellClassName: "boldandcolorcell" }),
+    stringColumn("portfolio", "Portföy", 185),
+    stringColumn("code", "Kod", 60, { cellClassName: "boldandcolorcell" }),
     numberColumn("number", "Adet", 70),
     dateColumn("purchaseDate", "Alış Tarihi"),
     priceColumn("purchasePrice", "Alış Fiyatı", 110, {

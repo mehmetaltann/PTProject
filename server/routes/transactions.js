@@ -31,7 +31,7 @@ const {
 } = require("../controllers/investments/investment");
 router.post("/yatirim-alis-ekle", investmentPurchase);
 router.post("/yatirim-satis-ekle", investmentSell);
-router.delete("/yatirim-islem-sil/:id", investmentDelete);
+router.put("/yatirim-islem-sil", investmentDelete);
 router.get("/yatirim-islem-sorgula/:date", investmentQuery);
 
 //Investments Records

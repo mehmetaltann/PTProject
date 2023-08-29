@@ -8,6 +8,8 @@ const {
   dbFindAggregate,
   dbFindOneAndUpdate,
   dbFindByIdAndDelete,
+  dbFindOne,
+  dbFindOneAndDelete,
 } = require("../dbQueries");
 const {
   thisMonthFirstDay,
@@ -241,9 +243,17 @@ exports.investmentSell = async (req, res) => {
 };
 
 exports.investmentDelete = async (req, res) => {
+  const { id, code } = req.body;
   try {
-    await dbFindByIdAndDelete(InvestmentSchema, req.params.id);
+    await dbFindByIdAndDelete(InvestmentSchema, id);
     res.status(200).json({ message: "Yatırım Kalemi Silindi" });
+    const oRes = await dbFindOne(InvestmentSchema, {
+      code: code,
+    });
+    console.log(oRes)
+    if (!oRes) {
+      await dbFindOneAndDelete(InvPresentValueSchema, { code: code });
+    }
   } catch (error) {
     res
       .status(500)
